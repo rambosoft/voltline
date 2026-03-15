@@ -1,0 +1,39 @@
+# Unity generated
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+
+# IDE / editor
+.vs/
+.gradle/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+
+# Rider / JetBrains
+*.DotSettings.user
+/[Aa]ssets/Plugins/Editor/JetBrains*
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Unity/Blender temp import leftovers
+*.blend1
+*.blend1.meta
+
+# Logs
+*.log
