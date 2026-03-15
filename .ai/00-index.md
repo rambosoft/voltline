@@ -49,6 +49,7 @@ Read these in order before making any cross-cutting change:
 14. `12-adrs.md`
 15. `15-roadmap-backlog.md`
 16. `16-production-phases.md`
+17. `17-repo-alignment-audit.md`
 
 Read `13-feature-spec-template.md` before proposing or implementing any new feature.
 
@@ -65,6 +66,7 @@ When documents disagree, follow this authority order:
 7. feature-specific specs created from `13-feature-spec-template.md`
 8. `15-roadmap-backlog.md`
 9. `16-production-phases.md`
+10. `17-repo-alignment-audit.md`
 
 If a lower-authority document conflicts with a higher-authority document, the higher one wins.
 
@@ -110,6 +112,7 @@ The public name can change later without forcing a repository rename.
 - `14-agent-rules.md` owns **implementation behavior for AI contributors**
 - `15-roadmap-backlog.md` owns **future work and rejected ideas**
 - `16-production-phases.md` owns **phased delivery from current repo state to release**
+- `17-repo-alignment-audit.md` owns **current repo-to-doc alignment status and baseline remediation order**
 
 ## Update protocol
 
@@ -187,4 +190,5 @@ This `.ai` folder is healthy when:
 - Need to know how an AI agent should behave? Read `14`.
 - Need future priorities? Read `15`.
 - Need phased delivery order and release gates? Read `16`.
+- Need the current repo alignment snapshot before baseline cleanup? Read `17`.
 
