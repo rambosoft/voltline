@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c927ca8d01564300ac164c1b80724b43, type: 3}
+  m_Name: CFG_Obstacle_GapBasic
+  m_EditorClassIdentifier: 
+  obstacleId: obstacle.gap.basic
+  displayName: Line Gap
+  family: 3
+  allowedFromScore: 18
+  allowedToScore: -1
+  minSpawnSpacing: 1.7
+  maxSpawnSpacing: 2.3
+  requiresTelegraph: 0
+  minimumTelegraphSeconds: 0.75
+  weight: 0.75
+  enabledForRuntime: 1

@@ -33,8 +33,6 @@ Prioritize in this order:
 These are the highest-priority items for the first serious playable.
 
 ### Core playable
-- set up Unity project with approved stack
-- create `Bootstrap`, `MainMenu`, `Gameplay`
 - implement one-tap side flip
 - implement moving line/path
 - implement at least 2 hazard families
@@ -49,13 +47,6 @@ These are the highest-priority items for the first serious playable.
 - main menu animated preview
 - safe-area handling
 - minimal settings overlay
-
-### Data foundations
-- create balance config assets
-- create difficulty curve config
-- create theme config for first theme
-- create audio/VFX catalogs
-- create versioned save profile
 
 ## Next
 

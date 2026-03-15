@@ -1,4 +1,4 @@
-﻿# Production Phases
+# Production Phases
 Status: Active
 Owner: Team / AI
 Last updated: 2026-03-15
@@ -63,6 +63,8 @@ Future AI agents should use this file to sequence work, not to reinterpret the g
 - Production scenes remain `Bootstrap`, `MainMenu`, and `Gameplay` unless an ADR changes that decision.
 
 ## Starting point
+
+Historical note: this starting-state description is the Phase 0 / Phase 1 baseline that the roadmap began from. Once baseline alignment is complete, use `.ai/17-repo-alignment-audit.md` as the live repo snapshot rather than re-treating the project as template-derived.
 
 The roadmap begins from a repository that is still close to a Unity template rather than the documented production baseline.
 

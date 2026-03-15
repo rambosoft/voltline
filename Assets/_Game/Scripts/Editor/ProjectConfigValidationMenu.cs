@@ -1,0 +1,35 @@
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEngine;
+using Voltline.Data;
+
+namespace Voltline.Editor
+{
+    internal static class ProjectConfigValidationMenu
+    {
+        [MenuItem("Tools/Voltline/Validate Config")]
+        private static void ValidateConfig()
+        {
+            GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
+            DifficultyCurveConfig difficultyCurve = AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
+            ObstacleCatalog obstacleCatalog = AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
+            ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
+            AudioCueCatalog audioCueCatalog = AssetDatabase.LoadAssetAtPath<AudioCueCatalog>(ProjectConfigAssetPaths.AudioCueCatalog);
+            VfxCatalog vfxCatalog = AssetDatabase.LoadAssetAtPath<VfxCatalog>(ProjectConfigAssetPaths.VfxCatalog);
+
+            ConfigValidationResult result = ProjectConfigValidator.ValidateProject(gameBalance, difficultyCurve, obstacleCatalog, themeCatalog, audioCueCatalog, vfxCatalog);
+
+            if (result.IsValid)
+            {
+                Debug.Log("Voltline config validation passed.");
+                return;
+            }
+
+            foreach (string error in result.Errors)
+            {
+                Debug.LogError(error);
+            }
+        }
+    }
+}
+#endif

@@ -1,0 +1,28 @@
+using UnityEngine;
+
+namespace Voltline.Data
+{
+    [CreateAssetMenu(fileName = "THM_NeonNight", menuName = "Voltline/Config/Theme")]
+    public sealed class ThemeConfig : ScriptableObject
+    {
+        [SerializeField] private string themeId = "theme.neon-night";
+        [SerializeField] private string displayName = "Neon Night";
+        [SerializeField] private Color backgroundTopColor = new(0.015f, 0.028f, 0.07f, 1f);
+        [SerializeField] private Color backgroundBottomColor = new(0.03f, 0.005f, 0.085f, 1f);
+        [SerializeField] private Color lineCoreColor = new(0.2f, 0.95f, 1f, 1f);
+        [SerializeField] private Color lineGlowColor = new(0.06f, 0.68f, 1f, 1f);
+        [SerializeField] private Color playerAccentColor = new(1f, 0.92f, 0.28f, 1f);
+        [SerializeField] private Color dangerColor = new(1f, 0.23f, 0.43f, 1f);
+        [SerializeField] private Color milestoneColor = new(0.62f, 0.44f, 1f, 1f);
+
+        public string ThemeId => themeId;
+        public string DisplayName => displayName;
+        public Color BackgroundTopColor => backgroundTopColor;
+        public Color BackgroundBottomColor => backgroundBottomColor;
+        public Color LineCoreColor => lineCoreColor;
+        public Color LineGlowColor => lineGlowColor;
+        public Color PlayerAccentColor => playerAccentColor;
+        public Color DangerColor => dangerColor;
+        public Color MilestoneColor => milestoneColor;
+    }
+}

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b2c9e45e4b942e6a20d54caa16d26c5, type: 3}
+  m_Name: CFG_DifficultyCurve_Main
+  m_EditorClassIdentifier: 
+  bands:
+  - bandId: band.0
+    minScore: 0
+    maxScoreInclusive: 4
+    speedMultiplier: 1
+    minSpawnSpacing: 2.6
+    maxSpawnSpacing: 3.2
+    minimumTelegraphSeconds: 0.9
+  - bandId: band.1
+    minScore: 5
+    maxScoreInclusive: 9
+    speedMultiplier: 1.1
+    minSpawnSpacing: 2.2
+    maxSpawnSpacing: 2.8
+    minimumTelegraphSeconds: 0.85
+  - bandId: band.2
+    minScore: 10
+    maxScoreInclusive: 19
+    speedMultiplier: 1.2
+    minSpawnSpacing: 1.9
+    maxSpawnSpacing: 2.5
+    minimumTelegraphSeconds: 0.8
+  - bandId: band.3
+    minScore: 20
+    maxScoreInclusive: 34
+    speedMultiplier: 1.35
+    minSpawnSpacing: 1.7
+    maxSpawnSpacing: 2.2
+    minimumTelegraphSeconds: 0.75
+  - bandId: band.4
+    minScore: 35
+    maxScoreInclusive: -1
+    speedMultiplier: 1.5
+    minSpawnSpacing: 1.5
+    maxSpawnSpacing: 2
+    minimumTelegraphSeconds: 0.75

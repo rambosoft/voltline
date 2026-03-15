@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c927ca8d01564300ac164c1b80724b43, type: 3}
+  m_Name: CFG_Obstacle_SpikeBasic
+  m_EditorClassIdentifier: 
+  obstacleId: obstacle.spike.basic
+  displayName: Spike
+  family: 0
+  allowedFromScore: 0
+  allowedToScore: -1
+  minSpawnSpacing: 1.8
+  maxSpawnSpacing: 2.6
+  requiresTelegraph: 0
+  minimumTelegraphSeconds: 0.75
+  weight: 1.2
+  enabledForRuntime: 1
