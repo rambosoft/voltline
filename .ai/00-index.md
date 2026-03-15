@@ -1,4 +1,4 @@
-﻿# Project Index
+# Project Index
 Status: Active
 Owner: Team
 Last updated: 2026-03-15
@@ -13,7 +13,7 @@ Do not duplicate with: feature notes, ad-hoc implementation comments, backlog it
 
 **Voltline** is a portrait mobile one-tap arcade game built around a single action: tap to flip the player from one side of a glowing line to the other.  
 The line moves forward automatically. Hazards, gaps, cutters, and electric obstacles force split-second decisions.  
-The game is designed to create a brutal but fair â€œone more tryâ€ loop through very short runs, immediate restarts, readable danger, and a score that always feels beatable by one more point.  
+The game is designed to create a brutal but fair “one more try” loop through very short runs, immediate restarts, readable danger, and a score that always feels beatable by one more point.  
 The visual direction is premium neon arcade: dark soft backgrounds, glowing line, cute-but-stylish character, clean HUD, and highly shareable near-death moments.  
 The technical target is **Unity 6.x LTS**, **C#**, **URP 2D**, **Input System**, **Canvas UI**, **Particle System**, and **Audio Mixer**.
 
@@ -50,6 +50,8 @@ Read these in order before making any cross-cutting change:
 15. `15-roadmap-backlog.md`
 16. `16-production-phases.md`
 17. `17-repo-alignment-audit.md`
+18. `18-visual-refresh-and-theme-system-guide.md`
+19. `19-presentation-refresh-readiness-roadmap.md`
 
 Read `13-feature-spec-template.md` before proposing or implementing any new feature.
 
@@ -67,6 +69,8 @@ When documents disagree, follow this authority order:
 8. `15-roadmap-backlog.md`
 9. `16-production-phases.md`
 10. `17-repo-alignment-audit.md`
+11. `18-visual-refresh-and-theme-system-guide.md`
+12. `19-presentation-refresh-readiness-roadmap.md`
 
 If a lower-authority document conflicts with a higher-authority document, the higher one wins.
 
@@ -79,7 +83,7 @@ When docs disagree:
 3. Prefer **system boundaries** over convenience.
 4. Prefer **fairness, readability, and restart speed** over extra flair.
 5. If the disagreement changes architecture, stack, or ownership, record it in `12-adrs.md`.
-6. Do not silently â€œsplit the differenceâ€ by inventing a new hybrid rule.
+6. Do not silently “split the difference” by inventing a new hybrid rule.
 
 ## Stable project names
 
@@ -113,6 +117,8 @@ The public name can change later without forcing a repository rename.
 - `15-roadmap-backlog.md` owns **future work and rejected ideas**
 - `16-production-phases.md` owns **phased delivery from current repo state to release**
 - `17-repo-alignment-audit.md` owns **current repo-to-doc alignment status and baseline remediation order**
+- `18-visual-refresh-and-theme-system-guide.md` owns **visual refresh planning and theme-system evolution guidance**
+- `19-presentation-refresh-readiness-roadmap.md` owns **strict readiness and gating before refresh implementation begins**
 
 ## Update protocol
 
@@ -149,7 +155,7 @@ Do not put the following into source-of-truth docs:
 - meeting leftovers
 - contradictory examples
 - personal preference comments without a decision
-- â€œwe might do thisâ€ items that belong in backlog instead
+- “we might do this” items that belong in backlog instead
 - duplicate copies of the same rule in multiple docs
 
 ## Expected implementation behavior
@@ -191,4 +197,7 @@ This `.ai` folder is healthy when:
 - Need future priorities? Read `15`.
 - Need phased delivery order and release gates? Read `16`.
 - Need the current repo alignment snapshot before baseline cleanup? Read `17`.
+- Need the visual-refresh/theme-system implementation map? Read `18`.
+- Need the pre-refresh gating roadmap before any presentation implementation starts? Read `19`.
+
 
