@@ -145,7 +145,9 @@ namespace Voltline.Editor
             GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
             DifficultyCurveConfig difficultyCurve = AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
             GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            PlayerVisualConfig playerVisualConfig = AssetDatabase.LoadAssetAtPath<PlayerVisualConfig>(ProjectConfigAssetPaths.PlayerVisualConfig);
             HazardPresentationCatalog hazardPresentationCatalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
+            ObstacleVisualCatalog obstacleVisualCatalog = AssetDatabase.LoadAssetAtPath<ObstacleVisualCatalog>(ProjectConfigAssetPaths.ObstacleVisualCatalog);
             ObstacleCatalog obstacleCatalog = AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
             ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
             AudioCueCatalog audioCueCatalog = AssetDatabase.LoadAssetAtPath<AudioCueCatalog>(ProjectConfigAssetPaths.AudioCueCatalog);
@@ -155,7 +157,9 @@ namespace Voltline.Editor
                 gameBalance,
                 difficultyCurve,
                 gameplayPresentation,
+                playerVisualConfig,
                 hazardPresentationCatalog,
+                obstacleVisualCatalog,
                 obstacleCatalog,
                 themeCatalog,
                 audioCueCatalog,
@@ -254,6 +258,8 @@ namespace Voltline.Editor
 
             SerializedObject serializedMainMenu = new(mainMenuView);
             ValidateObjectReference(serializedMainMenu, "themeCatalog", result, true);
+            ValidateObjectReference(serializedMainMenu, "playerVisualConfig", result, true);
+            ValidateObjectReference(serializedMainMenu, "obstacleVisualCatalog", result, true);
             ValidateObjectReference(serializedMainMenu, "audioCueCatalog", result, true);
             ValidateObjectReference(serializedMainMenu, "audioMixer", result, false);
         }
@@ -271,7 +277,9 @@ namespace Voltline.Editor
             SerializedObject serializedInstaller = new(installer);
             ValidateObjectReference(serializedInstaller, "gameBalance", result, true);
             ValidateObjectReference(serializedInstaller, "gameplayPresentation", result, true);
+            ValidateObjectReference(serializedInstaller, "playerVisualConfig", result, true);
             ValidateObjectReference(serializedInstaller, "hazardPresentationCatalog", result, true);
+            ValidateObjectReference(serializedInstaller, "obstacleVisualCatalog", result, true);
             ValidateObjectReference(serializedInstaller, "difficultyCurve", result, true);
             ValidateObjectReference(serializedInstaller, "obstacleCatalog", result, true);
             ValidateObjectReference(serializedInstaller, "themeCatalog", result, true);

@@ -11,7 +11,9 @@ namespace Voltline.Data
             GameBalanceConfig gameBalance,
             DifficultyCurveConfig difficultyCurve,
             GameplayPresentationConfig gameplayPresentation,
+            PlayerVisualConfig playerVisualConfig,
             HazardPresentationCatalog hazardPresentationCatalog,
+            ObstacleVisualCatalog obstacleVisualCatalog,
             ObstacleCatalog obstacleCatalog,
             ThemeCatalog themeCatalog,
             AudioCueCatalog audioCueCatalog,
@@ -22,12 +24,14 @@ namespace Voltline.Data
             ValidateGameBalance(gameBalance, result);
             ValidateDifficultyCurve(difficultyCurve, result);
             ValidateGameplayPresentation(gameplayPresentation, result);
+            ValidatePlayerVisualConfig(playerVisualConfig, result);
             ValidateHazardPresentationCatalog(hazardPresentationCatalog, result);
+            ValidateObstacleVisualCatalog(obstacleVisualCatalog, result);
             ValidateObstacleCatalog(obstacleCatalog, result);
             ValidateThemeCatalog(themeCatalog, result);
             ValidateAudioCueCatalog(audioCueCatalog, result);
             ValidateVfxCatalog(vfxCatalog, result);
-            ValidatePresentationReadinessRelationships(gameBalance, gameplayPresentation, hazardPresentationCatalog, obstacleCatalog, result);
+            ValidatePresentationReadinessRelationships(gameBalance, gameplayPresentation, playerVisualConfig, hazardPresentationCatalog, obstacleVisualCatalog, obstacleCatalog, result);
 
             return result;
         }
@@ -137,21 +141,22 @@ namespace Voltline.Data
             if (config.TrackCurvePrimaryWavelength <= 0f) result.Add("GameplayPresentationConfig primary curve wavelength must be positive.");
             if (config.TrackCurveSecondaryAmplitude < 0f) result.Add("GameplayPresentationConfig secondary curve amplitude must be non-negative.");
             if (config.TrackCurveSecondaryWavelength <= 0f) result.Add("GameplayPresentationConfig secondary curve wavelength must be positive.");
-            if (config.PlayerVisualScale <= 0f) result.Add("GameplayPresentationConfig player visual scale must be positive.");
+            if (config.PlayerVisualScale <= 0f) result.Add("GameplayPresentationConfig frozen player visual scale must be positive.");
             if (config.PlayerLineClearance < 0f) result.Add("GameplayPresentationConfig player line clearance must be non-negative.");
             if (config.PlayerCollisionHalfWidth <= 0f) result.Add("GameplayPresentationConfig player collision half-width must be positive.");
             if (config.PlayerCollisionHalfHeight <= 0f) result.Add("GameplayPresentationConfig player collision half-height must be positive.");
+        }
 
-            float visualHalfExtent = config.PlayerVisualScale * 0.5f;
-            if (config.PlayerCollisionHalfWidth >= visualHalfExtent)
+        public static void ValidatePlayerVisualConfig(PlayerVisualConfig config, ConfigValidationResult result)
+        {
+            if (config == null)
             {
-                result.Add("GameplayPresentationConfig player collision half-width must stay inside the readable player visual scale.");
+                result.Add("Missing PlayerVisualConfig asset.");
+                return;
             }
 
-            if (config.PlayerCollisionHalfHeight > visualHalfExtent)
-            {
-                result.Add("GameplayPresentationConfig player collision half-height must stay inside the readable player visual scale.");
-            }
+            if (config.VisibleBoundsScale.x <= 0f || config.VisibleBoundsScale.y <= 0f) result.Add("PlayerVisualConfig visible bounds must be positive.");
+            if (config.MenuPreviewSize.x <= 0f || config.MenuPreviewSize.y <= 0f) result.Add("PlayerVisualConfig menu preview size must be positive.");
         }
 
         public static void ValidateHazardPresentationCatalog(HazardPresentationCatalog catalog, ConfigValidationResult result)
@@ -220,6 +225,56 @@ namespace Voltline.Data
                 if (!families.Contains(family))
                 {
                     result.Add($"HazardPresentationCatalog is missing a presentation entry for family '{family}'.");
+                }
+            }
+        }
+
+        public static void ValidateObstacleVisualCatalog(ObstacleVisualCatalog catalog, ConfigValidationResult result)
+        {
+            if (catalog == null)
+            {
+                result.Add("Missing ObstacleVisualCatalog asset.");
+                return;
+            }
+
+            IReadOnlyList<ObstacleVisualDefinition> entries = catalog.Entries;
+            if (entries == null || entries.Count == 0)
+            {
+                result.Add("ObstacleVisualCatalog must contain entries for every approved hazard family.");
+                return;
+            }
+
+            HashSet<ObstacleFamily> families = new();
+            for (int i = 0; i < entries.Count; i++)
+            {
+                ObstacleVisualDefinition entry = entries[i];
+                if (entry == null)
+                {
+                    result.Add($"ObstacleVisualCatalog entry at index {i} is missing.");
+                    continue;
+                }
+
+                if (!families.Add(entry.Family))
+                {
+                    result.Add($"ObstacleVisualCatalog contains duplicate entry for family '{entry.Family}'.");
+                }
+
+                if (entry.VisualBoundsScale.x <= 0f || entry.VisualBoundsScale.y <= 0f)
+                {
+                    result.Add($"ObstacleVisualCatalog family '{entry.Family}' visual bounds must be positive.");
+                }
+
+                if (entry.TelegraphBoundsScale.x < 0f || entry.TelegraphBoundsScale.y < 0f)
+                {
+                    result.Add($"ObstacleVisualCatalog family '{entry.Family}' telegraph bounds must be non-negative.");
+                }
+            }
+
+            foreach (ObstacleFamily family in System.Enum.GetValues(typeof(ObstacleFamily)))
+            {
+                if (!families.Contains(family))
+                {
+                    result.Add($"ObstacleVisualCatalog is missing a visual entry for family '{family}'.");
                 }
             }
         }
@@ -373,38 +428,59 @@ namespace Voltline.Data
         private static void ValidatePresentationReadinessRelationships(
             GameBalanceConfig gameBalance,
             GameplayPresentationConfig gameplayPresentation,
+            PlayerVisualConfig playerVisualConfig,
             HazardPresentationCatalog hazardPresentationCatalog,
+            ObstacleVisualCatalog obstacleVisualCatalog,
             ObstacleCatalog obstacleCatalog,
             ConfigValidationResult result)
         {
-            if (gameBalance == null || gameplayPresentation == null || hazardPresentationCatalog == null)
+            if (gameBalance == null || gameplayPresentation == null || playerVisualConfig == null || hazardPresentationCatalog == null || obstacleVisualCatalog == null)
             {
                 return;
             }
 
             float requiredPlayerClearance = (gameplayPresentation.TrackLineWidth * 0.5f)
-                + (gameplayPresentation.PlayerVisualScale * 0.5f)
+                + playerVisualConfig.VisibleHalfWidth
                 + gameplayPresentation.PlayerLineClearance;
             if (gameBalance.SideOffset <= requiredPlayerClearance)
             {
-                result.Add("GameBalanceConfig side offset must keep the player visibly clear of the line.");
+                result.Add("GameBalanceConfig side offset must keep the player visual visibly clear of the line.");
+            }
+
+            if (playerVisualConfig.VisibleHalfWidth < gameplayPresentation.PlayerCollisionHalfWidth)
+            {
+                result.Add("PlayerVisualConfig visible width must remain wider than the player collision half-width.");
+            }
+
+            if (playerVisualConfig.VisibleHalfHeight < gameplayPresentation.PlayerCollisionHalfHeight)
+            {
+                result.Add("PlayerVisualConfig visible height must remain taller than the player collision half-height.");
             }
 
             float widestVisualHalfWidth = 0f;
             foreach (ObstacleFamily family in System.Enum.GetValues(typeof(ObstacleFamily)))
             {
-                if (!hazardPresentationCatalog.TryGetProfile(family, out HazardLayoutProfile layout))
+                if (hazardPresentationCatalog.TryGetProfile(family, out HazardLayoutProfile layout)
+                    && obstacleVisualCatalog.TryGetProfile(family, out ObstacleVisualProfile visual))
                 {
-                    continue;
-                }
+                    widestVisualHalfWidth = System.Math.Max(widestVisualHalfWidth, visual.VisualHalfWidth);
 
-                widestVisualHalfWidth = System.Math.Max(widestVisualHalfWidth, layout.VisualHalfWidth);
+                    if (visual.VisualBoundsScale.x < layout.CollisionBoundsScale.x)
+                    {
+                        result.Add($"ObstacleVisualCatalog family '{family}' visible width must remain at least as wide as the collision width.");
+                    }
+
+                    if (visual.VisualBoundsScale.y < layout.CollisionBoundsScale.y)
+                    {
+                        result.Add($"ObstacleVisualCatalog family '{family}' visible height must remain at least as tall as the collision height.");
+                    }
+                }
             }
 
             float requiredHazardClearance = (gameplayPresentation.TrackLineWidth * 0.5f) + widestVisualHalfWidth + 0.08f;
             if (gameBalance.SideOffset <= requiredHazardClearance)
             {
-                result.Add("GameBalanceConfig side offset must keep the widest hazard profile visibly clear of the line.");
+                result.Add("GameBalanceConfig side offset must keep the widest obstacle visual profile visibly clear of the line.");
             }
 
             if (obstacleCatalog == null)
@@ -424,6 +500,11 @@ namespace Voltline.Data
                 if (!hazardPresentationCatalog.TryGetProfile(obstacle.Family, out _))
                 {
                     result.Add($"ObstacleConfig '{obstacle.ObstacleId}' has no matching hazard presentation profile for family '{obstacle.Family}'.");
+                }
+
+                if (!obstacleVisualCatalog.TryGetProfile(obstacle.Family, out _))
+                {
+                    result.Add($"ObstacleConfig '{obstacle.ObstacleId}' has no matching obstacle visual profile for family '{obstacle.Family}'.");
                 }
             }
         }

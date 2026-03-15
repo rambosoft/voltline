@@ -7,14 +7,15 @@ namespace Voltline.Tests.EditMode
     public sealed class PresentationReadinessAuditEditModeTests
     {
         [Test]
-        public void PresentationReadinessAudit_HasNoBlockingErrors_AndKeepsCurrentBlockedWorkVisible()
+        public void PresentationReadinessAudit_HasNoBlockingErrors_AndKeepsLaterBlockedWorkVisible()
         {
             PresentationReadinessAuditResult result = PresentationReadinessAudit.Validate();
 
             Assert.That(result.Errors, Is.Empty);
-            Assert.That(result.Warnings, Has.Some.Contains("Player visuals remain procedural"));
-            Assert.That(result.Warnings, Has.Some.Contains("Hazard visuals remain procedural"));
+            Assert.That(result.Warnings, Has.None.Contains("Player visuals remain procedural"));
+            Assert.That(result.Warnings, Has.None.Contains("Hazard visuals remain procedural"));
             Assert.That(result.Warnings, Has.Some.Contains("TrackManager still lacks a dedicated background presentation layer"));
+            Assert.That(result.Notes, Has.Some.Contains("Player and obstacle refresh slices are now structurally unlocked"));
         }
     }
 }

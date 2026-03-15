@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0eddbdb811cd22d45a1b96e9bb04adda, type: 3}
+  m_Name: CFG_PlayerVisual_Default
+  m_EditorClassIdentifier: 
+  visualPrefab: {fileID: 0}
+  fallbackSprite: {fileID: 0}
+  overrideMaterial: {fileID: 0}
+  fallbackColor: {r: 1, g: 1, b: 1, a: 1}
+  applyRuntimeTint: 1
+  visibleBoundsScale: {x: 0.68, y: 0.68}
+  localOffset: {x: 0, y: 0}
+  baseRotationOffset: 0
+  sortingOrder: 4
+  menuPreviewSize: {x: 88, y: 88}
+  menuPreviewOffset: {x: 84, y: 116}

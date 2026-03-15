@@ -1,6 +1,5 @@
 using UnityEngine;
 using Voltline.Data;
-using Voltline.Utilities;
 
 namespace Voltline.Gameplay
 {
@@ -8,10 +7,10 @@ namespace Voltline.Gameplay
     {
         private GameBalanceConfig gameBalance;
         private GameplayPresentationConfig presentationConfig;
+        private PlayerVisualConfig visualConfig;
         private ThemeConfig theme;
         private TrackManager trackManager;
-        private Transform visualRoot;
-        private SpriteRenderer spriteRenderer;
+        private PlayerVisualView visualView;
 
         private PlayerSide currentSide;
         private PlayerSide targetSide;
@@ -32,18 +31,21 @@ namespace Voltline.Gameplay
         public float CollisionHalfWidth => presentationConfig.PlayerCollisionHalfWidth;
         public float CollisionHalfHeight => presentationConfig.PlayerCollisionHalfHeight;
         public Vector3 WorldPosition => new(currentX, trackManager != null ? trackManager.PlayerAnchorY : 0f, 0f);
+        public bool HasVisualView => visualView != null && visualView.IsInitialized;
 
         public void Initialize(
             GameBalanceConfig balanceConfig,
             GameplayPresentationConfig gameplayPresentation,
+            PlayerVisualConfig playerVisual,
             TrackManager track,
             ThemeConfig activeTheme)
         {
             gameBalance = balanceConfig;
             presentationConfig = gameplayPresentation;
+            visualConfig = playerVisual;
             trackManager = track;
             theme = activeTheme;
-            EnsureVisual();
+            EnsureVisualView();
             ResetRun();
         }
 
@@ -109,31 +111,27 @@ namespace Voltline.Gameplay
             ApplyVisualState(theme.DangerColor, 45f);
         }
 
-        private void EnsureVisual()
+        private void EnsureVisualView()
         {
-            visualRoot ??= new GameObject("Player").transform;
-            visualRoot.SetParent(trackManager.PlayerRoot, false);
-
-            spriteRenderer = visualRoot.GetComponent<SpriteRenderer>();
-            if (spriteRenderer == null)
-            {
-                spriteRenderer = visualRoot.gameObject.AddComponent<SpriteRenderer>();
-                spriteRenderer.sprite = RuntimeSpriteFactory.WhiteSprite;
-                spriteRenderer.sortingOrder = 4;
-            }
-        }
-
-        private void ApplyVisualState(Color tint, float zRotation)
-        {
-            if (visualRoot == null || spriteRenderer == null)
+            if (visualView != null)
             {
                 return;
             }
 
-            visualRoot.position = WorldPosition;
-            visualRoot.localScale = new Vector3(presentationConfig.PlayerVisualScale, presentationConfig.PlayerVisualScale, 1f);
-            visualRoot.rotation = Quaternion.Euler(0f, 0f, zRotation);
-            spriteRenderer.color = tint;
+            GameObject viewRoot = new("PlayerVisualRoot");
+            viewRoot.transform.SetParent(trackManager.PlayerRoot, false);
+            visualView = viewRoot.AddComponent<PlayerVisualView>();
+            visualView.Initialize(trackManager.PlayerRoot, visualConfig);
+        }
+
+        private void ApplyVisualState(Color tint, float zRotation)
+        {
+            if (visualView == null)
+            {
+                return;
+            }
+
+            visualView.Apply(new PlayerVisualState(WorldPosition, tint, zRotation));
         }
 
         private float GetOffsetForSide(PlayerSide side)

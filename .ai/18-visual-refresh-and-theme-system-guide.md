@@ -20,17 +20,17 @@ This file is the execution guide for presentation refresh work. It owns how to e
 - Presentation work must not introduce feature creep.
 
 ## 3. Current-state analysis
-- Player visuals are currently procedural: `PlayerController.cs` creates a runtime `SpriteRenderer` using `RuntimeSpriteFactory.WhiteSprite` and tints/scales it.
+- Player visuals are now decoupled from gameplay hit logic: `PlayerController.cs` owns side/collision/flip state, while `PlayerVisualView.cs` renders the active look from `PlayerVisualConfig`.
 - Player collision is currently simplified, but the frozen readability/collision baseline now lives in `GameplayPresentationConfig` rather than static helper constants.
-- Obstacle visuals are procedural too: `HazardManager.cs` creates multiple runtime `SpriteRenderer`s and styles them per family.
-- Obstacle collision and readable spacing now route through `HazardPresentationCatalog` and `HazardManager.cs`, but the visuals themselves are still procedural.
+- Obstacle visuals are now decoupled from gameplay collision/spacing: `HazardManager.cs` owns spawn/collision/spacing state, while `HazardVisualView.cs` renders family visuals from `ObstacleVisualCatalog`.
+- Obstacle collision and readable spacing remain routed through `HazardPresentationCatalog`, which now sits cleanly beside the obstacle visual catalog instead of being implicitly tied to procedural rendering.
 - Gameplay background is minimal: `TrackManager.cs` sets camera background color from `ThemeConfig`; there is no gameplay background layer system yet.
 - Themes already exist but are color-only: `ThemeConfig`, `ThemeCatalog`, `SaveService`, and `SettingsOverlayView` support unlock/select persistence, but not asset overrides or in-run switching.
 - VFX are mostly procedural: `VfxService.cs` falls back to transient sprite pulses/bursts.
 - Audio is semantic and service-based: `AudioService.cs` + `AudioCueCatalog.cs` + mixer routing are in place, but actual content still leans on procedural fallback clips.
 - Content folders are still sparse: `Assets/_Game/Art/...` and most audio content folders contain structure more than real authored assets.
-- Main architectural limitation: visuals are still heavily code-generated, and theme application is mostly initialization-time only.
-- Easy changes: more color themes, richer theme metadata, config additions. Risky changes: swapping player/obstacle art before decoupling collision, adding mid-run theme switching, and adding busy background effects too early.
+- Main architectural limitation: background presentation still lacks a dedicated owner, and theme application is mostly initialization-time only.
+- Easy changes: richer player/obstacle art through config, more color themes, richer theme metadata, config additions. Risky changes: broad background spectacle, mid-run theme switching, and content-heavy VFX/audio refresh too early.
 
 ## 4. Impact map
 Affected areas will include:
@@ -57,7 +57,7 @@ Affected areas will include:
 ## 6. Player asset refresh guide
 - Keep gameplay-critical data separate from art: collision extents, side offset, line clearance, flip timing, and visual minimum size should be data-driven.
 - Visual-only data should include sprite/prefab, material, scale, pivot offset, glow/trail references, and theme overrides.
-- Recommended repo-specific path: add `PlayerVisualConfig`, then let `PlayerController` read visual setup separately from collision setup before replacing the runtime white sprite.
+- Recommended repo-specific path is now live: `PlayerController` drives `PlayerVisualView` via `PlayerVisualConfig`, so future player art replacement should happen there rather than inside gameplay hit logic.
 - Preserve one canonical pivot/orientation rule. Do not let themes silently change the perceived anchor on the line.
 - Avoid large decorative appendages that imply collision when they are cosmetic only.
 
@@ -273,4 +273,5 @@ Safest sequence:
 - theme expansion fourth
 - dynamic switching fifth
 - final VFX/audio cohesion pass last
+
 

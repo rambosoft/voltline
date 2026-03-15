@@ -32,6 +32,7 @@ namespace Voltline.Tests.PlayMode
 
             Assert.That(installer.DebugStartingScore, Is.EqualTo(0));
             Assert.That(scoreSystem.CurrentScore, Is.EqualTo(0));
+            Assert.That(playerController.HasVisualView, Is.True);
 
             PlayerSide initialSide = playerController.CurrentSide;
             gameManager.DebugHandleTap();
@@ -51,12 +52,16 @@ namespace Voltline.Tests.PlayMode
             GameManager gameManager = Object.FindFirstObjectByType<GameManager>();
             TrackManager trackManager = Object.FindFirstObjectByType<TrackManager>();
             UIStateCoordinator coordinator = Object.FindFirstObjectByType<UIStateCoordinator>();
+            HazardManager hazardManager = Object.FindFirstObjectByType<HazardManager>();
 
             Assert.That(gameManager, Is.Not.Null);
             Assert.That(trackManager, Is.Not.Null);
             Assert.That(coordinator, Is.Not.Null);
+            Assert.That(hazardManager, Is.Not.Null);
 
             yield return WaitForState(gameManager, RunState.Active, 1.5f);
+            yield return WaitForHazardVisuals(hazardManager, 2.5f);
+
             float initialDistance = trackManager.TravelDistance;
             yield return new WaitForSeconds(0.25f);
             Assert.That(trackManager.TravelDistance, Is.GreaterThan(initialDistance));
@@ -106,5 +111,18 @@ namespace Voltline.Tests.PlayMode
 
             Assert.That(gameManager.CurrentState, Is.EqualTo(state));
         }
+
+        private static IEnumerator WaitForHazardVisuals(HazardManager hazardManager, float timeoutSeconds)
+        {
+            float elapsed = 0f;
+            while (!hazardManager.AllActiveHazardsHaveVisualViews && elapsed < timeoutSeconds)
+            {
+                elapsed += Time.deltaTime;
+                yield return null;
+            }
+
+            Assert.That(hazardManager.AllActiveHazardsHaveVisualViews, Is.True);
+        }
     }
 }
+

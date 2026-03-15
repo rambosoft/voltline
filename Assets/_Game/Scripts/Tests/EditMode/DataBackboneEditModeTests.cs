@@ -17,7 +17,9 @@ namespace Voltline.Tests.EditMode
             GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
             DifficultyCurveConfig difficultyCurve = AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
             GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            PlayerVisualConfig playerVisualConfig = AssetDatabase.LoadAssetAtPath<PlayerVisualConfig>(ProjectConfigAssetPaths.PlayerVisualConfig);
             HazardPresentationCatalog hazardPresentationCatalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
+            ObstacleVisualCatalog obstacleVisualCatalog = AssetDatabase.LoadAssetAtPath<ObstacleVisualCatalog>(ProjectConfigAssetPaths.ObstacleVisualCatalog);
             ObstacleCatalog obstacleCatalog = AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
             ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
             AudioCueCatalog audioCueCatalog = AssetDatabase.LoadAssetAtPath<AudioCueCatalog>(ProjectConfigAssetPaths.AudioCueCatalog);
@@ -27,7 +29,9 @@ namespace Voltline.Tests.EditMode
                 gameBalance,
                 difficultyCurve,
                 gameplayPresentation,
+                playerVisualConfig,
                 hazardPresentationCatalog,
+                obstacleVisualCatalog,
                 obstacleCatalog,
                 themeCatalog,
                 audioCueCatalog,
@@ -98,6 +102,19 @@ namespace Voltline.Tests.EditMode
                 Assert.That(catalog.TryGetProfile(family, out HazardLayoutProfile profile), Is.True, family.ToString());
                 Assert.That(profile.VisualBoundsScale.x, Is.GreaterThan(0f), family.ToString());
                 Assert.That(profile.CollisionBoundsScale.x, Is.GreaterThan(0f), family.ToString());
+            }
+        }
+
+        [Test]
+        public void ObstacleVisualCatalog_CoversEveryApprovedFamily()
+        {
+            ObstacleVisualCatalog catalog = AssetDatabase.LoadAssetAtPath<ObstacleVisualCatalog>(ProjectConfigAssetPaths.ObstacleVisualCatalog);
+
+            foreach (ObstacleFamily family in System.Enum.GetValues(typeof(ObstacleFamily)))
+            {
+                Assert.That(catalog.TryGetProfile(family, out ObstacleVisualProfile profile), Is.True, family.ToString());
+                Assert.That(profile.VisualBoundsScale.x, Is.GreaterThan(0f), family.ToString());
+                Assert.That(profile.MainSprite, Is.Not.Null, family.ToString());
             }
         }
 

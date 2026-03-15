@@ -121,6 +121,10 @@ Examples:
 
 - `GameBalanceConfig`
 - `DifficultyCurveConfig`
+- `GameplayPresentationConfig`
+- `PlayerVisualConfig`
+- `HazardPresentationCatalog`
+- `ObstacleVisualCatalog`
 - `ObstacleCatalog`
 - `AudioCueCatalog`
 - `VfxCatalog`
@@ -396,3 +400,4 @@ Assets/_Game/Scripts/Runtime/
 - Runtime code uses explicit assemblies.
 - New top-level folders require this document to be updated.
 - Naming must optimize clarity, not personal preference.
+

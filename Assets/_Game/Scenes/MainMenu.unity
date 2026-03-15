@@ -385,6 +385,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   themeCatalog: {fileID: 11400000, guid: 7038d79080204d47bc6ecdf5e273aa8b, type: 2}
+  playerVisualConfig: {fileID: 11400000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f2003, type: 2}
+  obstacleVisualCatalog: {fileID: 11400000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f2004, type: 2}
   audioCueCatalog: {fileID: 11400000, guid: 5d8c35b2df694648b626cf48d5e8f3b6, type: 2}
   audioMixer: {fileID: 24100000, guid: 369026a18c987a5409269da44d653f5c, type: 2}
 --- !u!1660057539 &9223372036854775807

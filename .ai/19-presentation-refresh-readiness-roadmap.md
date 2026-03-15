@@ -20,7 +20,7 @@ This file is the strict readiness and gating roadmap that must be satisfied befo
 - Refresh work must not introduce feature creep, parallel systems, or scene-local hacks.
 
 ## 3. Why a readiness roadmap is needed
-The current repo is playable and broadly validated, and the frozen presentation baseline now lives in explicit config assets. It is still not structurally ready for safe presentation swaps because player and hazard visuals remain procedural runtime constructs and have not yet been decoupled from their gameplay-facing roots. Without a strict pre-refresh roadmap, art or theme work could still silently break collision honesty, spacing fairness, readability, restart speed, or performance.
+The current repo is playable and broadly validated, and the frozen presentation baseline now lives in explicit config assets. Player and hazard visuals are now decoupled from gameplay collision and spacing ownership, but the repo is still not fully refresh-ready because background architecture, presentation-ready theme data, and refresh pipelines are still gated. Without a strict pre-refresh roadmap, art or theme work could still silently break collision honesty, spacing fairness, readability, restart speed, or performance.
 
 ## 4. Relationship to other docs
 - `16-production-phases.md` owns the broader production sequence; this file narrows only the pre-refresh readiness path.
@@ -36,8 +36,8 @@ Voltline should not refresh presentation by replacing visuals first and repairin
 
 ## 6. Readiness overview
 Current repo state relevant to readiness:
-- `PlayerController.cs` creates the player visual procedurally.
-- `HazardManager.cs` creates hazard visuals procedurally.
+- `PlayerController.cs` owns hit logic and line anchoring while `PlayerVisualView.cs` renders the player from `PlayerVisualConfig`.
+- `HazardManager.cs` owns hazard collision/spacing while `HazardVisualView.cs` renders family visuals from `ObstacleVisualCatalog`.
 - `GameplayPresentationConfig` now owns the frozen player/track presentation baseline for the live repo.
 - `HazardPresentationCatalog` now owns the frozen hazard-family readability, collision, and spacing baseline for the live repo.
 - `TrackManager.cs` has no dedicated background presentation owner; gameplay background is effectively line + camera color.
@@ -252,30 +252,27 @@ Readiness gates:
 
 ## 8. Now / Next / Later / Blocked
 ### Now
-- Decouple player visuals from collision.
-- Decouple obstacle visuals from collision and spacing.
-
-### Next
 - Establish background architecture and a strict performance budget.
 - Expand the theme system into a presentation-ready model.
 
-### Later
+### Next
 - Define dynamic theme transition rules.
 - Establish VFX and audio refresh pipelines.
-- Apply the refresh approval gate and controlled rollout plan.
+
+### Later
+- Apply the refresh approval gate.
+- Apply the controlled rollout plan to each refresh slice.
 
 ### Blocked
-- Direct player asset swaps.
-- Direct obstacle asset swaps.
-- Replacing gameplay background visuals with richer content.
+- Replacing gameplay background visuals with richer content before background architecture and budgets are defined.
 - Broad theme visual expansion beyond the current color-oriented baseline.
 - Dynamic theme switching during a run.
 - Large VFX refresh passes.
 - SFX/music presentation refresh beyond current semantic/pipeline-safe work.
 
 ## 9. Asset-swap gating rules
-- No player art swap is allowed until player visuals are decoupled from collision and line anchoring.
-- No obstacle art swap is allowed until visible shape, collision shape, and spacing ownership are independent and testable.
+- Player art swaps are allowed only through `PlayerVisualConfig` and `PlayerVisualView`; they remain blocked from touching collision or line anchoring code directly.
+- Obstacle art swaps are allowed only through `ObstacleVisualCatalog` and `HazardVisualView`; they remain blocked from touching collision or spacing code directly.
 - No background art or speed FX rollout is allowed until a background owner and effect budget exist.
 - No theme art rollout is allowed until theme data can own those assets without hardcoded branching.
 - No VFX or audio replacement sweep is allowed until the corresponding pipeline phase is complete.
@@ -319,6 +316,7 @@ Before refresh implementation, the repo should have explicit ownership for:
 
 Recommended asset families for future implementation:
 - `PlayerVisualConfig`
+- `ObstacleVisualCatalog`
 - `CollisionTuningConfig`
 - `ObstacleVisualConfig`
 - `BackgroundFxConfig`
@@ -365,13 +363,17 @@ When implementation later happens, update only the owning docs affected by the a
 - `18-visual-refresh-and-theme-system-guide.md` if the implementation strategy itself changes materially.
 
 ## 17. Recommendations
-- Do not begin with art swaps.
 - Do not begin with dynamic theme switching.
 - Do not begin with background spectacle.
-- Begin with dependency audit, assumption freeze, and config readiness.
-- Treat visual refresh as blocked until player and hazard visuals are decoupled from their gameplay collision/spacing ownership.
+- Treat player and obstacle refresh as structurally unlocked, but only through `PlayerVisualConfig` / `PlayerVisualView` and `ObstacleVisualCatalog` / `HazardVisualView`.
+- Begin the next readiness slice with background architecture and theme-model expansion.
+- Keep collision, spacing, and line anchoring code off-limits to art swaps unless a later readiness phase explicitly reopens them.
 - Keep this roadmap narrower than `16` and more restrictive than `18`.
 - Use it as the stop/go gate for any future visual refresh proposal.
+
+
+
+
 
 
 

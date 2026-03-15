@@ -347,3 +347,4 @@ The important rule is that event flow remains readable and local.
 - Config lives in assets, not random scene objects.
 - System responsibilities stay small enough to explain in one sentence.
 - New runtime systems require explicit ownership justification.
+

@@ -16,6 +16,8 @@ namespace Voltline.UI
     public sealed class MainMenuView : MonoBehaviour
     {
         [SerializeField] private ThemeCatalog themeCatalog;
+        [SerializeField] private PlayerVisualConfig playerVisualConfig;
+        [SerializeField] private ObstacleVisualCatalog obstacleVisualCatalog;
         [SerializeField] private AudioCueCatalog audioCueCatalog;
         [SerializeField] private AudioMixer audioMixer;
 
@@ -27,9 +29,9 @@ namespace Voltline.UI
 
         private void Awake()
         {
-            if (themeCatalog == null || themeCatalog.DefaultTheme == null || audioCueCatalog == null)
+            if (themeCatalog == null || themeCatalog.DefaultTheme == null || playerVisualConfig == null || obstacleVisualCatalog == null || audioCueCatalog == null)
             {
-                Debug.LogError("MainMenuView is missing a valid ThemeCatalog or AudioCueCatalog reference.");
+                Debug.LogError("MainMenuView is missing a valid ThemeCatalog, PlayerVisualConfig, ObstacleVisualCatalog, or AudioCueCatalog reference.");
                 enabled = false;
                 return;
             }
@@ -102,7 +104,7 @@ namespace Voltline.UI
             RectTransform previewRoot = new GameObject("PreviewView", typeof(RectTransform)).GetComponent<RectTransform>();
             previewRoot.SetParent(safeAreaRoot, false);
             MainMenuPreviewView previewView = previewRoot.gameObject.AddComponent<MainMenuPreviewView>();
-            previewView.Initialize(previewRoot, activeTheme);
+            previewView.Initialize(previewRoot, activeTheme, playerVisualConfig, obstacleVisualCatalog);
 
             TMP_Text hintText = UIFactory.CreateText("Hint", safeAreaRoot, "Tap to flip sides", 28, FontStyles.Normal, TextAlignmentOptions.Center, new Color(0.9f, 0.94f, 1f, 1f));
             UIFactory.SetAnchors((RectTransform)hintText.transform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -390f), new Vector2(460f, 44f));
@@ -139,6 +141,8 @@ namespace Voltline.UI
         private void AssignDefaults()
         {
             themeCatalog ??= AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
+            playerVisualConfig ??= AssetDatabase.LoadAssetAtPath<PlayerVisualConfig>(ProjectConfigAssetPaths.PlayerVisualConfig);
+            obstacleVisualCatalog ??= AssetDatabase.LoadAssetAtPath<ObstacleVisualCatalog>(ProjectConfigAssetPaths.ObstacleVisualCatalog);
             audioCueCatalog ??= AssetDatabase.LoadAssetAtPath<AudioCueCatalog>(ProjectConfigAssetPaths.AudioCueCatalog);
             audioMixer ??= AssetDatabase.LoadAssetAtPath<AudioMixer>(ProjectConfigAssetPaths.AudioMixer);
         }

@@ -72,7 +72,7 @@ At minimum, add automated tests for:
 - difficulty progression calculations
 - theme ID and catalog integrity
 - release-readiness audit checks for scene order, input asset integrity, and debug-safe defaults
-- presentation-readiness audit checks for frozen assumptions, config ownership, and still-blocked refresh work
+- presentation-readiness audit checks for frozen assumptions, config ownership, unlocked player/obstacle decoupling, and still-blocked later refresh work
 
 ## What must be validated manually
 
@@ -248,6 +248,7 @@ A feature is incomplete unless docs are updated when source-of-truth topics chan
 - Manual testing covers feel and readability.
 - Mobile safe area and performance must be validated before release.
 - No feature is done if docs and tests drift behind implementation.
+
 
 
 

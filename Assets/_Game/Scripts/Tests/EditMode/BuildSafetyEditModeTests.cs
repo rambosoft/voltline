@@ -21,7 +21,9 @@ namespace Voltline.Tests.EditMode
             SerializedObject serializedObject = new(installer);
             Assert.That(serializedObject.FindProperty("debugStartingScore").intValue, Is.EqualTo(0));
             Assert.That(serializedObject.FindProperty("gameplayPresentation").objectReferenceValue, Is.Not.Null);
+            Assert.That(serializedObject.FindProperty("playerVisualConfig").objectReferenceValue, Is.Not.Null);
             Assert.That(serializedObject.FindProperty("hazardPresentationCatalog").objectReferenceValue, Is.Not.Null);
+            Assert.That(serializedObject.FindProperty("obstacleVisualCatalog").objectReferenceValue, Is.Not.Null);
             Assert.That(serializedObject.FindProperty("inputActions").objectReferenceValue, Is.Not.Null);
             Assert.That(serializedObject.FindProperty("audioCueCatalog").objectReferenceValue, Is.Not.Null);
             Assert.That(serializedObject.FindProperty("vfxCatalog").objectReferenceValue, Is.Not.Null);

@@ -12,8 +12,9 @@ namespace Voltline.UI
         private RectTransform lineRect;
         private RectTransform glowRect;
         private float elapsed;
+        private Vector2 playerBaseOffset;
 
-        public void Initialize(RectTransform parent, ThemeConfig activeTheme)
+        public void Initialize(RectTransform parent, ThemeConfig activeTheme, PlayerVisualConfig playerVisualConfig, ObstacleVisualCatalog obstacleVisualCatalog)
         {
             RectTransform root = UIFactory.CreatePanel("PreviewRoot", parent, new Color(0.035f, 0.05f, 0.11f, 0.78f));
             UIFactory.SetAnchors(root, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -10f), new Vector2(560f, 620f));
@@ -27,20 +28,28 @@ namespace Voltline.UI
             lineRect = UIFactory.CreatePanel("PreviewLine", innerFrame, activeTheme.LineGlowColor);
             UIFactory.SetAnchors(lineRect, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(18f, 500f));
 
+            ObstacleVisualProfile spikeVisual = obstacleVisualCatalog.GetRequiredProfile(ObstacleFamily.Spikes);
             RectTransform hazardTelegraph = UIFactory.CreatePanel("PreviewTelegraph", innerFrame, new Color(activeTheme.DangerColor.r, activeTheme.DangerColor.g, activeTheme.DangerColor.b, 0.14f));
             UIFactory.SetAnchors(hazardTelegraph, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(112f, -150f), new Vector2(168f, 174f));
+            Image hazardTelegraphImage = hazardTelegraph.GetComponent<Image>();
+            hazardTelegraphImage.sprite = spikeVisual.TelegraphSprite;
 
             hazardRect = UIFactory.CreatePanel("PreviewHazard", innerFrame, activeTheme.DangerColor);
             UIFactory.SetAnchors(hazardRect, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(112f, -150f), new Vector2(92f, 138f));
+            Image hazardImage = hazardRect.GetComponent<Image>();
+            hazardImage.sprite = spikeVisual.MainSprite;
 
             RectTransform hazardAccent = UIFactory.CreatePanel("PreviewHazardAccent", hazardRect, new Color(1f, 1f, 1f, 0.24f));
             UIFactory.SetAnchors(hazardAccent, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -24f), new Vector2(52f, 16f));
+            hazardAccent.GetComponent<Image>().sprite = spikeVisual.AccentSprite;
 
             playerRect = UIFactory.CreatePanel("PreviewPlayer", innerFrame, activeTheme.PlayerAccentColor);
-            UIFactory.SetAnchors(playerRect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(84f, 116f), new Vector2(88f, 88f));
+            playerBaseOffset = playerVisualConfig.MenuPreviewOffset;
+            UIFactory.SetAnchors(playerRect, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), playerBaseOffset, playerVisualConfig.MenuPreviewSize);
 
             Image playerImage = playerRect.GetComponent<Image>();
-            playerImage.sprite = RuntimeSpriteFactory.WhiteSprite;
+            playerImage.sprite = playerVisualConfig.FallbackSprite;
+            playerImage.preserveAspect = true;
 
             RectTransform caption = UIFactory.CreatePanel("CaptionStrip", root, new Color(1f, 1f, 1f, 0.03f));
             UIFactory.SetAnchors(caption, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 38f), new Vector2(360f, 42f));
@@ -59,7 +68,7 @@ namespace Voltline.UI
             float pulse = 1f + (Mathf.Sin(elapsed * 4f) * 0.045f);
             float glowPulse = 1f + (Mathf.Sin(elapsed * 2.1f) * 0.08f);
 
-            playerRect.anchoredPosition = new Vector2(side, 116f);
+            playerRect.anchoredPosition = new Vector2(side, playerBaseOffset.y);
             playerRect.localScale = new Vector3(pulse, pulse, 1f);
             hazardRect.localScale = new Vector3(1f, 1f + (Mathf.Sin(elapsed * 3f) * 0.05f), 1f);
             lineRect.localScale = new Vector3(1f + (Mathf.Sin(elapsed * 2f) * 0.04f), 1f, 1f);

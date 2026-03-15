@@ -54,8 +54,8 @@ These items should happen after the current build is stable and validated.
 - verify release-safe debug posture in a non-development build
 
 ### Presentation readiness continuation
-- decouple player visuals from collision before any direct player art replacement
-- decouple obstacle visuals from collision and spacing before any hazard art replacement
+- establish background presentation architecture and a strict performance budget before any gameplay background refresh
+- expand the theme system beyond the current color-oriented model before any broad theme art rollout
 
 ## Later
 
@@ -133,6 +133,7 @@ Questions to ask before promoting an item:
 - Roadmap notes do not override source-of-truth docs.
 - Blocked items stay blocked until the core loop earns complexity.
 - Rejected ideas should not quietly re-enter implementation through side doors.
+
 
 
 
