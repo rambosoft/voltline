@@ -33,10 +33,6 @@ Prioritize in this order:
 These are the highest-priority items for the first serious playable.
 
 ### Core playable
-- implement one-tap side flip
-- implement moving line/path
-- implement at least 2 hazard families
-- implement score, death, and retry loop
 - implement base HUD and result panel
 
 ### Feel pass
@@ -96,6 +92,7 @@ Track debt explicitly. Initial likely areas:
 - if first line/path implementation is visually simple, refine it later without changing mechanics
 - if first restart path uses scene reload, consider in-scene reset only if speed profiling justifies the complexity
 - unify any duplicated telegraph logic once hazard set stabilizes
+- replace the Phase 3 code-created gameplay input actions with direct use of the project-owned input asset when the gameplay shell is stabilized
 - replace temporary debug UI with proper dev tooling if needed
 
 ## Blocked ideas

@@ -15,7 +15,7 @@ MonoBehaviour:
   obstacleId: obstacle.blocker.side.basic
   displayName: Side Blocker
   family: 4
-  allowedFromScore: 22
+  allowedFromScore: 12
   allowedToScore: -1
   minSpawnSpacing: 1.9
   maxSpawnSpacing: 2.5

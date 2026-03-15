@@ -15,7 +15,7 @@ MonoBehaviour:
   obstacleId: obstacle.electric.gate.short
   displayName: Electric Gate
   family: 2
-  allowedFromScore: 14
+  allowedFromScore: 8
   allowedToScore: -1
   minSpawnSpacing: 2.1
   maxSpawnSpacing: 2.9
