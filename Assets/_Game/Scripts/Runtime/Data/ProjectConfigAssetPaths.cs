@@ -8,5 +8,6 @@ namespace Voltline.Data
         public const string ThemeCatalog = "Assets/_Game/Config/Themes/CAT_ThemeCatalog_Main.asset";
         public const string AudioCueCatalog = "Assets/_Game/Config/Audio/CAT_AudioCueCatalog_Main.asset";
         public const string VfxCatalog = "Assets/_Game/Config/Audio/CAT_VfxCatalog_Main.asset";
+        public const string InputActions = "Assets/_Game/Settings/Input/VoltlineInputActions.inputactions";
     }
 }

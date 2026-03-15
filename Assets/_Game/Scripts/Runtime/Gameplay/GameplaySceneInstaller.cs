@@ -1,6 +1,8 @@
 using UnityEngine;
 using Voltline.Data;
 using Voltline.Input;
+using Voltline.Save;
+using Voltline.UI;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -39,8 +41,9 @@ namespace Voltline.Gameplay
             TrackManager trackManager = GetOrAddComponent<TrackManager>();
             HazardManager hazardManager = GetOrAddComponent<HazardManager>();
             GameManager gameManager = GetOrAddComponent<GameManager>();
-            GameplaySliceOverlay overlay = GetOrAddComponent<GameplaySliceOverlay>();
+            UIStateCoordinator uiStateCoordinator = GetOrAddComponent<UIStateCoordinator>();
             PlayerController playerController = GetOrAddComponent<PlayerController>();
+            SaveService saveService = SaveService.EnsureExists();
 
             inputReader.Initialize();
             difficultyDirector.Initialize(gameBalance, difficultyCurve, obstacleCatalog);
@@ -48,8 +51,8 @@ namespace Voltline.Gameplay
             trackManager.Initialize(gameBalance, themeCatalog.DefaultTheme, gameplayCamera);
             playerController.Initialize(gameBalance, trackManager, themeCatalog.DefaultTheme);
             hazardManager.Initialize(gameBalance, obstacleCatalog, difficultyDirector, trackManager, themeCatalog.DefaultTheme);
-            overlay.Initialize(gameManager, scoreSystem);
             gameManager.Initialize(gameBalance, inputReader, difficultyDirector, trackManager, playerController, hazardManager, scoreSystem, startingSeed);
+            uiStateCoordinator.Initialize(gameManager, scoreSystem, themeCatalog.DefaultTheme, saveService);
         }
 
         private T GetOrAddComponent<T>() where T : Component

@@ -5,8 +5,6 @@ namespace Voltline.Gameplay
 {
     public sealed class TrackManager : MonoBehaviour
     {
-        private const float CameraSize = 8f;
-        private const float LineWidth = 0.14f;
         private const float LineZ = 0f;
 
         private GameBalanceConfig gameBalance;
@@ -31,7 +29,7 @@ namespace Voltline.Gameplay
             theme = activeTheme;
             gameplayCamera = targetCamera;
             gameplayCamera.orthographic = true;
-            gameplayCamera.orthographicSize = CameraSize;
+            gameplayCamera.orthographicSize = GameplayPresentationTuning.TrackCameraSize;
             gameplayCamera.backgroundColor = new Color(
                 (theme.BackgroundTopColor.r + theme.BackgroundBottomColor.r) * 0.5f,
                 (theme.BackgroundTopColor.g + theme.BackgroundBottomColor.g) * 0.5f,
@@ -96,8 +94,8 @@ namespace Voltline.Gameplay
             lineRenderer.alignment = LineAlignment.TransformZ;
             lineRenderer.numCapVertices = 8;
             lineRenderer.textureMode = LineTextureMode.Stretch;
-            lineRenderer.startWidth = LineWidth;
-            lineRenderer.endWidth = LineWidth;
+            lineRenderer.startWidth = GameplayPresentationTuning.TrackLineWidth;
+            lineRenderer.endWidth = GameplayPresentationTuning.TrackLineWidth;
             lineRenderer.sortingOrder = 0;
 
             Shader shader = Shader.Find("Sprites/Default") ?? Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default");

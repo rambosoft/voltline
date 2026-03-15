@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Voltline.Save;
 
 namespace Voltline.Core
 {
@@ -19,6 +20,7 @@ namespace Voltline.Core
             }
 
             hasLoadedInitialScene = true;
+            SaveService.EnsureExists();
             SceneManager.LoadScene(SceneCatalog.MainMenu, LoadSceneMode.Single);
         }
 

@@ -21,9 +21,11 @@ namespace Voltline.Gameplay
         private float stateElapsed;
 
         public event Action<RunState> RunStateChanged;
+        public event Action<bool> PauseChanged;
 
         public RunState CurrentState { get; private set; }
         public float CurrentSpeed { get; private set; }
+        public bool IsPaused { get; private set; }
 
         public void Initialize(
             GameBalanceConfig balanceConfig,
@@ -58,8 +60,30 @@ namespace Voltline.Gameplay
                 return;
             }
 
+            SetPaused(false);
             SetState(RunState.Restarting);
             BeginRun();
+        }
+
+        public void SetPaused(bool paused)
+        {
+            if (paused && CurrentState != RunState.Active)
+            {
+                return;
+            }
+
+            if (IsPaused == paused)
+            {
+                return;
+            }
+
+            IsPaused = paused;
+            PauseChanged?.Invoke(IsPaused);
+        }
+
+        public void TogglePause()
+        {
+            SetPaused(!IsPaused);
         }
 
         private void Update()
@@ -72,6 +96,17 @@ namespace Voltline.Gameplay
             if (inputReader.ConsumeDebugRestartPressed())
             {
                 RequestRestart();
+                return;
+            }
+
+            if (CurrentState == RunState.Active && inputReader.ConsumePausePressed())
+            {
+                TogglePause();
+                return;
+            }
+
+            if (IsPaused)
+            {
                 return;
             }
 
@@ -123,6 +158,7 @@ namespace Voltline.Gameplay
         {
             int seed = baseSeed + (runCounter * 17);
             runCounter++;
+            SetPaused(false);
 
             scoreSystem.ResetRun();
             trackManager.ResetRun();

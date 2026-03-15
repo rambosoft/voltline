@@ -14,9 +14,9 @@ namespace Voltline.Utilities
                 {
                     whiteSprite = Sprite.Create(
                         Texture2D.whiteTexture,
-                        new Rect(0f, 0f, Texture2D.whiteTexture.width, Texture2D.whiteTexture.height),
+                        new Rect(0f, 0f, 1f, 1f),
                         new Vector2(0.5f, 0.5f),
-                        100f);
+                        1f);
                     whiteSprite.name = "RuntimeWhiteSprite";
                 }
 

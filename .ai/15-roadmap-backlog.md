@@ -32,17 +32,11 @@ Prioritize in this order:
 
 These are the highest-priority items for the first serious playable.
 
-### Core playable
-- implement base HUD and result panel
-
 ### Feel pass
 - flip sound
 - death burst
 - score pop
 - near-miss feedback
-- main menu animated preview
-- safe-area handling
-- minimal settings overlay
 
 ## Next
 
@@ -54,7 +48,7 @@ These items should happen after the core loop is already fun.
 - add first theme unlock
 - improve milestone feedback
 - refine result messaging
-- add pause overlay and settings persistence
+- add settings persistence
 
 ### Testing / quality
 - add wider Edit Mode coverage

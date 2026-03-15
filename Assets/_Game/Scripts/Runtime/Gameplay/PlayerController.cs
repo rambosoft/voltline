@@ -6,8 +6,6 @@ namespace Voltline.Gameplay
 {
     public sealed class PlayerController : MonoBehaviour
     {
-        private const float PlayerScale = 0.42f;
-
         private GameBalanceConfig gameBalance;
         private ThemeConfig theme;
         private TrackManager trackManager;
@@ -27,7 +25,8 @@ namespace Voltline.Gameplay
         public bool IsDead => isDead;
         public bool IsFlipping => isFlipping;
         public float CurrentX => currentX;
-        public float Radius => PlayerScale * 0.5f;
+        public float CollisionHalfWidth => GameplayPresentationTuning.PlayerCollisionHalfWidth;
+        public float CollisionHalfHeight => GameplayPresentationTuning.PlayerCollisionHalfHeight;
 
         public void Initialize(GameBalanceConfig balanceConfig, TrackManager track, ThemeConfig activeTheme)
         {
@@ -112,7 +111,7 @@ namespace Voltline.Gameplay
             }
 
             visualRoot.position = new Vector3(currentX, trackManager.PlayerAnchorY, 0f);
-            visualRoot.localScale = new Vector3(PlayerScale, PlayerScale, 1f);
+            visualRoot.localScale = new Vector3(GameplayPresentationTuning.PlayerScale, GameplayPresentationTuning.PlayerScale, 1f);
             visualRoot.rotation = Quaternion.Euler(0f, 0f, zRotation);
             spriteRenderer.color = tint;
         }

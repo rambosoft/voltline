@@ -15,7 +15,7 @@ MonoBehaviour:
   baseSpeed: 6
   earlySpeedRampPerPoint: 0.12
   flipDurationSeconds: 0.09
-  sideOffset: 0.34
+  sideOffset: 0.82
   nearMissThreshold: 0.18
   safeStartWindowSeconds: 1.2
   minimumReadableTelegraphSeconds: 0.75
