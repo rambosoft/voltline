@@ -1,0 +1,12 @@
+# ninja log v5
+344	1440	7953107481535073	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	6cf77c1dda2f0b8e
+1445	2439	7953107490317888	C:/workspace/voltline/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6v5dy6s7/obj/arm64-v8a/libswappywrapper.so	8eda605e4ff71f02
+268	5892	7953107525973912	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	6788c96da2526010
+29	6074	7953107527894165	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	3b834dc7cbb494b0
+120	6241	7953107529443616	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	3d713094b9eec0b3
+185	6247	7953107529453784	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	ee3eeb5bdb4aaed3
+61	6469	7953107531757328	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	1ec3b9af9986a37b
+147	7066	7953107537952517	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	142ec16389a878d
+89	7137	7953107538703077	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	f8330e88379368
+2	7560	7953107542711982	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	bf9583cb5f879394
+7560	8035	7953107546697178	C:/workspace/voltline/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6v5dy6s7/obj/arm64-v8a/libgame.so	e9110d29ff56679b

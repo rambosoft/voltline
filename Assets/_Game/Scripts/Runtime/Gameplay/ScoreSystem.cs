@@ -14,6 +14,9 @@ namespace Voltline.Gameplay
         public event Action<int> MilestoneReached;
 
         public int CurrentScore { get; private set; }
+        public IReadOnlyList<int> MilestoneThresholds => gameBalance != null && gameBalance.MilestoneThresholds != null
+            ? gameBalance.MilestoneThresholds
+            : Array.Empty<int>();
 
         public void Initialize(GameBalanceConfig balanceConfig)
         {
@@ -21,10 +24,17 @@ namespace Voltline.Gameplay
             ResetRun();
         }
 
-        public void ResetRun()
+        public void ResetRun(int startingScore = 0)
         {
-            CurrentScore = 0;
+            CurrentScore = Mathf.Max(0, startingScore);
             nextMilestoneIndex = 0;
+
+            IReadOnlyList<int> milestones = gameBalance != null ? gameBalance.MilestoneThresholds : null;
+            while (milestones != null && nextMilestoneIndex < milestones.Count && CurrentScore >= milestones[nextMilestoneIndex])
+            {
+                nextMilestoneIndex++;
+            }
+
             ScoreChanged?.Invoke(CurrentScore);
         }
 

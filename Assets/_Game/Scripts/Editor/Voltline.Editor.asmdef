@@ -2,7 +2,8 @@
   "name": "Voltline.Editor",
   "rootNamespace": "Voltline.Editor",
   "references": [
-    "Voltline.Runtime"
+    "Voltline.Runtime",
+    "Unity.InputSystem"
   ],
   "includePlatforms": [
     "Editor"

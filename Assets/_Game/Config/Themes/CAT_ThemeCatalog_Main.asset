@@ -15,3 +15,4 @@ MonoBehaviour:
   defaultTheme: {fileID: 11400000, guid: 2236333bc90e4ff598ff28031cf29386, type: 2}
   themes:
   - {fileID: 11400000, guid: 2236333bc90e4ff598ff28031cf29386, type: 2}
+  - {fileID: 11400000, guid: 5d2c0e8d0cfd4ec8b7e8d3b6759b3794, type: 2}

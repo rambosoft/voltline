@@ -3,6 +3,7 @@
     "rootNamespace":  "Voltline.Tests.EditMode",
     "references":  [
                        "Voltline.Runtime",
+                       "Voltline.Editor",
                        "Unity.InputSystem"
                    ],
     "includePlatforms":  [

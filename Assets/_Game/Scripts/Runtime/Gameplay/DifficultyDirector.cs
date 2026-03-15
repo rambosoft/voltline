@@ -77,21 +77,41 @@ namespace Voltline.Gameplay
             }
         }
 
-        public float GetNextSpawnSpacing(int score)
+        public void GetSpawnSpacingRange(int score, ObstacleConfig obstacle, out float minSpacing, out float maxSpacing)
         {
             DifficultyCurveConfig.DifficultyBandDefinition band = GetBand(score);
-            if (band == null)
+            float bandMin = band != null ? band.MinSpawnSpacing : 2.2f;
+            float bandMax = band != null ? band.MaxSpawnSpacing : 2.8f;
+
+            if (obstacle == null)
             {
-                return 2.4f;
+                minSpacing = bandMin;
+                maxSpacing = bandMax;
+                return;
             }
 
-            return Random.Range(band.MinSpawnSpacing, band.MaxSpawnSpacing);
+            minSpacing = Mathf.Max(bandMin, obstacle.MinSpawnSpacing);
+            maxSpacing = Mathf.Min(bandMax, obstacle.MaxSpawnSpacing);
+            if (maxSpacing < minSpacing)
+            {
+                maxSpacing = minSpacing;
+            }
+        }
+
+        public float GetEffectiveTelegraphSeconds(int score, ObstacleConfig obstacle)
+        {
+            DifficultyCurveConfig.DifficultyBandDefinition band = GetBand(score);
+            float bandTelegraph = band != null ? band.MinimumTelegraphSeconds : gameBalance.MinimumReadableTelegraphSeconds;
+            float obstacleTelegraph = obstacle != null && obstacle.RequiresTelegraph ? obstacle.MinimumTelegraphSeconds : 0f;
+            return Mathf.Max(gameBalance.MinimumReadableTelegraphSeconds, bandTelegraph, obstacleTelegraph);
         }
 
         public bool IsSupportedFamily(ObstacleFamily family)
         {
             return family == ObstacleFamily.Spikes ||
+                   family == ObstacleFamily.RotatingCutters ||
                    family == ObstacleFamily.ElectricGates ||
+                   family == ObstacleFamily.BrokenLineGaps ||
                    family == ObstacleFamily.SideBlockers;
         }
     }

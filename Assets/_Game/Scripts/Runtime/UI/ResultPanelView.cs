@@ -11,35 +11,38 @@ namespace Voltline.UI
         private TMP_Text messageText;
         private TMP_Text scoreText;
         private TMP_Text bestText;
+        private OverlayTransitionController transitionController;
 
-        public bool IsVisible => root != null && root.gameObject.activeSelf;
+        public bool IsVisible => transitionController != null && transitionController.IsVisible;
 
         public void Initialize(Transform parent, ThemeConfig theme, System.Action retryAction, System.Action homeAction)
         {
-            root = UIFactory.CreatePanel("ResultOverlay", parent, new Color(0f, 0f, 0f, 0.52f));
+            root = UIFactory.CreatePanel("ResultOverlay", parent, new Color(0f, 0f, 0f, 0.46f));
             UIFactory.Stretch(root, 0f);
-            root.gameObject.SetActive(false);
 
             RectTransform panel = UIFactory.CreatePanel("ResultPanel", root, UIFactory.PanelColor(0.95f));
-            UIFactory.SetAnchors(panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 24f), new Vector2(760f, 620f));
+            UIFactory.SetAnchors(panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(760f, 640f));
 
-            TMP_Text titleText = UIFactory.CreateText("Title", panel, "Run over", 40, FontStyles.Bold, TextAlignmentOptions.Center, Color.white);
-            UIFactory.SetAnchors((RectTransform)titleText.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -72f), new Vector2(440f, 56f));
+            TMP_Text titleText = UIFactory.CreateText("Title", panel, "Run Over", 42, FontStyles.Bold, TextAlignmentOptions.Center, Color.white);
+            UIFactory.SetAnchors((RectTransform)titleText.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -74f), new Vector2(460f, 58f));
 
-            scoreText = UIFactory.CreateText("Score", panel, "0", 96, FontStyles.Bold, TextAlignmentOptions.Center, Color.white);
-            UIFactory.SetAnchors((RectTransform)scoreText.transform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 78f), new Vector2(380f, 110f));
+            scoreText = UIFactory.CreateText("Score", panel, "0", 110, FontStyles.Bold, TextAlignmentOptions.Center, Color.white);
+            UIFactory.SetAnchors((RectTransform)scoreText.transform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 88f), new Vector2(420f, 120f));
 
-            bestText = UIFactory.CreateText("Best", panel, "Best 0", 28, FontStyles.Normal, TextAlignmentOptions.Center, theme.PlayerAccentColor);
-            UIFactory.SetAnchors((RectTransform)bestText.transform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 8f), new Vector2(320f, 50f));
+            bestText = UIFactory.CreateText("Best", panel, "Best 0", 30, FontStyles.Normal, TextAlignmentOptions.Center, theme.PlayerAccentColor);
+            UIFactory.SetAnchors((RectTransform)bestText.transform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, 10f), new Vector2(360f, 48f));
 
             messageText = UIFactory.CreateText("Message", panel, "One more run", 28, FontStyles.Normal, TextAlignmentOptions.Center, new Color(0.9f, 0.94f, 1f, 1f));
-            UIFactory.SetAnchors((RectTransform)messageText.transform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -54f), new Vector2(520f, 46f));
+            UIFactory.SetAnchors((RectTransform)messageText.transform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -58f), new Vector2(560f, 46f));
 
             Button retryButton = UIFactory.CreateButton("RetryButton", panel, "Retry", UIFactory.AccentColor(theme), new Color(0.05f, 0.08f, 0.12f, 1f), retryAction);
-            UIFactory.SetAnchors((RectTransform)retryButton.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 136f), new Vector2(460f, 110f));
+            UIFactory.SetAnchors((RectTransform)retryButton.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 174f), new Vector2(500f, 112f));
 
             Button homeButton = UIFactory.CreateButton("HomeButton", panel, "Home", UIFactory.PanelColor(1f), Color.white, homeAction);
-            UIFactory.SetAnchors((RectTransform)homeButton.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 52f), new Vector2(240f, 76f));
+            UIFactory.SetAnchors((RectTransform)homeButton.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 40f), new Vector2(500f, 78f));
+
+            transitionController = gameObject.AddComponent<OverlayTransitionController>();
+            transitionController.Initialize(root, panel, -26f);
         }
 
         public void Show(int score, int bestScore, bool isNewBest, string message)
@@ -49,18 +52,15 @@ namespace Voltline.UI
                 return;
             }
 
-            root.gameObject.SetActive(true);
             scoreText.text = score.ToString();
             bestText.text = isNewBest ? $"New Best {bestScore}" : $"Best {bestScore}";
             messageText.text = message;
+            transitionController?.Show();
         }
 
         public void Hide()
         {
-            if (root != null)
-            {
-                root.gameObject.SetActive(false);
-            }
+            transitionController?.Hide();
         }
     }
 }

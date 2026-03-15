@@ -32,18 +32,22 @@ namespace Voltline.Tests.PlayMode
 
             GameManager gameManager = Object.FindFirstObjectByType<GameManager>();
             ScoreSystem scoreSystem = Object.FindFirstObjectByType<ScoreSystem>();
+            GameplaySceneInstaller installer = Object.FindFirstObjectByType<GameplaySceneInstaller>();
 
             yield return WaitForState(gameManager, RunState.Active, 1.5f);
+
+            int startingScore = installer != null ? installer.DebugStartingScore : 0;
+            Assert.That(scoreSystem.CurrentScore, Is.EqualTo(startingScore));
 
             gameManager.DebugHandleTap();
             yield return new WaitForSeconds(2.25f);
 
-            Assert.That(scoreSystem.CurrentScore, Is.GreaterThanOrEqualTo(1));
+            Assert.That(scoreSystem.CurrentScore, Is.GreaterThanOrEqualTo(startingScore + 1));
 
             gameManager.RequestRestart();
             yield return null;
             yield return WaitForState(gameManager, RunState.Active, 1.5f);
-            Assert.That(scoreSystem.CurrentScore, Is.EqualTo(0));
+            Assert.That(scoreSystem.CurrentScore, Is.EqualTo(startingScore));
         }
 
         [UnityTest]

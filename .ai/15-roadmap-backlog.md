@@ -30,37 +30,28 @@ Prioritize in this order:
 
 ## Now
 
-These are the highest-priority items for the first serious playable.
+These are the highest-priority items for the next serious playable.
 
-### Feel pass
-- flip sound
-- death burst
-- score pop
-- near-miss feedback
+### Final release validation
+- run `Tools > Voltline > Validate Config`
+- run `Tools > Voltline > Run Release Audit`
+- run the full Unity Edit Mode and Play Mode suites in editor
+- validate no console noise in menu/gameplay/retry/theme-selection flows
+- validate safe-area, persistence, and feel flows on representative mobile hardware
+- measure startup, common gameplay frame pacing, and build size on representative devices before final candidate approval
+
+### Release-candidate blockers
+- run `Tools > Voltline > Ensure Audio Mixer` and confirm the final `Music`, `SFX`, `Gameplay`, and `UI` routing before final release-candidate sign-off
+- replace the first-pass procedural audio clips and procedural VFX with authored assets if playtest fatigue or release polish review shows the current pass is insufficient
 
 ## Next
 
-These items should happen after the core loop is already fun.
+These items should happen after the current build is stable and validated.
 
-### Content polish
-- expand hazard set to approved initial family list
-- improve line rendering and pulse
-- add first theme unlock
-- improve milestone feedback
-- refine result messaging
-- add settings persistence
-
-### Testing / quality
-- add wider Edit Mode coverage
-- add Play Mode retry/regression tests
-- profile particle/audio overlap on target devices
-- validate build stability on Android and iOS hardware
-
-### Product polish
-- improve menu presentation
-- refine logo/title treatment
-- improve screenshot moments
-- tighten safe-start difficulty bands
+### Publishing prep
+- perform clean-install and relaunch checks on candidate builds
+- finalize store copy, icons, screenshots, and submission metadata outside gameplay scope
+- verify release-safe debug posture in a non-development build
 
 ## Later
 
@@ -70,7 +61,6 @@ Only pursue after the game already feels strong.
 - daily challenge seed mode
 - ghost/replay-style share image
 - cosmetic themes/skins expansion
-- theme unlock progression
 - best score history view
 - lightweight leaderboard page outside the game app
 
@@ -83,11 +73,8 @@ Only pursue after the game already feels strong.
 
 Track debt explicitly. Initial likely areas:
 
-- if first line/path implementation is visually simple, refine it later without changing mechanics
-- if first restart path uses scene reload, consider in-scene reset only if speed profiling justifies the complexity
-- unify any duplicated telegraph logic once hazard set stabilizes
-- replace the Phase 3 code-created gameplay input actions with direct use of the project-owned input asset when the gameplay shell is stabilized
-- replace temporary debug UI with proper dev tooling if needed
+- refine the current curved line/path presentation only if playtesting shows readability or performance issues
+- add lightweight automated safe-area coverage only if the Unity test harness or device setup justifies it
 
 ## Blocked ideas
 
@@ -142,3 +129,4 @@ Questions to ask before promoting an item:
 - Roadmap notes do not override source-of-truth docs.
 - Blocked items stay blocked until the core loop earns complexity.
 - Rejected ideas should not quietly re-enter implementation through side doors.
+

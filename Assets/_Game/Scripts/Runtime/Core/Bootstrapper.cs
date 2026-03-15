@@ -14,6 +14,8 @@ namespace Voltline.Core
             ValidateBuildConfiguration();
 #endif
 
+            RuntimePerformanceConfigurator.Apply();
+
             if (hasLoadedInitialScene)
             {
                 return;

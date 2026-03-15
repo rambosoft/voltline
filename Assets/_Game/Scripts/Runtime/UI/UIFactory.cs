@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
+using Voltline.Audio;
 using Voltline.Data;
 using Voltline.Utilities;
 
@@ -86,6 +87,7 @@ namespace Voltline.UI
             button.colors = colors;
             if (onClick != null)
             {
+                button.onClick.AddListener(() => AudioService.EnsureExists().PlayButtonClick());
                 button.onClick.AddListener(() => onClick());
             }
 
@@ -138,4 +140,3 @@ namespace Voltline.UI
         }
     }
 }
-

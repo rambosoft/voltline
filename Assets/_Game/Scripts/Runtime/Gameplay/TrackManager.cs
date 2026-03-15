@@ -6,6 +6,7 @@ namespace Voltline.Gameplay
     public sealed class TrackManager : MonoBehaviour
     {
         private const float LineZ = 0f;
+        private const int LinePointCount = 64;
 
         private GameBalanceConfig gameBalance;
         private ThemeConfig theme;
@@ -15,6 +16,8 @@ namespace Voltline.Gameplay
         private Transform worldRoot;
         private Transform playerRoot;
         private Transform hazardsRoot;
+        private float pulseTime;
+        private float pulseStrength;
 
         public float TravelDistance { get; private set; }
         public float PlayerAnchorY => -gameplayCamera.orthographicSize * 0.68f;
@@ -30,31 +33,59 @@ namespace Voltline.Gameplay
             gameplayCamera = targetCamera;
             gameplayCamera.orthographic = true;
             gameplayCamera.orthographicSize = GameplayPresentationTuning.TrackCameraSize;
-            gameplayCamera.backgroundColor = new Color(
-                (theme.BackgroundTopColor.r + theme.BackgroundBottomColor.r) * 0.5f,
-                (theme.BackgroundTopColor.g + theme.BackgroundBottomColor.g) * 0.5f,
-                (theme.BackgroundTopColor.b + theme.BackgroundBottomColor.b) * 0.5f,
-                1f);
+            gameplayCamera.backgroundColor = Color.Lerp(theme.BackgroundTopColor, theme.BackgroundBottomColor, 0.5f);
 
             EnsureRuntimeHierarchy();
             EnsureLineRenderer();
             ResetRun();
         }
 
+        private void Update()
+        {
+            if (lineRenderer == null)
+            {
+                return;
+            }
+
+            pulseTime += Time.deltaTime;
+            pulseStrength = Mathf.Max(0f, pulseStrength - (Time.deltaTime * 2.4f));
+
+            float idlePulse = 0.5f + (Mathf.Sin(pulseTime * 2.25f) * 0.5f);
+            float width = GameplayPresentationTuning.TrackLineWidth * (1f + (idlePulse * 0.08f) + (pulseStrength * 0.22f));
+            lineRenderer.startWidth = width;
+            lineRenderer.endWidth = width;
+            lineRenderer.startColor = Color.Lerp(theme.LineCoreColor, theme.LineGlowColor, 0.28f + (idlePulse * 0.12f) + (pulseStrength * 0.25f));
+            lineRenderer.endColor = Color.Lerp(theme.LineGlowColor, Color.white, idlePulse * 0.08f + pulseStrength * 0.22f);
+        }
+
         public void ResetRun()
         {
             TravelDistance = 0f;
+            pulseStrength = 0f;
             UpdateLineGeometry();
         }
 
         public void Advance(float deltaTime, float speed)
         {
             TravelDistance += speed * deltaTime;
+            UpdateLineGeometry();
+        }
+
+        public void PlayLinePulse(float intensity = 1f)
+        {
+            pulseStrength = Mathf.Clamp01(Mathf.Max(pulseStrength, intensity));
+        }
+
+        public float GetTrackCenterX(float worldY)
+        {
+            float distanceFromPlayer = worldY - PlayerAnchorY;
+            float pathDistance = TravelDistance + distanceFromPlayer;
+            return EvaluateTrackCenterX(pathDistance);
         }
 
         public float GetSideX(PlayerSide side)
         {
-            return side == PlayerSide.Top ? gameBalance.SideOffset : -gameBalance.SideOffset;
+            return GetTrackCenterX(PlayerAnchorY) + (side == PlayerSide.Top ? gameBalance.SideOffset : -gameBalance.SideOffset);
         }
 
         public float GetWorldYForHitDistance(float hitDistance)
@@ -89,7 +120,7 @@ namespace Voltline.Gameplay
                 lineRenderer = existing.gameObject.AddComponent<LineRenderer>();
             }
 
-            lineRenderer.positionCount = 2;
+            lineRenderer.positionCount = LinePointCount;
             lineRenderer.useWorldSpace = true;
             lineRenderer.alignment = LineAlignment.TransformZ;
             lineRenderer.numCapVertices = 8;
@@ -114,8 +145,21 @@ namespace Voltline.Gameplay
             }
 
             float extent = gameplayCamera.orthographicSize + 3f;
-            lineRenderer.SetPosition(0, new Vector3(0f, -extent, LineZ));
-            lineRenderer.SetPosition(1, new Vector3(0f, extent, LineZ));
+            for (int i = 0; i < LinePointCount; i++)
+            {
+                float t = LinePointCount > 1 ? i / (LinePointCount - 1f) : 0f;
+                float worldY = Mathf.Lerp(-extent, extent, t);
+                lineRenderer.SetPosition(i, new Vector3(GetTrackCenterX(worldY), worldY, LineZ));
+            }
+        }
+
+        private static float EvaluateTrackCenterX(float pathDistance)
+        {
+            float primary = Mathf.Sin((pathDistance / GameplayPresentationTuning.TrackCurvePrimaryWavelength) + 0.45f)
+                * GameplayPresentationTuning.TrackCurvePrimaryAmplitude;
+            float secondary = Mathf.Sin((pathDistance / GameplayPresentationTuning.TrackCurveSecondaryWavelength) + 1.1f)
+                * GameplayPresentationTuning.TrackCurveSecondaryAmplitude;
+            return primary + secondary;
         }
     }
 }

@@ -7,6 +7,8 @@ namespace Voltline.Data
     {
         [SerializeField] private string themeId = "theme.neon-night";
         [SerializeField] private string displayName = "Neon Night";
+        [SerializeField] private bool unlockedByDefault = true;
+        [SerializeField] private int unlockBestScoreThreshold;
         [SerializeField] private Color backgroundTopColor = new(0.015f, 0.028f, 0.07f, 1f);
         [SerializeField] private Color backgroundBottomColor = new(0.03f, 0.005f, 0.085f, 1f);
         [SerializeField] private Color lineCoreColor = new(0.2f, 0.95f, 1f, 1f);
@@ -17,6 +19,8 @@ namespace Voltline.Data
 
         public string ThemeId => themeId;
         public string DisplayName => displayName;
+        public bool UnlockedByDefault => unlockedByDefault;
+        public int UnlockBestScoreThreshold => unlockBestScoreThreshold;
         public Color BackgroundTopColor => backgroundTopColor;
         public Color BackgroundBottomColor => backgroundBottomColor;
         public Color LineCoreColor => lineCoreColor;

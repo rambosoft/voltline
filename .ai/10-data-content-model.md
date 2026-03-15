@@ -116,7 +116,7 @@ Suggested fields:
 Owns the set of available obstacle configs.
 
 #### `ThemeConfig`
-Owns one theme’s visual role definitions.
+Owns one theme's visual role definitions.
 
 Suggested fields:
 - theme ID
@@ -146,7 +146,8 @@ Owns semantic effect mapping.
 
 Suggested fields:
 - VFX ID
-- prefab reference
+- spawn mode (`Prefab` or lightweight procedural)
+- prefab reference when prefab-backed
 - scale rules
 - lifetime category
 - optional pooling hint
@@ -285,15 +286,19 @@ Suggested first themes:
 
 First release can ship with only one or two unlocked.
 
+Current launch baseline:
+- 	heme.neon-night is the default unlocked theme
+- 	heme.candy-pop is the first best-score unlock theme
+
 ## Difficulty data model
 
 Difficulty should be data-driven through score bands or progression curves.
 
 Suggested score bands:
-- band 0: scores 0–4
-- band 1: scores 5–9
-- band 2: scores 10–19
-- band 3: scores 20–34
+- band 0: scores 0-4
+- band 1: scores 5-9
+- band 2: scores 10-19
+- band 3: scores 20-34
 - band 4: 35+
 
 Actual values are tunable, but the model should exist in config.
@@ -318,8 +323,8 @@ Examples:
 - theme IDs unique
 - obstacle IDs unique
 - no negative timing values
-- no missing prefab references in VFX catalog
-- no missing clip mappings in Audio cue catalog
+- no missing prefab references in prefab-backed VFX entries
+- no missing clip mappings in Audio cue catalog where authored clips are expected
 
 ## Non-negotiables
 
@@ -329,3 +334,4 @@ Examples:
 - Balance values should not be scattered across scene objects.
 - Runtime systems should read catalogs, not invent parallel registries.
 - Do not mutate content assets as a save mechanism.
+

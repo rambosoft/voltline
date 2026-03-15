@@ -1,0 +1,156 @@
+using System.Collections.Generic;
+using UnityEngine;
+using Voltline.Data;
+
+namespace Voltline.VFX
+{
+    public sealed class VfxService : MonoBehaviour
+    {
+        private readonly Dictionary<string, float> lastPlayTimes = new();
+
+        private VfxCatalog catalog;
+        private ThemeConfig theme;
+        private Camera targetCamera;
+        private Transform root;
+        private float shakeTimeRemaining;
+        private float shakeMagnitude;
+        private Vector3 cameraBaseLocalPosition;
+
+        public void Initialize(VfxCatalog effectCatalog, ThemeConfig activeTheme, Camera gameplayCamera)
+        {
+            catalog = effectCatalog;
+            theme = activeTheme;
+            targetCamera = gameplayCamera;
+            root ??= new GameObject("VfxRoot").transform;
+            root.SetParent(transform, false);
+            if (targetCamera != null)
+            {
+                cameraBaseLocalPosition = targetCamera.transform.localPosition;
+            }
+        }
+
+        public void PlayEffect(string vfxId, Vector3 position, float scaleMultiplier = 1f)
+        {
+            VfxCatalog.VfxDefinition definition = ResolveDefinition(vfxId);
+            if (definition == null)
+            {
+                return;
+            }
+
+            if (definition.SpawnMode == VfxCatalog.VfxSpawnMode.Prefab && definition.Prefab != null)
+            {
+                GameObject instance = Instantiate(definition.Prefab, position, Quaternion.identity, root);
+                instance.transform.localScale *= definition.Scale * scaleMultiplier;
+                return;
+            }
+
+            SpawnProcedural(vfxId, position, definition.Scale * scaleMultiplier);
+        }
+
+        private void Update()
+        {
+            if (targetCamera == null)
+            {
+                return;
+            }
+
+            if (shakeTimeRemaining > 0f)
+            {
+                shakeTimeRemaining -= Time.deltaTime;
+                Vector2 offset = Random.insideUnitCircle * shakeMagnitude;
+                targetCamera.transform.localPosition = cameraBaseLocalPosition + new Vector3(offset.x, offset.y, 0f);
+                if (shakeTimeRemaining <= 0f)
+                {
+                    targetCamera.transform.localPosition = cameraBaseLocalPosition;
+                }
+            }
+        }
+
+        private void SpawnProcedural(string vfxId, Vector3 position, float scale)
+        {
+            float now = Time.time;
+            if (lastPlayTimes.TryGetValue(vfxId, out float previousTime) && now - previousTime < 0.04f)
+            {
+                return;
+            }
+
+            lastPlayTimes[vfxId] = now;
+
+            switch (vfxId)
+            {
+                case VfxCueIds.Flip:
+                    SpawnPulse(position, theme.LineGlowColor, 0.16f * scale, 0.56f * scale, 0.14f, 6);
+                    SpawnPulse(position + new Vector3(0f, 0.08f, 0f), theme.PlayerAccentColor, 0.08f * scale, 0.3f * scale, 0.1f, 7);
+                    break;
+
+                case VfxCueIds.NearMiss:
+                    SpawnPulse(position, new Color(1f, 0.96f, 0.8f, 0.95f), 0.1f * scale, 0.38f * scale, 0.12f, 8);
+                    SpawnBurst(position, theme.PlayerAccentColor, 4, 0.16f * scale, 0.08f, 8);
+                    break;
+
+                case VfxCueIds.Milestone:
+                    SpawnPulse(position, theme.MilestoneColor, 0.18f * scale, 0.9f * scale, 0.22f, 6);
+                    SpawnBurst(position, theme.MilestoneColor, 8, 0.42f * scale, 0.18f, 7);
+                    break;
+
+                case VfxCueIds.Death:
+                    SpawnPulse(position, theme.DangerColor, 0.2f * scale, 1.1f * scale, 0.28f, 8);
+                    SpawnBurst(position, theme.DangerColor, 10, 0.62f * scale, 0.24f, 9);
+                    shakeTimeRemaining = 0.12f;
+                    shakeMagnitude = 0.09f;
+                    break;
+            }
+        }
+
+        private void SpawnPulse(Vector3 position, Color color, float startScale, float endScale, float lifetime, int sortingOrder)
+        {
+            GameObject effect = new("VfxPulse");
+            effect.transform.SetParent(root, false);
+            effect.transform.position = position;
+            TransientVfxSprite transient = effect.AddComponent<TransientVfxSprite>();
+            transient.Initialize(color, startScale, endScale, lifetime, Vector3.zero, sortingOrder);
+        }
+
+        private void SpawnBurst(Vector3 position, Color color, int count, float radius, float lifetime, int sortingOrder)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                float angle = (Mathf.PI * 2f * i) / count;
+                Vector3 velocity = new(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
+                GameObject effect = new("VfxBurst");
+                effect.transform.SetParent(root, false);
+                effect.transform.position = position;
+                TransientVfxSprite transient = effect.AddComponent<TransientVfxSprite>();
+                transient.Initialize(color, 0.08f, 0.16f, lifetime, velocity * radius, sortingOrder);
+            }
+        }
+
+        private VfxCatalog.VfxDefinition ResolveDefinition(string vfxId)
+        {
+            if (catalog != null && catalog.TryGetDefinition(vfxId, out VfxCatalog.VfxDefinition definition))
+            {
+                return definition;
+            }
+
+            return DefaultVfxDefinitions.Get(vfxId);
+        }
+    }
+
+    internal static class DefaultVfxDefinitions
+    {
+        private static readonly Dictionary<string, VfxCatalog.VfxDefinition> Definitions = new()
+        {
+            { VfxCueIds.Flip, new VfxCatalog.VfxDefinition(VfxCueIds.Flip, VfxCatalog.VfxSpawnMode.Procedural, 1f, VfxCatalog.VfxLifetimeCategory.Short, false) },
+            { VfxCueIds.NearMiss, new VfxCatalog.VfxDefinition(VfxCueIds.NearMiss, VfxCatalog.VfxSpawnMode.Procedural, 1f, VfxCatalog.VfxLifetimeCategory.Short, false) },
+            { VfxCueIds.Death, new VfxCatalog.VfxDefinition(VfxCueIds.Death, VfxCatalog.VfxSpawnMode.Procedural, 1.1f, VfxCatalog.VfxLifetimeCategory.Short, false) },
+            { VfxCueIds.Milestone, new VfxCatalog.VfxDefinition(VfxCueIds.Milestone, VfxCatalog.VfxSpawnMode.Procedural, 1.15f, VfxCatalog.VfxLifetimeCategory.Short, false) },
+        };
+
+        public static VfxCatalog.VfxDefinition Get(string vfxId)
+        {
+            return Definitions.TryGetValue(vfxId, out VfxCatalog.VfxDefinition definition)
+                ? definition
+                : Definitions[VfxCueIds.Flip];
+        }
+    }
+}

@@ -37,6 +37,7 @@ Examples:
 - save schema upgrade logic
 - catalog validation
 - theme/config integrity checks
+- release-readiness audit checks
 
 ### 2. Play Mode tests
 Use for runtime interaction and scene-level behavior.
@@ -70,6 +71,7 @@ At minimum, add automated tests for:
 - save load/write/version migration behavior
 - difficulty progression calculations
 - theme ID and catalog integrity
+- release-readiness audit checks for scene order, input asset integrity, and debug-safe defaults
 
 ## What must be validated manually
 
@@ -82,6 +84,7 @@ Always test manually for:
 - sound balance after many retries
 - restart emotional speed
 - safe-area correctness on representative phone aspect ratios
+- clean-install and relaunch behavior on representative devices before final candidate approval
 
 ## Smoke test checklist
 
@@ -220,12 +223,16 @@ Do not overforce test-first on highly feel-driven VFX polish, but still validate
 
 Before creating a candidate mobile build:
 
+- run `Tools > Voltline > Validate Config`
+- run `Tools > Voltline > Run Release Audit`
 - verify scene list order
 - verify portrait orientation settings
 - verify package/import sanity
-- verify audio mixer references
+- run Tools > Voltline > Ensure Audio Mixer if the mixer asset or groups are missing
+- verify audio routing references and mixer setup
 - verify input action asset included and functional
-- verify no dev cheats exposed unintentionally
+- verify debug-only restart/start-score helpers are not exposed unintentionally in release builds
+- verify clean-install and relaunch behavior on representative devices
 
 ## Documentation rule
 
@@ -239,3 +246,5 @@ A feature is incomplete unless docs are updated when source-of-truth topics chan
 - Manual testing covers feel and readability.
 - Mobile safe area and performance must be validated before release.
 - No feature is done if docs and tests drift behind implementation.
+
+

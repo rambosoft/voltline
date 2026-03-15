@@ -15,11 +15,14 @@ namespace Voltline.Gameplay
         private PlayerSide currentSide;
         private PlayerSide targetSide;
         private float currentX;
+        private float currentOffsetFromCenter;
         private float flipElapsed;
-        private float flipFromX;
-        private float flipToX;
+        private float flipFromOffset;
+        private float flipToOffset;
         private bool isFlipping;
         private bool isDead;
+
+        public event System.Action<Vector3> Flipped;
 
         public PlayerSide CurrentSide => currentSide;
         public bool IsDead => isDead;
@@ -27,6 +30,7 @@ namespace Voltline.Gameplay
         public float CurrentX => currentX;
         public float CollisionHalfWidth => GameplayPresentationTuning.PlayerCollisionHalfWidth;
         public float CollisionHalfHeight => GameplayPresentationTuning.PlayerCollisionHalfHeight;
+        public Vector3 WorldPosition => new(currentX, trackManager != null ? trackManager.PlayerAnchorY : 0f, 0f);
 
         public void Initialize(GameBalanceConfig balanceConfig, TrackManager track, ThemeConfig activeTheme)
         {
@@ -44,7 +48,8 @@ namespace Voltline.Gameplay
             isFlipping = false;
             isDead = false;
             flipElapsed = 0f;
-            currentX = trackManager.GetSideX(PlayerSide.Top);
+            currentOffsetFromCenter = GetOffsetForSide(PlayerSide.Top);
+            currentX = trackManager.GetTrackCenterX(trackManager.PlayerAnchorY) + currentOffsetFromCenter;
             ApplyVisualState(theme.PlayerAccentColor, 0f);
         }
 
@@ -56,27 +61,36 @@ namespace Voltline.Gameplay
             }
 
             targetSide = currentSide == PlayerSide.Top ? PlayerSide.Bottom : PlayerSide.Top;
-            flipFromX = currentX;
-            flipToX = trackManager.GetSideX(targetSide);
+            flipFromOffset = currentOffsetFromCenter;
+            flipToOffset = GetOffsetForSide(targetSide);
             flipElapsed = 0f;
             isFlipping = true;
+            Flipped?.Invoke(WorldPosition);
             return true;
         }
 
         public void Tick(float deltaTime)
         {
+            float trackCenterX = trackManager.GetTrackCenterX(trackManager.PlayerAnchorY);
             if (isFlipping)
             {
                 flipElapsed += deltaTime;
                 float t = Mathf.Clamp01(flipElapsed / gameBalance.FlipDurationSeconds);
                 float eased = Mathf.SmoothStep(0f, 1f, t);
-                currentX = Mathf.Lerp(flipFromX, flipToX, eased);
+                currentOffsetFromCenter = Mathf.Lerp(flipFromOffset, flipToOffset, eased);
+                currentX = trackCenterX + currentOffsetFromCenter;
                 if (t >= 1f)
                 {
                     isFlipping = false;
                     currentSide = targetSide;
-                    currentX = flipToX;
+                    currentOffsetFromCenter = flipToOffset;
+                    currentX = trackCenterX + currentOffsetFromCenter;
                 }
+            }
+            else
+            {
+                currentOffsetFromCenter = GetOffsetForSide(currentSide);
+                currentX = trackCenterX + currentOffsetFromCenter;
             }
 
             ApplyVisualState(isDead ? theme.DangerColor : theme.PlayerAccentColor, isFlipping ? 25f : 0f);
@@ -110,10 +124,15 @@ namespace Voltline.Gameplay
                 return;
             }
 
-            visualRoot.position = new Vector3(currentX, trackManager.PlayerAnchorY, 0f);
+            visualRoot.position = WorldPosition;
             visualRoot.localScale = new Vector3(GameplayPresentationTuning.PlayerScale, GameplayPresentationTuning.PlayerScale, 1f);
             visualRoot.rotation = Quaternion.Euler(0f, 0f, zRotation);
             spriteRenderer.color = tint;
+        }
+
+        private float GetOffsetForSide(PlayerSide side)
+        {
+            return side == PlayerSide.Top ? gameBalance.SideOffset : -gameBalance.SideOffset;
         }
     }
 }

@@ -12,4 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3250bf3d4eb44299998a886aa27a7a1d, type: 3}
   m_Name: CAT_VfxCatalog_Main
   m_EditorClassIdentifier: 
-  entries: []
+  entries:
+  - vfxId: vfx.flip.default
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1
+    lifetimeCategory: 1
+    usePoolingHint: 0
+  - vfxId: vfx.near-miss.default
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1
+    lifetimeCategory: 1
+    usePoolingHint: 0
+  - vfxId: vfx.death.default
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1.1
+    lifetimeCategory: 1
+    usePoolingHint: 0
+  - vfxId: vfx.milestone.default
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1.15
+    lifetimeCategory: 1
+    usePoolingHint: 0

@@ -1,41 +1,60 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using Voltline.Core;
 
 namespace Voltline.Input
 {
     public sealed class GameplayInputReader : MonoBehaviour
     {
+        private InputActionAsset inputActionsInstance;
         private InputAction tapAction;
         private InputAction pauseAction;
         private InputAction debugRestartAction;
 
-        public void Initialize()
+        public void Initialize(InputActionAsset inputActionsAsset)
         {
             if (tapAction != null)
             {
                 return;
             }
 
-            tapAction = new InputAction(name: "Tap", type: InputActionType.Button);
-            tapAction.AddBinding("<Mouse>/leftButton");
-            tapAction.AddBinding("<Touchscreen>/primaryTouch/press");
-            tapAction.AddBinding("<Gamepad>/buttonSouth");
+            if (inputActionsAsset == null)
+            {
+                Debug.LogError("GameplayInputReader requires the project-owned InputActionAsset.");
+                enabled = false;
+                return;
+            }
 
-            pauseAction = new InputAction(name: "Pause", type: InputActionType.Button);
-            pauseAction.AddBinding("<Keyboard>/escape");
-            pauseAction.AddBinding("<Gamepad>/start");
+            inputActionsInstance = Instantiate(inputActionsAsset);
+            tapAction = inputActionsInstance.FindAction("Tap");
+            pauseAction = inputActionsInstance.FindAction("Pause");
+            debugRestartAction = inputActionsInstance.FindAction("DebugRestart");
 
-            debugRestartAction = new InputAction(name: "DebugRestart", type: InputActionType.Button);
-            debugRestartAction.AddBinding("<Keyboard>/r");
+            if (tapAction == null || pauseAction == null)
+            {
+                Debug.LogError("GameplayInputReader could not find the required Gameplay actions in the project input asset.");
+                enabled = false;
+                return;
+            }
 
             tapAction.Enable();
             pauseAction.Enable();
-            debugRestartAction.Enable();
+
+            if (RuntimeBuildFlags.GameplayDebugToolsEnabled && debugRestartAction != null)
+            {
+                debugRestartAction.Enable();
+            }
         }
 
         public bool ConsumeTapPressed()
         {
             return tapAction != null && tapAction.WasPressedThisFrame();
+        }
+
+        public bool ConsumeGameplayTapPressed()
+        {
+            return ConsumeTapPressed() && !IsPointerOverUi();
         }
 
         public bool ConsumePausePressed()
@@ -48,6 +67,11 @@ namespace Voltline.Input
             return debugRestartAction != null && debugRestartAction.WasPressedThisFrame();
         }
 
+        private static bool IsPointerOverUi()
+        {
+            return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+        }
+
         private void OnDisable()
         {
             tapAction?.Disable();
@@ -57,9 +81,27 @@ namespace Voltline.Input
 
         private void OnDestroy()
         {
-            tapAction?.Dispose();
-            pauseAction?.Dispose();
-            debugRestartAction?.Dispose();
+            tapAction = null;
+            pauseAction = null;
+            debugRestartAction = null;
+
+            if (inputActionsInstance != null)
+            {
+                if (Application.isPlaying)
+                {
+                    Destroy(inputActionsInstance);
+                }
+                else
+                {
+#if UNITY_EDITOR
+                    DestroyImmediate(inputActionsInstance);
+#else
+                    Destroy(inputActionsInstance);
+#endif
+                }
+
+                inputActionsInstance = null;
+            }
         }
     }
 }

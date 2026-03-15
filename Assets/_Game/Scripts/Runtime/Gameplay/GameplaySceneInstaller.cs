@@ -1,8 +1,13 @@
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.InputSystem;
+using Voltline.Audio;
+using Voltline.Core;
 using Voltline.Data;
 using Voltline.Input;
 using Voltline.Save;
 using Voltline.UI;
+using Voltline.VFX;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -16,11 +21,25 @@ namespace Voltline.Gameplay
         [SerializeField] private DifficultyCurveConfig difficultyCurve;
         [SerializeField] private ObstacleCatalog obstacleCatalog;
         [SerializeField] private ThemeCatalog themeCatalog;
+        [SerializeField] private AudioCueCatalog audioCueCatalog;
+        [SerializeField] private VfxCatalog vfxCatalog;
+        [SerializeField] private AudioMixer audioMixer;
+        [SerializeField] private InputActionAsset inputActions;
         [SerializeField] private int startingSeed = 1337;
+        [SerializeField] private int debugStartingScore = 0;
+
+        public int DebugStartingScore => RuntimeBuildFlags.GameplayDebugToolsEnabled ? Mathf.Max(0, debugStartingScore) : 0;
 
         private void Awake()
         {
-            if (gameBalance == null || difficultyCurve == null || obstacleCatalog == null || themeCatalog == null || themeCatalog.DefaultTheme == null)
+            if (gameBalance == null
+                || difficultyCurve == null
+                || obstacleCatalog == null
+                || themeCatalog == null
+                || themeCatalog.DefaultTheme == null
+                || audioCueCatalog == null
+                || vfxCatalog == null
+                || inputActions == null)
             {
                 Debug.LogError("GameplaySceneInstaller is missing required config references.");
                 enabled = false;
@@ -35,6 +54,13 @@ namespace Voltline.Gameplay
                 return;
             }
 
+            SaveService saveService = SaveService.EnsureExists();
+            saveService.SynchronizeThemeUnlocks(themeCatalog);
+            ThemeConfig activeTheme = saveService.ResolveSelectedTheme(themeCatalog) ?? themeCatalog.DefaultTheme;
+            AudioService audioService = AudioService.EnsureExists();
+            audioService.Configure(audioCueCatalog, saveService, audioMixer);
+            audioService.PlayMusicLoop(AudioCueIds.MainLoop);
+
             GameplayInputReader inputReader = GetOrAddComponent<GameplayInputReader>();
             DifficultyDirector difficultyDirector = GetOrAddComponent<DifficultyDirector>();
             ScoreSystem scoreSystem = GetOrAddComponent<ScoreSystem>();
@@ -43,16 +69,19 @@ namespace Voltline.Gameplay
             GameManager gameManager = GetOrAddComponent<GameManager>();
             UIStateCoordinator uiStateCoordinator = GetOrAddComponent<UIStateCoordinator>();
             PlayerController playerController = GetOrAddComponent<PlayerController>();
-            SaveService saveService = SaveService.EnsureExists();
+            VfxService vfxService = GetOrAddComponent<VfxService>();
+            GameplayFeedbackCoordinator feedbackCoordinator = GetOrAddComponent<GameplayFeedbackCoordinator>();
 
-            inputReader.Initialize();
+            inputReader.Initialize(inputActions);
             difficultyDirector.Initialize(gameBalance, difficultyCurve, obstacleCatalog);
             scoreSystem.Initialize(gameBalance);
-            trackManager.Initialize(gameBalance, themeCatalog.DefaultTheme, gameplayCamera);
-            playerController.Initialize(gameBalance, trackManager, themeCatalog.DefaultTheme);
-            hazardManager.Initialize(gameBalance, obstacleCatalog, difficultyDirector, trackManager, themeCatalog.DefaultTheme);
-            gameManager.Initialize(gameBalance, inputReader, difficultyDirector, trackManager, playerController, hazardManager, scoreSystem, startingSeed);
-            uiStateCoordinator.Initialize(gameManager, scoreSystem, themeCatalog.DefaultTheme, saveService);
+            trackManager.Initialize(gameBalance, activeTheme, gameplayCamera);
+            playerController.Initialize(gameBalance, trackManager, activeTheme);
+            hazardManager.Initialize(gameBalance, obstacleCatalog, difficultyDirector, trackManager, activeTheme);
+            gameManager.Initialize(gameBalance, inputReader, difficultyDirector, trackManager, playerController, hazardManager, scoreSystem, startingSeed, DebugStartingScore);
+            uiStateCoordinator.Initialize(gameManager, scoreSystem, activeTheme, themeCatalog, saveService);
+            vfxService.Initialize(vfxCatalog, activeTheme, gameplayCamera);
+            feedbackCoordinator.Initialize(gameManager, playerController, hazardManager, scoreSystem, trackManager, audioService, vfxService);
         }
 
         private T GetOrAddComponent<T>() where T : Component
@@ -70,6 +99,7 @@ namespace Voltline.Gameplay
         private void OnValidate()
         {
             AssignDefaultReferences();
+            debugStartingScore = Mathf.Max(0, debugStartingScore);
         }
 
         private void AssignDefaultReferences()
@@ -78,6 +108,10 @@ namespace Voltline.Gameplay
             difficultyCurve ??= AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
             obstacleCatalog ??= AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
             themeCatalog ??= AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
+            audioCueCatalog ??= AssetDatabase.LoadAssetAtPath<AudioCueCatalog>(ProjectConfigAssetPaths.AudioCueCatalog);
+            vfxCatalog ??= AssetDatabase.LoadAssetAtPath<VfxCatalog>(ProjectConfigAssetPaths.VfxCatalog);
+            audioMixer ??= AssetDatabase.LoadAssetAtPath<AudioMixer>(ProjectConfigAssetPaths.AudioMixer);
+            inputActions ??= AssetDatabase.LoadAssetAtPath<InputActionAsset>(ProjectConfigAssetPaths.InputActions);
         }
 #endif
     }

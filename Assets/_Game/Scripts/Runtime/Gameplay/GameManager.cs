@@ -18,6 +18,7 @@ namespace Voltline.Gameplay
         private ScoreSystem scoreSystem;
         private int baseSeed;
         private int runCounter;
+        private int runStartingScore;
         private float stateElapsed;
 
         public event Action<RunState> RunStateChanged;
@@ -26,6 +27,7 @@ namespace Voltline.Gameplay
         public RunState CurrentState { get; private set; }
         public float CurrentSpeed { get; private set; }
         public bool IsPaused { get; private set; }
+        public int StartingScore => runStartingScore;
 
         public void Initialize(
             GameBalanceConfig balanceConfig,
@@ -35,7 +37,8 @@ namespace Voltline.Gameplay
             PlayerController player,
             HazardManager hazards,
             ScoreSystem scores,
-            int initialSeed)
+            int initialSeed,
+            int initialScore)
         {
             inputReader = gameplayInputReader;
             difficultyDirector = director;
@@ -45,6 +48,7 @@ namespace Voltline.Gameplay
             scoreSystem = scores;
             baseSeed = initialSeed;
             runCounter = 0;
+            runStartingScore = Mathf.Max(0, initialScore);
             BeginRun();
         }
 
@@ -112,7 +116,7 @@ namespace Voltline.Gameplay
 
             if (CurrentState == RunState.Results)
             {
-                if (inputReader.ConsumeTapPressed())
+                if (inputReader.ConsumeGameplayTapPressed())
                 {
                     HandleTap();
                 }
@@ -134,7 +138,7 @@ namespace Voltline.Gameplay
 
             if (CurrentState == RunState.Active)
             {
-                if (inputReader.ConsumeTapPressed())
+                if (inputReader.ConsumeGameplayTapPressed())
                 {
                     HandleTap();
                 }
@@ -160,11 +164,11 @@ namespace Voltline.Gameplay
             runCounter++;
             SetPaused(false);
 
-            scoreSystem.ResetRun();
+            scoreSystem.ResetRun(runStartingScore);
             trackManager.ResetRun();
             playerController.ResetRun();
             hazardManager.ResetRun(seed);
-            CurrentSpeed = difficultyDirector.GetCurrentSpeed(0);
+            CurrentSpeed = difficultyDirector.GetCurrentSpeed(scoreSystem.CurrentScore);
             SetState(RunState.Ready);
             SetState(RunState.Starting);
         }

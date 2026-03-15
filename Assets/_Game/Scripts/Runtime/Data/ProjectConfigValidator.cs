@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Voltline.Audio;
+using Voltline.VFX;
 
 namespace Voltline.Data
 {
@@ -185,6 +187,8 @@ namespace Voltline.Data
                 if (!StableIdUtility.IsValid(theme.ThemeId)) result.Add($"ThemeConfig '{theme.name}' has an invalid theme id '{theme.ThemeId}'.");
                 if (!ids.Add(theme.ThemeId)) result.Add($"ThemeCatalog contains duplicate theme id '{theme.ThemeId}'.");
                 if (string.IsNullOrWhiteSpace(theme.DisplayName)) result.Add($"ThemeConfig '{theme.ThemeId}' must have a display name.");
+                if (theme.UnlockBestScoreThreshold < 0) result.Add($"ThemeConfig '{theme.ThemeId}' unlock best score threshold must be non-negative.");
+                if (catalog.DefaultTheme == theme && !theme.UnlockedByDefault) result.Add("ThemeCatalog default theme must be unlocked by default.");
                 if (catalog.DefaultTheme == theme) foundDefaultTheme = true;
             }
 
@@ -199,6 +203,12 @@ namespace Voltline.Data
             if (catalog == null)
             {
                 result.Add("Missing AudioCueCatalog asset.");
+                return;
+            }
+
+            if (catalog.Entries == null || catalog.Entries.Count == 0)
+            {
+                result.Add("AudioCueCatalog must contain the core cue definitions.");
                 return;
             }
 
@@ -218,6 +228,8 @@ namespace Voltline.Data
                 if (entry.MaxSimultaneousInstances <= 0) result.Add($"AudioCueCatalog entry '{entry.CueId}' max simultaneous instances must be positive.");
                 if (entry.Clips != null && entry.Clips.Any(static clip => clip == null)) result.Add($"AudioCueCatalog entry '{entry.CueId}' contains a missing clip reference.");
             }
+
+            ValidateRequiredIds(ids, result, AudioCueIds.Flip, AudioCueIds.Score, AudioCueIds.NearMiss, AudioCueIds.Milestone, AudioCueIds.Death, AudioCueIds.UiClick, AudioCueIds.MainLoop);
         }
 
         public static void ValidateVfxCatalog(VfxCatalog catalog, ConfigValidationResult result)
@@ -225,6 +237,12 @@ namespace Voltline.Data
             if (catalog == null)
             {
                 result.Add("Missing VfxCatalog asset.");
+                return;
+            }
+
+            if (catalog.Entries == null || catalog.Entries.Count == 0)
+            {
+                result.Add("VfxCatalog must contain the core effect definitions.");
                 return;
             }
 
@@ -240,8 +258,22 @@ namespace Voltline.Data
                 if (!StableIdUtility.IsValid(entry.VfxId)) result.Add($"VfxCatalog entry id '{entry.VfxId}' is invalid.");
                 if (!ids.Add(entry.VfxId)) result.Add($"VfxCatalog contains duplicate effect id '{entry.VfxId}'.");
                 if (entry.Scale <= 0f) result.Add($"VfxCatalog entry '{entry.VfxId}' scale must be positive.");
-                if (entry.Prefab == null && catalog.Entries.Count > 0) result.Add($"VfxCatalog entry '{entry.VfxId}' is missing a prefab reference.");
+                if (entry.SpawnMode == VfxCatalog.VfxSpawnMode.Prefab && entry.Prefab == null) result.Add($"VfxCatalog prefab entry '{entry.VfxId}' is missing a prefab reference.");
+            }
+
+            ValidateRequiredIds(ids, result, VfxCueIds.Flip, VfxCueIds.NearMiss, VfxCueIds.Death, VfxCueIds.Milestone);
+        }
+
+        private static void ValidateRequiredIds(HashSet<string> ids, ConfigValidationResult result, params string[] requiredIds)
+        {
+            for (int i = 0; i < requiredIds.Length; i++)
+            {
+                if (!ids.Contains(requiredIds[i]))
+                {
+                    result.Add($"Missing required config id '{requiredIds[i]}'.");
+                }
             }
         }
     }
 }
+

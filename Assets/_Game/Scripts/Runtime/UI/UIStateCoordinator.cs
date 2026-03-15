@@ -12,6 +12,7 @@ namespace Voltline.UI
         private GameManager gameManager;
         private ScoreSystem scoreSystem;
         private ThemeConfig theme;
+        private ThemeCatalog themeCatalog;
         private SaveService saveService;
         private HudView hudView;
         private PauseOverlayView pauseOverlayView;
@@ -23,7 +24,7 @@ namespace Voltline.UI
         public bool IsResultVisible => resultPanelView != null && resultPanelView.IsVisible;
         public bool IsSettingsVisible => settingsOverlayView != null && settingsOverlayView.IsVisible;
 
-        public void Initialize(GameManager manager, ScoreSystem scores, ThemeConfig activeTheme, SaveService service)
+        public void Initialize(GameManager manager, ScoreSystem scores, ThemeConfig activeTheme, ThemeCatalog catalog, SaveService service)
         {
             if (isInitialized)
             {
@@ -33,6 +34,7 @@ namespace Voltline.UI
             gameManager = manager;
             scoreSystem = scores;
             theme = activeTheme;
+            themeCatalog = catalog;
             saveService = service;
 
             UIFactory.EnsureEventSystem();
@@ -51,9 +53,10 @@ namespace Voltline.UI
             resultPanelView.Initialize(safeAreaRoot, theme, HandleRetryPressed, HandleHomePressed);
 
             settingsOverlayView = gameObject.AddComponent<SettingsOverlayView>();
-            settingsOverlayView.Initialize(safeAreaRoot, theme, saveService, HandleCloseSettingsPressed);
+            settingsOverlayView.Initialize(safeAreaRoot, theme, themeCatalog, saveService, HandleCloseSettingsPressed);
 
             scoreSystem.ScoreChanged += HandleScoreChanged;
+            scoreSystem.MilestoneReached += HandleMilestoneReached;
             gameManager.RunStateChanged += HandleRunStateChanged;
             gameManager.PauseChanged += HandlePauseChanged;
             saveService.ProfileChanged += HandleProfileChanged;
@@ -66,6 +69,7 @@ namespace Voltline.UI
             if (scoreSystem != null)
             {
                 scoreSystem.ScoreChanged -= HandleScoreChanged;
+                scoreSystem.MilestoneReached -= HandleMilestoneReached;
             }
 
             if (gameManager != null)
@@ -126,6 +130,15 @@ namespace Voltline.UI
         private void HandleScoreChanged(int score)
         {
             hudView.SetScore(score);
+            if (score > 0)
+            {
+                hudView.PlayScorePop();
+            }
+        }
+
+        private void HandleMilestoneReached(int milestone)
+        {
+            hudView.PlayMilestonePulse();
         }
 
         private void HandleRunStateChanged(RunState state)
@@ -136,7 +149,9 @@ namespace Voltline.UI
                 int finalScore = scoreSystem.CurrentScore;
                 bool isNewBest = finalScore > previousBest;
                 saveService.RecordRunScore(finalScore);
-                resultPanelView.Show(finalScore, saveService.BestScore, isNewBest, BuildResultMessage(finalScore, isNewBest));
+                saveService.SynchronizeThemeUnlocks(themeCatalog);
+                string message = ResultCopyUtility.BuildMessage(finalScore, isNewBest, scoreSystem.MilestoneThresholds);
+                resultPanelView.Show(finalScore, saveService.BestScore, isNewBest, message);
                 pauseOverlayView.Hide();
                 settingsOverlayView.Hide();
                 return;
@@ -163,31 +178,6 @@ namespace Voltline.UI
         private void HandleProfileChanged()
         {
             hudView.SetBestScore(saveService.BestScore);
-        }
-
-        private static string BuildResultMessage(int score, bool isNewBest)
-        {
-            if (isNewBest)
-            {
-                return "New Best";
-            }
-
-            if (score <= 0)
-            {
-                return "One more run";
-            }
-
-            if (score < 5)
-            {
-                return "So close";
-            }
-
-            if (score < 15)
-            {
-                return $"You survived {score}";
-            }
-
-            return "Keep the line";
         }
     }
 }

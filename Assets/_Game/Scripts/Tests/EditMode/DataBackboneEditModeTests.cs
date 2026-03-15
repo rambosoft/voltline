@@ -1,7 +1,10 @@
 #if UNITY_EDITOR
+using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEditor;
+using UnityEngine;
 using Voltline.Data;
+using Voltline.Gameplay;
 using Voltline.Save;
 
 namespace Voltline.Tests.EditMode
@@ -39,6 +42,55 @@ namespace Voltline.Tests.EditMode
         }
 
         [Test]
+        public void DifficultyDirector_UnlocksApprovedFamiliesInReadableOrder()
+        {
+            GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
+            DifficultyCurveConfig difficultyCurve = AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
+            ObstacleCatalog obstacleCatalog = AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
+            GameObject root = new("DifficultyDirectorTests");
+
+            try
+            {
+                DifficultyDirector director = root.AddComponent<DifficultyDirector>();
+                director.Initialize(gameBalance, difficultyCurve, obstacleCatalog);
+                List<ObstacleConfig> eligible = new();
+
+                director.PopulateEligibleObstacleConfigs(0, eligible);
+                Assert.That(ContainsFamily(eligible, ObstacleFamily.Spikes), Is.True);
+                Assert.That(ContainsFamily(eligible, ObstacleFamily.RotatingCutters), Is.False);
+                Assert.That(ContainsFamily(eligible, ObstacleFamily.ElectricGates), Is.False);
+                Assert.That(ContainsFamily(eligible, ObstacleFamily.SideBlockers), Is.False);
+                Assert.That(ContainsFamily(eligible, ObstacleFamily.BrokenLineGaps), Is.False);
+
+                director.PopulateEligibleObstacleConfigs(8, eligible);
+                Assert.That(ContainsFamily(eligible, ObstacleFamily.RotatingCutters), Is.True);
+                Assert.That(ContainsFamily(eligible, ObstacleFamily.ElectricGates), Is.True);
+
+                director.PopulateEligibleObstacleConfigs(12, eligible);
+                Assert.That(ContainsFamily(eligible, ObstacleFamily.SideBlockers), Is.True);
+
+                director.PopulateEligibleObstacleConfigs(18, eligible);
+                Assert.That(ContainsFamily(eligible, ObstacleFamily.BrokenLineGaps), Is.True);
+            }
+            finally
+            {
+                Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void ThemeCatalog_ContainsLaunchThemeUnlockSet()
+        {
+            ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
+
+            Assert.That(themeCatalog.Themes.Count, Is.GreaterThanOrEqualTo(2));
+            Assert.That(themeCatalog.DefaultThemeId, Is.EqualTo("theme.neon-night"));
+            Assert.That(themeCatalog.TryGetTheme("theme.candy-pop", out ThemeConfig candyPop), Is.True);
+            Assert.That(candyPop.UnlockedByDefault, Is.False);
+            Assert.That(candyPop.UnlockBestScoreThreshold, Is.EqualTo(20));
+        }
+
+        [Test]
         public void DefaultProfile_UsesVersionOneAndDefaultTheme()
         {
             ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
@@ -51,6 +103,19 @@ namespace Voltline.Tests.EditMode
             Assert.That(profile.musicVolume, Is.EqualTo(1f));
             Assert.That(profile.sfxVolume, Is.EqualTo(1f));
             Assert.That(profile.vibrationEnabled, Is.True);
+        }
+
+        private static bool ContainsFamily(List<ObstacleConfig> eligible, ObstacleFamily family)
+        {
+            for (int i = 0; i < eligible.Count; i++)
+            {
+                if (eligible[i] != null && eligible[i].Family == family)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

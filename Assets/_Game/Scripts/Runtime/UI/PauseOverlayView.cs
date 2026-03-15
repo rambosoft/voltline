@@ -8,8 +8,9 @@ namespace Voltline.UI
     public sealed class PauseOverlayView : MonoBehaviour
     {
         private RectTransform root;
+        private OverlayTransitionController transitionController;
 
-        public bool IsVisible => root != null && root.gameObject.activeSelf;
+        public bool IsVisible => transitionController != null && transitionController.IsVisible;
 
         public void Initialize(
             Transform parent,
@@ -21,7 +22,6 @@ namespace Voltline.UI
         {
             root = UIFactory.CreatePanel("PauseOverlay", parent, new Color(0f, 0f, 0f, 0.52f));
             UIFactory.Stretch(root, 0f);
-            root.gameObject.SetActive(false);
 
             RectTransform panel = UIFactory.CreatePanel("PausePanel", root, UIFactory.PanelColor(0.95f));
             UIFactory.SetAnchors(panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(760f, 720f));
@@ -40,22 +40,19 @@ namespace Voltline.UI
 
             Button homeButton = UIFactory.CreateButton("HomeButton", panel, "Home", UIFactory.DangerColor(theme), Color.white, homeAction);
             UIFactory.SetAnchors((RectTransform)homeButton.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 74f), new Vector2(240f, 76f));
+
+            transitionController = gameObject.AddComponent<OverlayTransitionController>();
+            transitionController.Initialize(root, panel, -22f);
         }
 
         public void Show()
         {
-            if (root != null)
-            {
-                root.gameObject.SetActive(true);
-            }
+            transitionController?.Show();
         }
 
         public void Hide()
         {
-            if (root != null)
-            {
-                root.gameObject.SetActive(false);
-            }
+            transitionController?.Hide();
         }
     }
 }
