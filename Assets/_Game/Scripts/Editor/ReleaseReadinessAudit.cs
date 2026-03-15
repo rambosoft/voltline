@@ -1,8 +1,8 @@
 #if UNITY_EDITOR
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -144,6 +144,8 @@ namespace Voltline.Editor
         {
             GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
             DifficultyCurveConfig difficultyCurve = AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
+            GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            HazardPresentationCatalog hazardPresentationCatalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
             ObstacleCatalog obstacleCatalog = AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
             ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
             AudioCueCatalog audioCueCatalog = AssetDatabase.LoadAssetAtPath<AudioCueCatalog>(ProjectConfigAssetPaths.AudioCueCatalog);
@@ -152,6 +154,8 @@ namespace Voltline.Editor
             ConfigValidationResult validation = ProjectConfigValidator.ValidateProject(
                 gameBalance,
                 difficultyCurve,
+                gameplayPresentation,
+                hazardPresentationCatalog,
                 obstacleCatalog,
                 themeCatalog,
                 audioCueCatalog,
@@ -266,6 +270,8 @@ namespace Voltline.Editor
 
             SerializedObject serializedInstaller = new(installer);
             ValidateObjectReference(serializedInstaller, "gameBalance", result, true);
+            ValidateObjectReference(serializedInstaller, "gameplayPresentation", result, true);
+            ValidateObjectReference(serializedInstaller, "hazardPresentationCatalog", result, true);
             ValidateObjectReference(serializedInstaller, "difficultyCurve", result, true);
             ValidateObjectReference(serializedInstaller, "obstacleCatalog", result, true);
             ValidateObjectReference(serializedInstaller, "themeCatalog", result, true);
@@ -316,8 +322,8 @@ namespace Voltline.Editor
                 return;
             }
 
-            var lines = File.ReadAllLines(mixerPath).ToList();
-            var groups = ParseMixerGroups(lines);
+            List<string> lines = File.ReadAllLines(mixerPath).ToList();
+            Dictionary<string, MixerGroupBlock> groups = ParseMixerGroups(lines);
             if (!groups.TryGetValue("Master", out MixerGroupBlock masterGroup)
                 || !groups.TryGetValue("Music", out MixerGroupBlock musicGroup)
                 || !groups.TryGetValue("SFX", out MixerGroupBlock sfxGroup)

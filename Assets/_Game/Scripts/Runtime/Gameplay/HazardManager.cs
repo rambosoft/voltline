@@ -16,10 +16,8 @@ namespace Voltline.Gameplay
             public SpriteRenderer AccentRenderer;
             public SpriteRenderer TelegraphRenderer;
             public PlayerSide DangerousSide;
+            public HazardLayoutProfile LayoutProfile;
             public float HitDistance;
-            public float CollisionHalfWidth;
-            public float CollisionHalfHeight;
-            public float VisualHalfHeight;
             public float AnimationSeed;
             public bool ScoreAwarded;
             public bool NearMissTriggered;
@@ -29,6 +27,7 @@ namespace Voltline.Gameplay
         private readonly List<HazardRuntime> activeHazards = new();
 
         private GameBalanceConfig gameBalance;
+        private HazardPresentationCatalog hazardPresentationCatalog;
         private DifficultyDirector difficultyDirector;
         private TrackManager trackManager;
         private ThemeConfig theme;
@@ -36,6 +35,7 @@ namespace Voltline.Gameplay
         private float nextHitDistance;
         private float lastSpawnHitDistance;
         private float lastSpawnVisualHalfHeight;
+        private float lastSpawnGapPadding;
         private PlayerSide lastDangerousSide;
         private int sameSideStreak;
         private int spawnCount;
@@ -45,11 +45,13 @@ namespace Voltline.Gameplay
         public void Initialize(
             GameBalanceConfig balanceConfig,
             ObstacleCatalog catalog,
+            HazardPresentationCatalog presentationCatalog,
             DifficultyDirector director,
             TrackManager track,
             ThemeConfig activeTheme)
         {
             gameBalance = balanceConfig;
+            hazardPresentationCatalog = presentationCatalog;
             difficultyDirector = director;
             trackManager = track;
             theme = activeTheme;
@@ -70,6 +72,7 @@ namespace Voltline.Gameplay
             spawnCount = 0;
             lastSpawnHitDistance = float.NegativeInfinity;
             lastSpawnVisualHalfHeight = 0f;
+            lastSpawnGapPadding = 0f;
             lastDangerousSide = PlayerSide.Top;
             sameSideStreak = 0;
 
@@ -129,11 +132,16 @@ namespace Voltline.Gameplay
                     return;
                 }
 
-                HazardLayoutProfile layoutProfile = HazardFamilyPresentation.GetLayoutProfile(config.Family);
+                HazardLayoutProfile layoutProfile = hazardPresentationCatalog.GetRequiredProfile(config.Family);
                 if (lastSpawnHitDistance > float.NegativeInfinity)
                 {
+                    HazardLayoutProfile previousProfile = new(
+                        new Vector2(0f, lastSpawnVisualHalfHeight * 2f),
+                        Vector2.zero,
+                        Vector2.zero,
+                        lastSpawnGapPadding);
                     float minimumReadableHitDistance = lastSpawnHitDistance
-                        + HazardFamilyPresentation.GetRequiredHitDistanceSeparation(lastSpawnVisualHalfHeight, layoutProfile.VisualHalfHeight);
+                        + hazardPresentationCatalog.GetRequiredHitDistanceSeparation(previousProfile, layoutProfile);
                     nextHitDistance = Mathf.Max(nextHitDistance, minimumReadableHitDistance);
                 }
 
@@ -141,6 +149,7 @@ namespace Voltline.Gameplay
                 SpawnHazard(config, layoutProfile, side, nextHitDistance);
                 lastSpawnHitDistance = nextHitDistance;
                 lastSpawnVisualHalfHeight = layoutProfile.VisualHalfHeight;
+                lastSpawnGapPadding = layoutProfile.MinimumReadableGapPadding;
                 spawnCount++;
                 nextHitDistance += GetNextSpacing(currentScore, config);
             }
@@ -244,16 +253,14 @@ namespace Voltline.Gameplay
                 AccentRenderer = CreateRenderer("Accent", root.transform, 5),
                 TelegraphRenderer = CreateRenderer("Telegraph", root.transform, 2),
                 DangerousSide = dangerousSide,
+                LayoutProfile = layoutProfile,
                 HitDistance = hitDistance,
-                CollisionHalfWidth = layoutProfile.CollisionHalfWidth,
-                CollisionHalfHeight = layoutProfile.CollisionHalfHeight,
-                VisualHalfHeight = layoutProfile.VisualHalfHeight,
                 AnimationSeed = (float)random.NextDouble() * 10f,
                 ScoreAwarded = false,
                 NearMissTriggered = false,
             };
 
-            ConfigureBaseVisuals(runtime, layoutProfile);
+            ConfigureBaseVisuals(runtime);
             activeHazards.Add(runtime);
         }
 
@@ -267,12 +274,12 @@ namespace Voltline.Gameplay
             return renderer;
         }
 
-        private void ConfigureBaseVisuals(HazardRuntime hazard, HazardLayoutProfile layoutProfile)
+        private void ConfigureBaseVisuals(HazardRuntime hazard)
         {
-            SetRenderer(hazard.MainRenderer, true, Vector3.zero, layoutProfile.MainScale, theme.DangerColor, 0f);
+            SetRenderer(hazard.MainRenderer, true, Vector3.zero, hazard.LayoutProfile.VisualBoundsScale, theme.DangerColor, 0f);
             SetRenderer(hazard.SecondaryRenderer, false, Vector3.zero, Vector2.one, Color.clear, 0f);
             SetRenderer(hazard.AccentRenderer, false, Vector3.zero, Vector2.one, Color.clear, 0f);
-            SetRenderer(hazard.TelegraphRenderer, layoutProfile.UsesTelegraph, Vector3.zero, layoutProfile.TelegraphScale, new Color(theme.LineGlowColor.r, theme.LineGlowColor.g, theme.LineGlowColor.b, 0.16f), 0f);
+            SetRenderer(hazard.TelegraphRenderer, hazard.LayoutProfile.UsesTelegraph, Vector3.zero, hazard.LayoutProfile.TelegraphBoundsScale, new Color(theme.LineGlowColor.r, theme.LineGlowColor.g, theme.LineGlowColor.b, 0.16f), 0f);
         }
 
         private void UpdateVisuals(HazardRuntime hazard, int currentScore, float worldY, float trackCenterX)
@@ -283,7 +290,6 @@ namespace Voltline.Gameplay
             float telegraphDistance = Mathf.Max(0.75f, speed * telegraphSeconds);
             float telegraphStrength = 1f - Mathf.Clamp01(distanceToPlayer / telegraphDistance);
             float sideSign = hazard.DangerousSide == PlayerSide.Top ? 1f : -1f;
-            Vector2 mainScale = hazard.MainRenderer.transform.localScale;
 
             switch (hazard.Config.Family)
             {
@@ -292,7 +298,7 @@ namespace Voltline.Gameplay
                     break;
 
                 case ObstacleFamily.RotatingCutters:
-                    ApplyRotatingCutterVisuals(hazard, telegraphStrength, distanceToPlayer);
+                    ApplyRotatingCutterVisuals(hazard, telegraphStrength);
                     break;
 
                 case ObstacleFamily.ElectricGates:
@@ -300,7 +306,7 @@ namespace Voltline.Gameplay
                     break;
 
                 case ObstacleFamily.BrokenLineGaps:
-                    ApplyGapVisuals(hazard, telegraphStrength, trackCenterX);
+                    ApplyGapVisuals(hazard, telegraphStrength);
                     break;
 
                 case ObstacleFamily.SideBlockers:
@@ -312,20 +318,23 @@ namespace Voltline.Gameplay
         private void ApplySpikeVisuals(HazardRuntime hazard, float telegraphStrength)
         {
             Color core = Color.Lerp(theme.DangerColor, Color.white, telegraphStrength * 0.12f);
-            SetRenderer(hazard.MainRenderer, true, Vector3.zero, new Vector2(0.24f, 0.96f), core, 0f);
-            SetRenderer(hazard.SecondaryRenderer, true, new Vector3(0f, 0.28f, 0f), new Vector2(0.18f, 0.34f), core, 0f);
-            SetRenderer(hazard.AccentRenderer, true, new Vector3(0f, -0.28f, 0f), new Vector2(0.18f, 0.34f), core, 0f);
+            Vector2 visual = hazard.LayoutProfile.VisualBoundsScale;
+            SetRenderer(hazard.MainRenderer, true, Vector3.zero, visual, core, 0f);
+            SetRenderer(hazard.SecondaryRenderer, true, new Vector3(0f, visual.y * 0.18f, 0f), new Vector2(visual.x * 0.72f, visual.y * 0.36f), core, 0f);
+            SetRenderer(hazard.AccentRenderer, true, new Vector3(0f, -visual.y * 0.18f, 0f), new Vector2(visual.x * 0.72f, visual.y * 0.36f), core, 0f);
             hazard.TelegraphRenderer.enabled = false;
         }
 
-        private void ApplyRotatingCutterVisuals(HazardRuntime hazard, float telegraphStrength, float distanceToPlayer)
+        private void ApplyRotatingCutterVisuals(HazardRuntime hazard, float telegraphStrength)
         {
             float angle = (Time.time * 220f) + (hazard.AnimationSeed * 38f);
             Color bladeColor = Color.Lerp(theme.DangerColor, new Color(1f, 0.9f, 0.95f, 1f), telegraphStrength * 0.2f);
-            SetRenderer(hazard.MainRenderer, true, Vector3.zero, new Vector2(0.16f, 1.18f), bladeColor, angle);
-            SetRenderer(hazard.SecondaryRenderer, true, Vector3.zero, new Vector2(0.12f, 0.86f), bladeColor, -angle * 0.82f);
-            SetRenderer(hazard.AccentRenderer, true, Vector3.zero, new Vector2(0.24f, 0.24f), theme.PlayerAccentColor, 0f);
-            SetRenderer(hazard.TelegraphRenderer, true, Vector3.zero, new Vector2(0.74f, 1.34f), new Color(theme.LineGlowColor.r, theme.LineGlowColor.g, theme.LineGlowColor.b, Mathf.Lerp(0.08f, 0.22f, telegraphStrength)), 0f);
+            Vector2 visual = hazard.LayoutProfile.VisualBoundsScale;
+            Vector2 telegraph = hazard.LayoutProfile.TelegraphBoundsScale;
+            SetRenderer(hazard.MainRenderer, true, Vector3.zero, new Vector2(visual.x * 0.28f, visual.y * 1.12f), bladeColor, angle);
+            SetRenderer(hazard.SecondaryRenderer, true, Vector3.zero, new Vector2(visual.x * 0.21f, visual.y * 0.81f), bladeColor, -angle * 0.82f);
+            SetRenderer(hazard.AccentRenderer, true, Vector3.zero, new Vector2(visual.x * 0.42f, visual.x * 0.42f), theme.PlayerAccentColor, 0f);
+            SetRenderer(hazard.TelegraphRenderer, telegraph.x > 0f && telegraph.y > 0f, Vector3.zero, telegraph, new Color(theme.LineGlowColor.r, theme.LineGlowColor.g, theme.LineGlowColor.b, Mathf.Lerp(0.08f, 0.22f, telegraphStrength)), 0f);
         }
 
         private void ApplyElectricGateVisuals(HazardRuntime hazard, float telegraphStrength, float trackCenterX)
@@ -334,32 +343,36 @@ namespace Voltline.Gameplay
             float beamLength = Mathf.Abs(directionToCenter) + 0.18f;
             float beamOffset = directionToCenter * 0.5f;
             float arcPulse = 0.55f + (Mathf.Sin((Time.time + hazard.AnimationSeed) * 18f) * 0.45f);
+            Vector2 visual = hazard.LayoutProfile.VisualBoundsScale;
+            Vector2 telegraph = hazard.LayoutProfile.TelegraphBoundsScale;
 
-            SetRenderer(hazard.MainRenderer, true, Vector3.zero, new Vector2(0.18f, 1.24f), new Color(1f, 0.85f, 0.28f, 1f), 0f);
+            SetRenderer(hazard.MainRenderer, true, Vector3.zero, visual, new Color(1f, 0.85f, 0.28f, 1f), 0f);
             SetRenderer(hazard.SecondaryRenderer, true, new Vector3(beamOffset, 0f, 0f), new Vector2(beamLength, 0.12f + telegraphStrength * 0.05f), new Color(1f, 0.94f, 0.4f, Mathf.Lerp(0.3f, 0.75f, telegraphStrength * arcPulse)), 0f);
-            SetRenderer(hazard.AccentRenderer, true, new Vector3(0f, 0f, 0f), new Vector2(0.34f, 0.34f), new Color(1f, 0.96f, 0.6f, 0.95f), 0f);
-            SetRenderer(hazard.TelegraphRenderer, true, new Vector3(beamOffset, 0f, 0f), new Vector2(beamLength + 0.22f, 0.34f), new Color(1f, 0.95f, 0.35f, Mathf.Lerp(0.08f, 0.24f, telegraphStrength)), 0f);
+            SetRenderer(hazard.AccentRenderer, true, Vector3.zero, new Vector2(visual.x * 0.65f, visual.x * 0.65f), new Color(1f, 0.96f, 0.6f, 0.95f), 0f);
+            SetRenderer(hazard.TelegraphRenderer, telegraph.x > 0f && telegraph.y > 0f, new Vector3(beamOffset, 0f, 0f), new Vector2(beamLength + 0.22f, telegraph.y), new Color(1f, 0.95f, 0.35f, Mathf.Lerp(0.08f, 0.24f, telegraphStrength)), 0f);
         }
 
-        private void ApplyGapVisuals(HazardRuntime hazard, float telegraphStrength, float trackCenterX)
+        private void ApplyGapVisuals(HazardRuntime hazard, float telegraphStrength)
         {
             PlayerSide safeSide = Opposite(hazard.DangerousSide);
             float safeSideOffset = safeSide == PlayerSide.Top ? gameBalance.SideOffset : -gameBalance.SideOffset;
             Color gapCutout = Color.Lerp(theme.BackgroundTopColor, theme.BackgroundBottomColor, 0.5f);
             gapCutout.a = 1f;
 
-            SetRenderer(hazard.MainRenderer, true, Vector3.zero, new Vector2(GameplayPresentationTuning.TrackLineWidth * 1.7f, 1.18f), gapCutout, 0f);
+            SetRenderer(hazard.MainRenderer, true, Vector3.zero, hazard.LayoutProfile.VisualBoundsScale, gapCutout, 0f);
             SetRenderer(hazard.SecondaryRenderer, true, new Vector3(0f, 0.44f, 0f), new Vector2(0.48f, 0.08f), theme.LineGlowColor, 0f);
             SetRenderer(hazard.AccentRenderer, true, new Vector3(0f, -0.44f, 0f), new Vector2(0.48f, 0.08f), theme.LineGlowColor, 0f);
-            SetRenderer(hazard.TelegraphRenderer, true, new Vector3(safeSideOffset, 0f, 0f), new Vector2(0.26f, 0.52f), new Color(theme.PlayerAccentColor.r, theme.PlayerAccentColor.g, theme.PlayerAccentColor.b, Mathf.Lerp(0.24f, 0.8f, telegraphStrength)), 0f);
+            SetRenderer(hazard.TelegraphRenderer, hazard.LayoutProfile.UsesTelegraph, new Vector3(safeSideOffset, 0f, 0f), hazard.LayoutProfile.TelegraphBoundsScale, new Color(theme.PlayerAccentColor.r, theme.PlayerAccentColor.g, theme.PlayerAccentColor.b, Mathf.Lerp(0.24f, 0.8f, telegraphStrength)), 0f);
         }
 
         private void ApplySideBlockerVisuals(HazardRuntime hazard, float telegraphStrength, float sideSign)
         {
-            SetRenderer(hazard.MainRenderer, true, Vector3.zero, new Vector2(0.92f, 1.24f), theme.DangerColor, 0f);
-            SetRenderer(hazard.SecondaryRenderer, true, new Vector3(-sideSign * 0.2f, 0f, 0f), new Vector2(0.1f, 1.16f), new Color(1f, 1f, 1f, 0.42f), 0f);
-            SetRenderer(hazard.AccentRenderer, true, new Vector3(0f, 0.3f, 0f), new Vector2(0.42f, 0.12f), new Color(1f, 0.82f, 0.9f, 0.75f), 0f);
-            SetRenderer(hazard.TelegraphRenderer, true, Vector3.zero, new Vector2(1.12f, 1.42f), new Color(theme.DangerColor.r, theme.DangerColor.g, theme.DangerColor.b, Mathf.Lerp(0.08f, 0.22f, telegraphStrength)), 0f);
+            Vector2 visual = hazard.LayoutProfile.VisualBoundsScale;
+            Vector2 telegraph = hazard.LayoutProfile.TelegraphBoundsScale;
+            SetRenderer(hazard.MainRenderer, true, Vector3.zero, visual, theme.DangerColor, 0f);
+            SetRenderer(hazard.SecondaryRenderer, true, new Vector3(-sideSign * visual.x * 0.22f, 0f, 0f), new Vector2(visual.x * 0.11f, visual.y * 0.94f), new Color(1f, 1f, 1f, 0.42f), 0f);
+            SetRenderer(hazard.AccentRenderer, true, new Vector3(0f, visual.y * 0.24f, 0f), new Vector2(visual.x * 0.46f, visual.y * 0.1f), new Color(1f, 0.82f, 0.9f, 0.75f), 0f);
+            SetRenderer(hazard.TelegraphRenderer, telegraph.x > 0f && telegraph.y > 0f, Vector3.zero, telegraph, new Color(theme.DangerColor.r, theme.DangerColor.g, theme.DangerColor.b, Mathf.Lerp(0.08f, 0.22f, telegraphStrength)), 0f);
         }
 
         private static void SetRenderer(SpriteRenderer renderer, bool enabled, Vector3 localPosition, Vector2 scale, Color color, float rotationDegrees)
@@ -390,7 +403,7 @@ namespace Voltline.Gameplay
 
         private bool IsCollision(HazardRuntime hazard, float trackCenterX, float worldY, PlayerController playerController)
         {
-            float verticalThreshold = hazard.CollisionHalfHeight + playerController.CollisionHalfHeight;
+            float verticalThreshold = hazard.LayoutProfile.CollisionHalfHeight + playerController.CollisionHalfHeight;
             if (Mathf.Abs(worldY - trackManager.PlayerAnchorY) > verticalThreshold)
             {
                 return false;
@@ -406,7 +419,7 @@ namespace Voltline.Gameplay
             }
 
             float hazardX = GetAnchorX(hazard, trackCenterX);
-            float horizontalThreshold = hazard.CollisionHalfWidth + playerController.CollisionHalfWidth;
+            float horizontalThreshold = hazard.LayoutProfile.CollisionHalfWidth + playerController.CollisionHalfWidth;
             return Mathf.Abs(hazardX - playerController.CurrentX) <= horizontalThreshold;
         }
 
@@ -417,18 +430,17 @@ namespace Voltline.Gameplay
                 return false;
             }
 
-            float verticalThreshold = hazard.CollisionHalfHeight + playerController.CollisionHalfHeight;
+            float verticalThreshold = hazard.LayoutProfile.CollisionHalfHeight + playerController.CollisionHalfHeight;
             if (Mathf.Abs(worldY - trackManager.PlayerAnchorY) > verticalThreshold)
             {
                 return false;
             }
 
             float hazardX = GetAnchorX(hazard, trackCenterX);
-            float collisionThreshold = hazard.CollisionHalfWidth + playerController.CollisionHalfWidth;
+            float collisionThreshold = hazard.LayoutProfile.CollisionHalfWidth + playerController.CollisionHalfWidth;
             float horizontalDistance = Mathf.Abs(hazardX - playerController.CurrentX);
             return horizontalDistance > collisionThreshold
                 && horizontalDistance <= collisionThreshold + gameBalance.NearMissThreshold;
         }
     }
 }
-

@@ -9,6 +9,7 @@ namespace Voltline.Gameplay
         private const int LinePointCount = 64;
 
         private GameBalanceConfig gameBalance;
+        private GameplayPresentationConfig presentationConfig;
         private ThemeConfig theme;
         private Camera gameplayCamera;
         private LineRenderer lineRenderer;
@@ -26,13 +27,18 @@ namespace Voltline.Gameplay
         public Transform PlayerRoot => playerRoot;
         public Transform HazardsRoot => hazardsRoot;
 
-        public void Initialize(GameBalanceConfig balanceConfig, ThemeConfig activeTheme, Camera targetCamera)
+        public void Initialize(
+            GameBalanceConfig balanceConfig,
+            GameplayPresentationConfig gameplayPresentation,
+            ThemeConfig activeTheme,
+            Camera targetCamera)
         {
             gameBalance = balanceConfig;
+            presentationConfig = gameplayPresentation;
             theme = activeTheme;
             gameplayCamera = targetCamera;
             gameplayCamera.orthographic = true;
-            gameplayCamera.orthographicSize = GameplayPresentationTuning.TrackCameraSize;
+            gameplayCamera.orthographicSize = presentationConfig.TrackCameraSize;
             gameplayCamera.backgroundColor = Color.Lerp(theme.BackgroundTopColor, theme.BackgroundBottomColor, 0.5f);
 
             EnsureRuntimeHierarchy();
@@ -51,7 +57,7 @@ namespace Voltline.Gameplay
             pulseStrength = Mathf.Max(0f, pulseStrength - (Time.deltaTime * 2.4f));
 
             float idlePulse = 0.5f + (Mathf.Sin(pulseTime * 2.25f) * 0.5f);
-            float width = GameplayPresentationTuning.TrackLineWidth * (1f + (idlePulse * 0.08f) + (pulseStrength * 0.22f));
+            float width = presentationConfig.TrackLineWidth * (1f + (idlePulse * 0.08f) + (pulseStrength * 0.22f));
             lineRenderer.startWidth = width;
             lineRenderer.endWidth = width;
             lineRenderer.startColor = Color.Lerp(theme.LineCoreColor, theme.LineGlowColor, 0.28f + (idlePulse * 0.12f) + (pulseStrength * 0.25f));
@@ -125,8 +131,8 @@ namespace Voltline.Gameplay
             lineRenderer.alignment = LineAlignment.TransformZ;
             lineRenderer.numCapVertices = 8;
             lineRenderer.textureMode = LineTextureMode.Stretch;
-            lineRenderer.startWidth = GameplayPresentationTuning.TrackLineWidth;
-            lineRenderer.endWidth = GameplayPresentationTuning.TrackLineWidth;
+            lineRenderer.startWidth = presentationConfig.TrackLineWidth;
+            lineRenderer.endWidth = presentationConfig.TrackLineWidth;
             lineRenderer.sortingOrder = 0;
 
             Shader shader = Shader.Find("Sprites/Default") ?? Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default");
@@ -153,12 +159,12 @@ namespace Voltline.Gameplay
             }
         }
 
-        private static float EvaluateTrackCenterX(float pathDistance)
+        private float EvaluateTrackCenterX(float pathDistance)
         {
-            float primary = Mathf.Sin((pathDistance / GameplayPresentationTuning.TrackCurvePrimaryWavelength) + 0.45f)
-                * GameplayPresentationTuning.TrackCurvePrimaryAmplitude;
-            float secondary = Mathf.Sin((pathDistance / GameplayPresentationTuning.TrackCurveSecondaryWavelength) + 1.1f)
-                * GameplayPresentationTuning.TrackCurveSecondaryAmplitude;
+            float primary = Mathf.Sin((pathDistance / presentationConfig.TrackCurvePrimaryWavelength) + 0.45f)
+                * presentationConfig.TrackCurvePrimaryAmplitude;
+            float secondary = Mathf.Sin((pathDistance / presentationConfig.TrackCurveSecondaryWavelength) + 1.1f)
+                * presentationConfig.TrackCurveSecondaryAmplitude;
             return primary + secondary;
         }
     }

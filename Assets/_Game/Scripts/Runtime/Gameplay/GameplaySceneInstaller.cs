@@ -18,6 +18,8 @@ namespace Voltline.Gameplay
     public sealed class GameplaySceneInstaller : MonoBehaviour
     {
         [SerializeField] private GameBalanceConfig gameBalance;
+        [SerializeField] private GameplayPresentationConfig gameplayPresentation;
+        [SerializeField] private HazardPresentationCatalog hazardPresentationCatalog;
         [SerializeField] private DifficultyCurveConfig difficultyCurve;
         [SerializeField] private ObstacleCatalog obstacleCatalog;
         [SerializeField] private ThemeCatalog themeCatalog;
@@ -33,6 +35,8 @@ namespace Voltline.Gameplay
         private void Awake()
         {
             if (gameBalance == null
+                || gameplayPresentation == null
+                || hazardPresentationCatalog == null
                 || difficultyCurve == null
                 || obstacleCatalog == null
                 || themeCatalog == null
@@ -75,9 +79,9 @@ namespace Voltline.Gameplay
             inputReader.Initialize(inputActions);
             difficultyDirector.Initialize(gameBalance, difficultyCurve, obstacleCatalog);
             scoreSystem.Initialize(gameBalance);
-            trackManager.Initialize(gameBalance, activeTheme, gameplayCamera);
-            playerController.Initialize(gameBalance, trackManager, activeTheme);
-            hazardManager.Initialize(gameBalance, obstacleCatalog, difficultyDirector, trackManager, activeTheme);
+            trackManager.Initialize(gameBalance, gameplayPresentation, activeTheme, gameplayCamera);
+            playerController.Initialize(gameBalance, gameplayPresentation, trackManager, activeTheme);
+            hazardManager.Initialize(gameBalance, obstacleCatalog, hazardPresentationCatalog, difficultyDirector, trackManager, activeTheme);
             gameManager.Initialize(gameBalance, inputReader, difficultyDirector, trackManager, playerController, hazardManager, scoreSystem, startingSeed, DebugStartingScore);
             uiStateCoordinator.Initialize(gameManager, scoreSystem, activeTheme, themeCatalog, saveService);
             vfxService.Initialize(vfxCatalog, activeTheme, gameplayCamera);
@@ -105,6 +109,8 @@ namespace Voltline.Gameplay
         private void AssignDefaultReferences()
         {
             gameBalance ??= AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
+            gameplayPresentation ??= AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            hazardPresentationCatalog ??= AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
             difficultyCurve ??= AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
             obstacleCatalog ??= AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
             themeCatalog ??= AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);

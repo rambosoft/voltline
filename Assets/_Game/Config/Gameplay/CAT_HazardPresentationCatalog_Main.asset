@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f1002, type: 3}
+  m_Name: CAT_HazardPresentationCatalog_Main
+  m_EditorClassIdentifier: 
+  entries:
+  - family: 0
+    visualBoundsScale: {x: 0.42, y: 0.84}
+    telegraphBoundsScale: {x: 0, y: 0}
+    collisionBoundsScale: {x: 0.34, y: 0.84}
+    minimumReadableGapPadding: 0.8
+  - family: 1
+    visualBoundsScale: {x: 0.58, y: 1.06}
+    telegraphBoundsScale: {x: 0.74, y: 1.34}
+    collisionBoundsScale: {x: 0.46, y: 1.06}
+    minimumReadableGapPadding: 0.8
+  - family: 2
+    visualBoundsScale: {x: 0.52, y: 1.18}
+    telegraphBoundsScale: {x: 0.92, y: 1.62}
+    collisionBoundsScale: {x: 0.42, y: 1.18}
+    minimumReadableGapPadding: 0.8
+  - family: 3
+    visualBoundsScale: {x: 0.62, y: 0.92}
+    telegraphBoundsScale: {x: 0.26, y: 0.52}
+    collisionBoundsScale: {x: 0.5, y: 0.92}
+    minimumReadableGapPadding: 0.8
+  - family: 4
+    visualBoundsScale: {x: 0.82, y: 1.28}
+    telegraphBoundsScale: {x: 1.12, y: 1.42}
+    collisionBoundsScale: {x: 0.68, y: 1.28}
+    minimumReadableGapPadding: 0.8

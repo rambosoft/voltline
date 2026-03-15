@@ -89,6 +89,17 @@ Suggested fields:
 - safe-start window
 - milestone thresholds
 
+#### `GameplayPresentationConfig`
+Owns frozen gameplay-critical presentation assumptions for the current baseline.
+
+Suggested fields:
+- track camera size
+- line width
+- line curve amplitudes/wavelengths
+- player readable visual scale
+- player line clearance
+- player collision half extents
+
 #### `DifficultyCurveConfig`
 Owns pacing and escalation rules.
 
@@ -114,6 +125,16 @@ Suggested fields:
 
 #### `ObstacleCatalog`
 Owns the set of available obstacle configs.
+
+#### `HazardPresentationCatalog`
+Owns approved hazard-family presentation bounds used to preserve fairness before a future art refresh.
+
+Suggested fields:
+- family ID / enum binding
+- readable visual bounds
+- telegraph bounds
+- collision bounds
+- minimum readable gap padding
 
 #### `ThemeConfig`
 Owns one theme's visual role definitions.
@@ -287,8 +308,8 @@ Suggested first themes:
 First release can ship with only one or two unlocked.
 
 Current launch baseline:
-- 	heme.neon-night is the default unlocked theme
-- 	heme.candy-pop is the first best-score unlock theme
+- `theme.neon-night` is the default unlocked theme
+- `theme.candy-pop` is the first best-score unlock theme
 
 ## Difficulty data model
 
@@ -334,4 +355,5 @@ Examples:
 - Balance values should not be scattered across scene objects.
 - Runtime systems should read catalogs, not invent parallel registries.
 - Do not mutate content assets as a save mechanism.
+
 

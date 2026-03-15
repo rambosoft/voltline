@@ -367,7 +367,7 @@ These are initial targets, not immutable truths.
 
 - base forward speed: **6.0 units/sec**
 - early speed ramp: **+0.12 units/sec per point** through early curve
-- player side offset from line center: **0.34 units**
+- player side offset from line center: **0.82 units**
 - flip duration: **0.09 sec**
 - minimum intro safe window at run start: **1.20 sec**
 - minimum readable telegraph window for new/active hazards: **0.75 sec**
@@ -383,7 +383,7 @@ These are initial targets, not immutable truths.
 - first tighter gap + hazard combos allowed after score **12**
 - no “impossible-feeling” rhythm spikes before score **15**
 
-These values should be moved into config assets and tuned through playtesting.
+These values now live in config assets and should be tuned through playtesting rather than rewritten in runtime code.
 
 ## Fairness checklist for every new obstacle pattern
 
@@ -404,3 +404,4 @@ Before accepting a new pattern, confirm:
 - Score remains simple and visible.
 - Death stays immediate and understandable.
 - Restart remains central to the emotional loop.
+

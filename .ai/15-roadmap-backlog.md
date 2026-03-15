@@ -53,6 +53,10 @@ These items should happen after the current build is stable and validated.
 - finalize store copy, icons, screenshots, and submission metadata outside gameplay scope
 - verify release-safe debug posture in a non-development build
 
+### Presentation readiness continuation
+- decouple player visuals from collision before any direct player art replacement
+- decouple obstacle visuals from collision and spacing before any hazard art replacement
+
 ## Later
 
 Only pursue after the game already feels strong.
@@ -129,4 +133,7 @@ Questions to ask before promoting an item:
 - Roadmap notes do not override source-of-truth docs.
 - Blocked items stay blocked until the core loop earns complexity.
 - Rejected ideas should not quietly re-enter implementation through side doors.
+
+
+
 

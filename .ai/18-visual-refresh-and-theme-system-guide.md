@@ -21,9 +21,9 @@ This file is the execution guide for presentation refresh work. It owns how to e
 
 ## 3. Current-state analysis
 - Player visuals are currently procedural: `PlayerController.cs` creates a runtime `SpriteRenderer` using `RuntimeSpriteFactory.WhiteSprite` and tints/scales it.
-- Player collision is currently simplified and hardcoded through `GameplayPresentationTuning.PlayerCollisionHalfWidth/Height` rather than colliders or asset bounds.
+- Player collision is currently simplified, but the frozen readability/collision baseline now lives in `GameplayPresentationConfig` rather than static helper constants.
 - Obstacle visuals are procedural too: `HazardManager.cs` creates multiple runtime `SpriteRenderer`s and styles them per family.
-- Obstacle collision and readable spacing are hardcoded in `HazardFamilyPresentation.cs` and `HazardManager.cs`.
+- Obstacle collision and readable spacing now route through `HazardPresentationCatalog` and `HazardManager.cs`, but the visuals themselves are still procedural.
 - Gameplay background is minimal: `TrackManager.cs` sets camera background color from `ThemeConfig`; there is no gameplay background layer system yet.
 - Themes already exist but are color-only: `ThemeConfig`, `ThemeCatalog`, `SaveService`, and `SettingsOverlayView` support unlock/select persistence, but not asset overrides or in-run switching.
 - VFX are mostly procedural: `VfxService.cs` falls back to transient sprite pulses/bursts.
@@ -179,8 +179,8 @@ Most likely implementation touchpoints in the current repo:
 - `Assets/_Game/Scripts/Runtime/Gameplay/PlayerController.cs`
 - `Assets/_Game/Scripts/Runtime/Gameplay/HazardManager.cs`
 - `Assets/_Game/Scripts/Runtime/Gameplay/TrackManager.cs`
-- `Assets/_Game/Scripts/Runtime/Gameplay/GameplayPresentationTuning.cs`
-- `Assets/_Game/Scripts/Runtime/Gameplay/HazardFamilyPresentation.cs`
+- `Assets/_Game/Scripts/Runtime/Data/GameplayPresentationConfig.cs`
+- `Assets/_Game/Scripts/Runtime/Data/HazardPresentationCatalog.cs`
 - `Assets/_Game/Scripts/Runtime/Gameplay/GameplaySceneInstaller.cs`
 - `Assets/_Game/Scripts/Runtime/Gameplay/GameplayFeedbackCoordinator.cs`
 - `Assets/_Game/Scripts/Runtime/UI/MainMenuPreviewView.cs`
@@ -259,8 +259,8 @@ Exit criteria for each phase:
 ## 20. Recommendations
 Highest-value path for this repo right now:
 - do not start with art swapping
-- start by replacing hardcoded presentation assumptions with focused config assets
-- decouple player visuals and obstacle visuals from collision first
+- start by decoupling player visuals and obstacle visuals from collision and spacing ownership
+- keep the new presentation config assets as the frozen fairness baseline while decoupling happens
 - add the background motion system after silhouettes are stable
 - expand themes next
 - add dynamic theme switching only after live theme application is safe
@@ -273,3 +273,4 @@ Safest sequence:
 - theme expansion fourth
 - dynamic switching fifth
 - final VFX/audio cohesion pass last
+

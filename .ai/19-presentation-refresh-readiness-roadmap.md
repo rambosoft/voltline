@@ -20,7 +20,7 @@ This file is the strict readiness and gating roadmap that must be satisfied befo
 - Refresh work must not introduce feature creep, parallel systems, or scene-local hacks.
 
 ## 3. Why a readiness roadmap is needed
-The current repo is playable and broadly validated, but it is not yet structurally ready for safe presentation swaps. Player and hazard visuals are still generated procedurally in runtime code, and several fairness-critical visual assumptions still live in hardcoded presentation helpers. Without a strict pre-refresh roadmap, art or theme work could silently break collision honesty, spacing fairness, readability, restart speed, or performance.
+The current repo is playable and broadly validated, and the frozen presentation baseline now lives in explicit config assets. It is still not structurally ready for safe presentation swaps because player and hazard visuals remain procedural runtime constructs and have not yet been decoupled from their gameplay-facing roots. Without a strict pre-refresh roadmap, art or theme work could still silently break collision honesty, spacing fairness, readability, restart speed, or performance.
 
 ## 4. Relationship to other docs
 - `16-production-phases.md` owns the broader production sequence; this file narrows only the pre-refresh readiness path.
@@ -38,8 +38,8 @@ Voltline should not refresh presentation by replacing visuals first and repairin
 Current repo state relevant to readiness:
 - `PlayerController.cs` creates the player visual procedurally.
 - `HazardManager.cs` creates hazard visuals procedurally.
-- `GameplayPresentationTuning.cs` still holds player/track presentation and collision-adjacent assumptions in code.
-- `HazardFamilyPresentation.cs` still holds family-level visual, collision, and spacing assumptions in code.
+- `GameplayPresentationConfig` now owns the frozen player/track presentation baseline for the live repo.
+- `HazardPresentationCatalog` now owns the frozen hazard-family readability, collision, and spacing baseline for the live repo.
 - `TrackManager.cs` has no dedicated background presentation owner; gameplay background is effectively line + camera color.
 - `ThemeConfig.cs` is currently color-oriented and theme application is mostly initialization-time only.
 - `VfxService.cs` and `AudioService.cs` are centralized and structurally usable, but still lean heavily on procedural fallback content.
@@ -80,8 +80,8 @@ Readiness gates:
 - In scope: player side offset, line clearance, player readable size, player collision extents, hazard readable core, hazard collision extents, minimum spacing, near-miss thresholds, danger color semantics, milestone/theme readability constraints.
 - Out of scope: changing values or replacing visuals.
 - Dependencies: Phase 1.
-- Affected systems: `GameplayPresentationTuning.cs`, `HazardFamilyPresentation.cs`, `HazardManager.cs`, `PlayerController.cs`, `TrackManager.cs`, tests and manual QA notes.
-- Likely files/areas touched: documentation, test expectations, possible comment-only clarifications if truly required later.
+- Affected systems: `GameplayPresentationConfig`, `HazardPresentationCatalog`, `HazardManager.cs`, `PlayerController.cs`, `TrackManager.cs`, tests, the presentation audit, and manual QA notes.
+- Likely files/areas touched: documentation, readiness audit output, test expectations, and config asset baselines.
 - Performance concerns: none directly.
 - Fairness/readability concerns: this phase defines the fairness baseline future changes must prove against.
 - Validation requirements: frozen assumptions are traceable to live repo behavior and current tests/manual validation.
@@ -97,7 +97,7 @@ Readiness gates:
 - Out of scope: new art, dynamic transitions, or final theme presentation packages.
 - Dependencies: Phases 1 and 2.
 - Affected systems: runtime data/config model, gameplay installer, tests, validation tooling.
-- Likely files/areas touched: `GameplayPresentationTuning.cs`, `HazardFamilyPresentation.cs`, `GameplaySceneInstaller.cs`, config assets under `Assets/_Game/Config/Gameplay/` and `Assets/_Game/Config/Themes/`, tests under `Assets/_Game/Scripts/Tests`.
+- Likely files/areas touched: `GameplayPresentationConfig`, `HazardPresentationCatalog`, `GameplaySceneInstaller.cs`, config assets under `Assets/_Game/Config/Gameplay/`, validation tooling, and tests under `Assets/_Game/Scripts/Tests`.
 - Performance concerns: config reads must not add per-frame allocation or scene-start complexity.
 - Fairness/readability concerns: migration must preserve live values exactly before any refresh retuning happens.
 - Validation requirements: existing gameplay looks and behaves the same after the migration; tests cover the moved values.
@@ -124,12 +124,12 @@ Readiness gates:
 
 ### Phase 5. Decouple obstacle visuals from collision and spacing
 - Objective: separate obstacle look from obstacle hit shape, telegraph core, and spacing rules.
-- Why it exists: hazards currently derive readability, collision, and spacing from shared hardcoded family helpers.
+- Why it exists: hazards now have config-owned readability, collision, and spacing baselines, but the live runtime still couples those rules to procedural hazard visuals.
 - In scope: obstacle visual profiles, separate collision extents, separate readable-danger extents, spacing calculation inputs, family-specific telegraph ownership, themed appearance hooks.
 - Out of scope: adding new hazard families or changing gameplay rules for family behavior.
 - Dependencies: Phases 2, 3, and 4.
 - Affected systems: `HazardManager.cs`, obstacle configs/catalogs, difficulty tuning, tests.
-- Likely files/areas touched: `HazardManager.cs`, `HazardFamilyPresentation.cs`, obstacle config assets, future obstacle presentation config assets, tests.
+- Likely files/areas touched: `HazardManager.cs`, `HazardPresentationCatalog.cs`, obstacle config assets, future obstacle presentation config assets, tests.
 - Performance concerns: avoid runtime visual assembly that adds excessive allocations or per-hazard object counts.
 - Fairness/readability concerns: visible dangerous core must match or slightly exceed collision honesty expectations; spacing must remain readable at speed; no family may become ambiguous under theme variation.
 - Validation requirements: per-family collision checks, spacing checks, near-miss checks, screenshot readability review, repeated run manual QA.
@@ -252,17 +252,14 @@ Readiness gates:
 
 ## 8. Now / Next / Later / Blocked
 ### Now
-- Audit current presentation dependencies.
-- Freeze and document gameplay-critical visual assumptions.
-- Move hardcoded presentation values into config-ready ownership.
-
-### Next
 - Decouple player visuals from collision.
 - Decouple obstacle visuals from collision and spacing.
 
-### Later
+### Next
 - Establish background architecture and a strict performance budget.
 - Expand the theme system into a presentation-ready model.
+
+### Later
 - Define dynamic theme transition rules.
 - Establish VFX and audio refresh pipelines.
 - Apply the refresh approval gate and controlled rollout plan.
@@ -372,6 +369,9 @@ When implementation later happens, update only the owning docs affected by the a
 - Do not begin with dynamic theme switching.
 - Do not begin with background spectacle.
 - Begin with dependency audit, assumption freeze, and config readiness.
-- Treat visual refresh as blocked until collision honesty and spacing ownership are no longer trapped in hardcoded presentation helpers.
+- Treat visual refresh as blocked until player and hazard visuals are decoupled from their gameplay collision/spacing ownership.
 - Keep this roadmap narrower than `16` and more restrictive than `18`.
 - Use it as the stop/go gate for any future visual refresh proposal.
+
+
+

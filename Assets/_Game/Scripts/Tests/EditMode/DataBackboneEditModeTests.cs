@@ -16,12 +16,22 @@ namespace Voltline.Tests.EditMode
         {
             GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
             DifficultyCurveConfig difficultyCurve = AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
+            GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            HazardPresentationCatalog hazardPresentationCatalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
             ObstacleCatalog obstacleCatalog = AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
             ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
             AudioCueCatalog audioCueCatalog = AssetDatabase.LoadAssetAtPath<AudioCueCatalog>(ProjectConfigAssetPaths.AudioCueCatalog);
             VfxCatalog vfxCatalog = AssetDatabase.LoadAssetAtPath<VfxCatalog>(ProjectConfigAssetPaths.VfxCatalog);
 
-            ConfigValidationResult result = ProjectConfigValidator.ValidateProject(gameBalance, difficultyCurve, obstacleCatalog, themeCatalog, audioCueCatalog, vfxCatalog);
+            ConfigValidationResult result = ProjectConfigValidator.ValidateProject(
+                gameBalance,
+                difficultyCurve,
+                gameplayPresentation,
+                hazardPresentationCatalog,
+                obstacleCatalog,
+                themeCatalog,
+                audioCueCatalog,
+                vfxCatalog);
 
             Assert.That(result.IsValid, Is.True, result.ToString());
         }
@@ -75,6 +85,19 @@ namespace Voltline.Tests.EditMode
             finally
             {
                 Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void HazardPresentationCatalog_CoversEveryApprovedFamily()
+        {
+            HazardPresentationCatalog catalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
+
+            foreach (ObstacleFamily family in System.Enum.GetValues(typeof(ObstacleFamily)))
+            {
+                Assert.That(catalog.TryGetProfile(family, out HazardLayoutProfile profile), Is.True, family.ToString());
+                Assert.That(profile.VisualBoundsScale.x, Is.GreaterThan(0f), family.ToString());
+                Assert.That(profile.CollisionBoundsScale.x, Is.GreaterThan(0f), family.ToString());
             }
         }
 

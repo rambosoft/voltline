@@ -72,6 +72,7 @@ At minimum, add automated tests for:
 - difficulty progression calculations
 - theme ID and catalog integrity
 - release-readiness audit checks for scene order, input asset integrity, and debug-safe defaults
+- presentation-readiness audit checks for frozen assumptions, config ownership, and still-blocked refresh work
 
 ## What must be validated manually
 
@@ -225,10 +226,11 @@ Before creating a candidate mobile build:
 
 - run `Tools > Voltline > Validate Config`
 - run `Tools > Voltline > Run Release Audit`
+- run `Tools > Voltline > Run Presentation Readiness Audit` before any art/theme/presentation rollout work
 - verify scene list order
 - verify portrait orientation settings
 - verify package/import sanity
-- run Tools > Voltline > Ensure Audio Mixer if the mixer asset or groups are missing
+- run `Tools > Voltline > Ensure Audio Mixer` if the mixer asset or groups are missing
 - verify audio routing references and mixer setup
 - verify input action asset included and functional
 - verify debug-only restart/start-score helpers are not exposed unintentionally in release builds
@@ -246,5 +248,8 @@ A feature is incomplete unless docs are updated when source-of-truth topics chan
 - Manual testing covers feel and readability.
 - Mobile safe area and performance must be validated before release.
 - No feature is done if docs and tests drift behind implementation.
+
+
+
 
 

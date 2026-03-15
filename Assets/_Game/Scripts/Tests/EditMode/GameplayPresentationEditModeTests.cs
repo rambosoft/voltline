@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using UnityEditor;
 using Voltline.Data;
-using Voltline.Gameplay;
 using Voltline.Utilities;
 
 namespace Voltline.Tests.EditMode
@@ -21,9 +20,10 @@ namespace Voltline.Tests.EditMode
         public void PlayerOffset_ClearsTheLineWithReadableMargin()
         {
             GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
-            float requiredClearance = (GameplayPresentationTuning.TrackLineWidth * 0.5f)
-                + (GameplayPresentationTuning.PlayerScale * 0.5f)
-                + GameplayPresentationTuning.PlayerLineClearance;
+            GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            float requiredClearance = (gameplayPresentation.TrackLineWidth * 0.5f)
+                + (gameplayPresentation.PlayerVisualScale * 0.5f)
+                + gameplayPresentation.PlayerLineClearance;
 
             Assert.That(gameBalance.SideOffset, Is.GreaterThan(requiredClearance));
         }
@@ -31,32 +31,35 @@ namespace Voltline.Tests.EditMode
         [Test]
         public void PlayerCollisionProfile_StaysInsideVisibleDot()
         {
-            float visualHalfExtent = GameplayPresentationTuning.PlayerScale * 0.5f;
+            GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            float visualHalfExtent = gameplayPresentation.PlayerVisualScale * 0.5f;
 
-            Assert.That(GameplayPresentationTuning.PlayerCollisionHalfWidth, Is.GreaterThan(0f));
-            Assert.That(GameplayPresentationTuning.PlayerCollisionHalfHeight, Is.GreaterThan(0f));
-            Assert.That(GameplayPresentationTuning.PlayerCollisionHalfWidth, Is.LessThan(visualHalfExtent));
-            Assert.That(GameplayPresentationTuning.PlayerCollisionHalfHeight, Is.LessThanOrEqualTo(visualHalfExtent));
+            Assert.That(gameplayPresentation.PlayerCollisionHalfWidth, Is.GreaterThan(0f));
+            Assert.That(gameplayPresentation.PlayerCollisionHalfHeight, Is.GreaterThan(0f));
+            Assert.That(gameplayPresentation.PlayerCollisionHalfWidth, Is.LessThan(visualHalfExtent));
+            Assert.That(gameplayPresentation.PlayerCollisionHalfHeight, Is.LessThanOrEqualTo(visualHalfExtent));
         }
 
         [Test]
         public void HazardProfiles_KeepReadableSpacingBetweenVisibleBounds()
         {
-            HazardLayoutProfile spikes = HazardFamilyPresentation.GetLayoutProfile(ObstacleFamily.Spikes);
-            HazardLayoutProfile blockers = HazardFamilyPresentation.GetLayoutProfile(ObstacleFamily.SideBlockers);
+            HazardPresentationCatalog catalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
+            HazardLayoutProfile spikes = catalog.GetRequiredProfile(ObstacleFamily.Spikes);
+            HazardLayoutProfile blockers = catalog.GetRequiredProfile(ObstacleFamily.SideBlockers);
 
-            Assert.That(spikes.MainScale.y, Is.GreaterThan(0f));
-            Assert.That(blockers.MainScale.y, Is.GreaterThan(spikes.MainScale.y));
-            Assert.That(HazardFamilyPresentation.GetRequiredHitDistanceSeparation(blockers.VisualHalfHeight, blockers.VisualHalfHeight),
-                Is.GreaterThan(blockers.MainScale.y));
+            Assert.That(spikes.VisualBoundsScale.y, Is.GreaterThan(0f));
+            Assert.That(blockers.VisualBoundsScale.y, Is.GreaterThan(spikes.VisualBoundsScale.y));
+            Assert.That(catalog.GetRequiredHitDistanceSeparation(blockers, blockers), Is.GreaterThan(blockers.VisualBoundsScale.y));
         }
 
         [Test]
         public void HazardCollisionProfiles_StayInsideVisibleBounds()
         {
+            HazardPresentationCatalog catalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
+
             foreach (ObstacleFamily family in System.Enum.GetValues(typeof(ObstacleFamily)))
             {
-                HazardLayoutProfile layout = HazardFamilyPresentation.GetLayoutProfile(family);
+                HazardLayoutProfile layout = catalog.GetRequiredProfile(family);
                 Assert.That(layout.CollisionHalfWidth, Is.GreaterThan(0f), family.ToString());
                 Assert.That(layout.CollisionHalfHeight, Is.GreaterThan(0f), family.ToString());
                 Assert.That(layout.CollisionHalfWidth, Is.LessThan(layout.VisualHalfWidth), family.ToString());
@@ -68,8 +71,10 @@ namespace Voltline.Tests.EditMode
         public void HazardProfiles_ClearTheLineHorizontally()
         {
             GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
-            float widestVisualHalfWidth = HazardFamilyPresentation.GetLayoutProfile(ObstacleFamily.SideBlockers).VisualHalfWidth;
-            float requiredClearance = (GameplayPresentationTuning.TrackLineWidth * 0.5f) + widestVisualHalfWidth + 0.08f;
+            GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            HazardPresentationCatalog catalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
+            float widestVisualHalfWidth = catalog.GetRequiredProfile(ObstacleFamily.SideBlockers).VisualHalfWidth;
+            float requiredClearance = (gameplayPresentation.TrackLineWidth * 0.5f) + widestVisualHalfWidth + 0.08f;
 
             Assert.That(gameBalance.SideOffset, Is.GreaterThan(requiredClearance));
         }

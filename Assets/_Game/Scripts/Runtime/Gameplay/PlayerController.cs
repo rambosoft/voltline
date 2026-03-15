@@ -7,6 +7,7 @@ namespace Voltline.Gameplay
     public sealed class PlayerController : MonoBehaviour
     {
         private GameBalanceConfig gameBalance;
+        private GameplayPresentationConfig presentationConfig;
         private ThemeConfig theme;
         private TrackManager trackManager;
         private Transform visualRoot;
@@ -28,13 +29,18 @@ namespace Voltline.Gameplay
         public bool IsDead => isDead;
         public bool IsFlipping => isFlipping;
         public float CurrentX => currentX;
-        public float CollisionHalfWidth => GameplayPresentationTuning.PlayerCollisionHalfWidth;
-        public float CollisionHalfHeight => GameplayPresentationTuning.PlayerCollisionHalfHeight;
+        public float CollisionHalfWidth => presentationConfig.PlayerCollisionHalfWidth;
+        public float CollisionHalfHeight => presentationConfig.PlayerCollisionHalfHeight;
         public Vector3 WorldPosition => new(currentX, trackManager != null ? trackManager.PlayerAnchorY : 0f, 0f);
 
-        public void Initialize(GameBalanceConfig balanceConfig, TrackManager track, ThemeConfig activeTheme)
+        public void Initialize(
+            GameBalanceConfig balanceConfig,
+            GameplayPresentationConfig gameplayPresentation,
+            TrackManager track,
+            ThemeConfig activeTheme)
         {
             gameBalance = balanceConfig;
+            presentationConfig = gameplayPresentation;
             trackManager = track;
             theme = activeTheme;
             EnsureVisual();
@@ -125,7 +131,7 @@ namespace Voltline.Gameplay
             }
 
             visualRoot.position = WorldPosition;
-            visualRoot.localScale = new Vector3(GameplayPresentationTuning.PlayerScale, GameplayPresentationTuning.PlayerScale, 1f);
+            visualRoot.localScale = new Vector3(presentationConfig.PlayerVisualScale, presentationConfig.PlayerVisualScale, 1f);
             visualRoot.rotation = Quaternion.Euler(0f, 0f, zRotation);
             spriteRenderer.color = tint;
         }

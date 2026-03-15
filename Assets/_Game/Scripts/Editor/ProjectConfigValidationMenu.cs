@@ -12,12 +12,22 @@ namespace Voltline.Editor
         {
             GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
             DifficultyCurveConfig difficultyCurve = AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
+            GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            HazardPresentationCatalog hazardPresentationCatalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
             ObstacleCatalog obstacleCatalog = AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
             ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
             AudioCueCatalog audioCueCatalog = AssetDatabase.LoadAssetAtPath<AudioCueCatalog>(ProjectConfigAssetPaths.AudioCueCatalog);
             VfxCatalog vfxCatalog = AssetDatabase.LoadAssetAtPath<VfxCatalog>(ProjectConfigAssetPaths.VfxCatalog);
 
-            ConfigValidationResult result = ProjectConfigValidator.ValidateProject(gameBalance, difficultyCurve, obstacleCatalog, themeCatalog, audioCueCatalog, vfxCatalog);
+            ConfigValidationResult result = ProjectConfigValidator.ValidateProject(
+                gameBalance,
+                difficultyCurve,
+                gameplayPresentation,
+                hazardPresentationCatalog,
+                obstacleCatalog,
+                themeCatalog,
+                audioCueCatalog,
+                vfxCatalog);
 
             if (result.IsValid)
             {

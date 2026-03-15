@@ -385,6 +385,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameBalance: {fileID: 11400000, guid: 8c92e31f78064ce99179c6d142f4c2e7, type: 2}
+  gameplayPresentation: {fileID: 11400000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f2001, type: 2}
+  hazardPresentationCatalog: {fileID: 11400000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f2002, type: 2}
   difficultyCurve: {fileID: 11400000, guid: 4dce2fcd728e433d93635f522f6c566d, type: 2}
   obstacleCatalog: {fileID: 11400000, guid: 08d7e4d1288440f9ab8c0f98be8ef3ad, type: 2}
   themeCatalog: {fileID: 11400000, guid: 7038d79080204d47bc6ecdf5e273aa8b, type: 2}

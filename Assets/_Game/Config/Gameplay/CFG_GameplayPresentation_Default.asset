@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f1001, type: 3}
+  m_Name: CFG_GameplayPresentation_Default
+  m_EditorClassIdentifier: 
+  trackCameraSize: 7.25
+  trackLineWidth: 0.22
+  trackCurvePrimaryAmplitude: 0.34
+  trackCurvePrimaryWavelength: 6.6
+  trackCurveSecondaryAmplitude: 0.12
+  trackCurveSecondaryWavelength: 3.4
+  playerVisualScale: 0.68
+  playerLineClearance: 0.1
+  playerCollisionHalfWidth: 0.28
+  playerCollisionHalfHeight: 0.32

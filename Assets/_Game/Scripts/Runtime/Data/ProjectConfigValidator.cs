@@ -10,6 +10,8 @@ namespace Voltline.Data
         public static ConfigValidationResult ValidateProject(
             GameBalanceConfig gameBalance,
             DifficultyCurveConfig difficultyCurve,
+            GameplayPresentationConfig gameplayPresentation,
+            HazardPresentationCatalog hazardPresentationCatalog,
             ObstacleCatalog obstacleCatalog,
             ThemeCatalog themeCatalog,
             AudioCueCatalog audioCueCatalog,
@@ -19,10 +21,13 @@ namespace Voltline.Data
 
             ValidateGameBalance(gameBalance, result);
             ValidateDifficultyCurve(difficultyCurve, result);
+            ValidateGameplayPresentation(gameplayPresentation, result);
+            ValidateHazardPresentationCatalog(hazardPresentationCatalog, result);
             ValidateObstacleCatalog(obstacleCatalog, result);
             ValidateThemeCatalog(themeCatalog, result);
             ValidateAudioCueCatalog(audioCueCatalog, result);
             ValidateVfxCatalog(vfxCatalog, result);
+            ValidatePresentationReadinessRelationships(gameBalance, gameplayPresentation, hazardPresentationCatalog, obstacleCatalog, result);
 
             return result;
         }
@@ -115,6 +120,107 @@ namespace Voltline.Data
                 }
 
                 expectedMinScore = band.MaxScoreInclusive + 1;
+            }
+        }
+
+        public static void ValidateGameplayPresentation(GameplayPresentationConfig config, ConfigValidationResult result)
+        {
+            if (config == null)
+            {
+                result.Add("Missing GameplayPresentationConfig asset.");
+                return;
+            }
+
+            if (config.TrackCameraSize <= 0f) result.Add("GameplayPresentationConfig track camera size must be positive.");
+            if (config.TrackLineWidth <= 0f) result.Add("GameplayPresentationConfig track line width must be positive.");
+            if (config.TrackCurvePrimaryAmplitude < 0f) result.Add("GameplayPresentationConfig primary curve amplitude must be non-negative.");
+            if (config.TrackCurvePrimaryWavelength <= 0f) result.Add("GameplayPresentationConfig primary curve wavelength must be positive.");
+            if (config.TrackCurveSecondaryAmplitude < 0f) result.Add("GameplayPresentationConfig secondary curve amplitude must be non-negative.");
+            if (config.TrackCurveSecondaryWavelength <= 0f) result.Add("GameplayPresentationConfig secondary curve wavelength must be positive.");
+            if (config.PlayerVisualScale <= 0f) result.Add("GameplayPresentationConfig player visual scale must be positive.");
+            if (config.PlayerLineClearance < 0f) result.Add("GameplayPresentationConfig player line clearance must be non-negative.");
+            if (config.PlayerCollisionHalfWidth <= 0f) result.Add("GameplayPresentationConfig player collision half-width must be positive.");
+            if (config.PlayerCollisionHalfHeight <= 0f) result.Add("GameplayPresentationConfig player collision half-height must be positive.");
+
+            float visualHalfExtent = config.PlayerVisualScale * 0.5f;
+            if (config.PlayerCollisionHalfWidth >= visualHalfExtent)
+            {
+                result.Add("GameplayPresentationConfig player collision half-width must stay inside the readable player visual scale.");
+            }
+
+            if (config.PlayerCollisionHalfHeight > visualHalfExtent)
+            {
+                result.Add("GameplayPresentationConfig player collision half-height must stay inside the readable player visual scale.");
+            }
+        }
+
+        public static void ValidateHazardPresentationCatalog(HazardPresentationCatalog catalog, ConfigValidationResult result)
+        {
+            if (catalog == null)
+            {
+                result.Add("Missing HazardPresentationCatalog asset.");
+                return;
+            }
+
+            IReadOnlyList<HazardPresentationDefinition> entries = catalog.Entries;
+            if (entries == null || entries.Count == 0)
+            {
+                result.Add("HazardPresentationCatalog must contain entries for every approved hazard family.");
+                return;
+            }
+
+            HashSet<ObstacleFamily> families = new();
+            for (int i = 0; i < entries.Count; i++)
+            {
+                HazardPresentationDefinition entry = entries[i];
+                if (entry == null)
+                {
+                    result.Add($"HazardPresentationCatalog entry at index {i} is missing.");
+                    continue;
+                }
+
+                if (!families.Add(entry.Family))
+                {
+                    result.Add($"HazardPresentationCatalog contains duplicate presentation entry for family '{entry.Family}'.");
+                }
+
+                if (entry.VisualBoundsScale.x <= 0f || entry.VisualBoundsScale.y <= 0f)
+                {
+                    result.Add($"HazardPresentationCatalog family '{entry.Family}' visual bounds must be positive.");
+                }
+
+                if (entry.CollisionBoundsScale.x <= 0f || entry.CollisionBoundsScale.y <= 0f)
+                {
+                    result.Add($"HazardPresentationCatalog family '{entry.Family}' collision bounds must be positive.");
+                }
+
+                if (entry.CollisionBoundsScale.x > entry.VisualBoundsScale.x)
+                {
+                    result.Add($"HazardPresentationCatalog family '{entry.Family}' collision width must not exceed visual width.");
+                }
+
+                if (entry.CollisionBoundsScale.y > entry.VisualBoundsScale.y)
+                {
+                    result.Add($"HazardPresentationCatalog family '{entry.Family}' collision height must not exceed visual height.");
+                }
+
+                if (entry.TelegraphBoundsScale.x < 0f || entry.TelegraphBoundsScale.y < 0f)
+                {
+                    result.Add($"HazardPresentationCatalog family '{entry.Family}' telegraph bounds must be non-negative.");
+                }
+
+                if (entry.MinimumReadableGapPadding < 0f)
+                {
+                    result.Add($"HazardPresentationCatalog family '{entry.Family}' readable gap padding must be non-negative.");
+                }
+            }
+
+            foreach (ObstacleFamily family in System.Enum.GetValues(typeof(ObstacleFamily)))
+            {
+                if (!families.Contains(family))
+                {
+                    result.Add($"HazardPresentationCatalog is missing a presentation entry for family '{family}'.");
+                }
             }
         }
 
@@ -264,6 +370,64 @@ namespace Voltline.Data
             ValidateRequiredIds(ids, result, VfxCueIds.Flip, VfxCueIds.NearMiss, VfxCueIds.Death, VfxCueIds.Milestone);
         }
 
+        private static void ValidatePresentationReadinessRelationships(
+            GameBalanceConfig gameBalance,
+            GameplayPresentationConfig gameplayPresentation,
+            HazardPresentationCatalog hazardPresentationCatalog,
+            ObstacleCatalog obstacleCatalog,
+            ConfigValidationResult result)
+        {
+            if (gameBalance == null || gameplayPresentation == null || hazardPresentationCatalog == null)
+            {
+                return;
+            }
+
+            float requiredPlayerClearance = (gameplayPresentation.TrackLineWidth * 0.5f)
+                + (gameplayPresentation.PlayerVisualScale * 0.5f)
+                + gameplayPresentation.PlayerLineClearance;
+            if (gameBalance.SideOffset <= requiredPlayerClearance)
+            {
+                result.Add("GameBalanceConfig side offset must keep the player visibly clear of the line.");
+            }
+
+            float widestVisualHalfWidth = 0f;
+            foreach (ObstacleFamily family in System.Enum.GetValues(typeof(ObstacleFamily)))
+            {
+                if (!hazardPresentationCatalog.TryGetProfile(family, out HazardLayoutProfile layout))
+                {
+                    continue;
+                }
+
+                widestVisualHalfWidth = System.Math.Max(widestVisualHalfWidth, layout.VisualHalfWidth);
+            }
+
+            float requiredHazardClearance = (gameplayPresentation.TrackLineWidth * 0.5f) + widestVisualHalfWidth + 0.08f;
+            if (gameBalance.SideOffset <= requiredHazardClearance)
+            {
+                result.Add("GameBalanceConfig side offset must keep the widest hazard profile visibly clear of the line.");
+            }
+
+            if (obstacleCatalog == null)
+            {
+                return;
+            }
+
+            IReadOnlyList<ObstacleConfig> obstacles = obstacleCatalog.Obstacles;
+            for (int i = 0; i < obstacles.Count; i++)
+            {
+                ObstacleConfig obstacle = obstacles[i];
+                if (obstacle == null)
+                {
+                    continue;
+                }
+
+                if (!hazardPresentationCatalog.TryGetProfile(obstacle.Family, out _))
+                {
+                    result.Add($"ObstacleConfig '{obstacle.ObstacleId}' has no matching hazard presentation profile for family '{obstacle.Family}'.");
+                }
+            }
+        }
+
         private static void ValidateRequiredIds(HashSet<string> ids, ConfigValidationResult result, params string[] requiredIds)
         {
             for (int i = 0; i < requiredIds.Length; i++)
@@ -276,4 +440,3 @@ namespace Voltline.Data
         }
     }
 }
-
