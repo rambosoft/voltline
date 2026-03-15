@@ -1,4 +1,4 @@
-# Project Index
+﻿# Project Index
 Status: Active
 Owner: Team
 Last updated: 2026-03-15
@@ -13,7 +13,7 @@ Do not duplicate with: feature notes, ad-hoc implementation comments, backlog it
 
 **Voltline** is a portrait mobile one-tap arcade game built around a single action: tap to flip the player from one side of a glowing line to the other.  
 The line moves forward automatically. Hazards, gaps, cutters, and electric obstacles force split-second decisions.  
-The game is designed to create a brutal but fair “one more try” loop through very short runs, immediate restarts, readable danger, and a score that always feels beatable by one more point.  
+The game is designed to create a brutal but fair â€œone more tryâ€ loop through very short runs, immediate restarts, readable danger, and a score that always feels beatable by one more point.  
 The visual direction is premium neon arcade: dark soft backgrounds, glowing line, cute-but-stylish character, clean HUD, and highly shareable near-death moments.  
 The technical target is **Unity 6.x LTS**, **C#**, **URP 2D**, **Input System**, **Canvas UI**, **Particle System**, and **Audio Mixer**.
 
@@ -48,6 +48,7 @@ Read these in order before making any cross-cutting change:
 13. `11-testing-quality-bar.md`
 14. `12-adrs.md`
 15. `15-roadmap-backlog.md`
+16. `16-production-phases.md`
 
 Read `13-feature-spec-template.md` before proposing or implementing any new feature.
 
@@ -63,6 +64,7 @@ When documents disagree, follow this authority order:
 6. `09-audio-vfx-guide.md`
 7. feature-specific specs created from `13-feature-spec-template.md`
 8. `15-roadmap-backlog.md`
+9. `16-production-phases.md`
 
 If a lower-authority document conflicts with a higher-authority document, the higher one wins.
 
@@ -75,7 +77,7 @@ When docs disagree:
 3. Prefer **system boundaries** over convenience.
 4. Prefer **fairness, readability, and restart speed** over extra flair.
 5. If the disagreement changes architecture, stack, or ownership, record it in `12-adrs.md`.
-6. Do not silently “split the difference” by inventing a new hybrid rule.
+6. Do not silently â€œsplit the differenceâ€ by inventing a new hybrid rule.
 
 ## Stable project names
 
@@ -107,6 +109,7 @@ The public name can change later without forcing a repository rename.
 - `13-feature-spec-template.md` owns **how new features are specified**
 - `14-agent-rules.md` owns **implementation behavior for AI contributors**
 - `15-roadmap-backlog.md` owns **future work and rejected ideas**
+- `16-production-phases.md` owns **phased delivery from current repo state to release**
 
 ## Update protocol
 
@@ -143,7 +146,7 @@ Do not put the following into source-of-truth docs:
 - meeting leftovers
 - contradictory examples
 - personal preference comments without a decision
-- “we might do this” items that belong in backlog instead
+- â€œwe might do thisâ€ items that belong in backlog instead
 - duplicate copies of the same rule in multiple docs
 
 ## Expected implementation behavior
@@ -183,3 +186,5 @@ This `.ai` folder is healthy when:
 - Need to spec a new feature? Start with `13`.
 - Need to know how an AI agent should behave? Read `14`.
 - Need future priorities? Read `15`.
+- Need phased delivery order and release gates? Read `16`.
+
