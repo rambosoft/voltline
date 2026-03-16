@@ -1,7 +1,7 @@
 # Presentation Refresh Readiness Roadmap
 Status: Active
 Owner: Team / AI
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Source of truth for: phased readiness and gating before presentation refresh implementation
 Depends on: `@.ai/00-index.md`, `@.ai/03-tech-stack.md`, `@.ai/04-architecture.md`, `@.ai/07-gameplay-systems.md`, `@.ai/08-ui-ux-style-guide.md`, `@.ai/09-audio-vfx-guide.md`, `@.ai/10-data-content-model.md`, `@.ai/11-testing-quality-bar.md`, `@.ai/14-agent-rules.md`, `@.ai/15-roadmap-backlog.md`, `@.ai/16-production-phases.md`, `@.ai/18-visual-refresh-and-theme-system-guide.md`
 Do not duplicate with: production phases, gameplay systems, architecture, UI style guide, audio/VFX guide, or visual refresh system guide
@@ -20,7 +20,7 @@ This file is the strict readiness and gating roadmap that must be satisfied befo
 - Refresh work must not introduce feature creep, parallel systems, or scene-local hacks.
 
 ## 3. Why a readiness roadmap is needed
-The current repo is playable and broadly validated, and the frozen presentation baseline now lives in explicit config assets. Player and hazard visuals are now decoupled from gameplay collision and spacing ownership, but the repo is still not fully refresh-ready because background architecture, presentation-ready theme data, and refresh pipelines are still gated. Without a strict pre-refresh roadmap, art or theme work could still silently break collision honesty, spacing fairness, readability, restart speed, or performance.
+The current repo is playable and broadly validated, and the frozen presentation baseline now lives in explicit config assets. Player and hazard visuals are decoupled from gameplay collision and spacing ownership, the repo has a dedicated background presentation owner, and the theme model is presentation-ready with milestone-gated runtime sequencing. VFX and audio refresh pipelines are now also defined structurally through theme-owned profile assets and service-level semantic routing. That still does not make the whole refresh safe by default. Any rollout still needs explicit approval, staged delivery, and repeated validation so fairness, readability, restart speed, and performance do not regress.
 
 ## 4. Relationship to other docs
 - `16-production-phases.md` owns the broader production sequence; this file narrows only the pre-refresh readiness path.
@@ -38,11 +38,12 @@ Voltline should not refresh presentation by replacing visuals first and repairin
 Current repo state relevant to readiness:
 - `PlayerController.cs` owns hit logic and line anchoring while `PlayerVisualView.cs` renders the player from `PlayerVisualConfig`.
 - `HazardManager.cs` owns hazard collision/spacing while `HazardVisualView.cs` renders family visuals from `ObstacleVisualCatalog`.
-- `GameplayPresentationConfig` now owns the frozen player/track presentation baseline for the live repo.
-- `HazardPresentationCatalog` now owns the frozen hazard-family readability, collision, and spacing baseline for the live repo.
-- `TrackManager.cs` has no dedicated background presentation owner; gameplay background is effectively line + camera color.
-- `ThemeConfig.cs` is currently color-oriented and theme application is mostly initialization-time only.
-- `VfxService.cs` and `AudioService.cs` are centralized and structurally usable, but still lean heavily on procedural fallback content.
+- `GameplayPresentationConfig` owns the frozen player/track presentation baseline for the live repo.
+- `HazardPresentationCatalog` owns the frozen hazard-family readability, collision, and spacing baseline for the live repo.
+- `BackgroundPresentationController.cs` owns a small budgeted gameplay background layer stack through `BackgroundPresentationConfig`, while `TrackManager.cs` stays focused on line/path ownership.
+- `ThemeConfig.cs` is now presentation-ready, and `ThemePresentationController.cs` plus `ThemeSequenceConfig.cs` own milestone-gated runtime theme application rules.
+- `VfxService.cs` and `AudioService.cs` are centralized, theme-aware, and now route variation through `ThemeVfxProfile` and `ThemeAudioProfile`.
+- `PresentationRefreshApprovalAudit.cs` and `PresentationRolloutPlanConfig` now provide the hard stop/go approval gate for staged refresh work.
 - `Assets/_Game/Art` and most authored audio content folders are structurally present but still sparse.
 
 Readiness gates:
@@ -124,7 +125,7 @@ Readiness gates:
 
 ### Phase 5. Decouple obstacle visuals from collision and spacing
 - Objective: separate obstacle look from obstacle hit shape, telegraph core, and spacing rules.
-- Why it exists: hazards now have config-owned readability, collision, and spacing baselines, but the live runtime still couples those rules to procedural hazard visuals.
+- Why it exists: hazards must be able to evolve visually without altering collision honesty or spacing fairness.
 - In scope: obstacle visual profiles, separate collision extents, separate readable-danger extents, spacing calculation inputs, family-specific telegraph ownership, themed appearance hooks.
 - Out of scope: adding new hazard families or changing gameplay rules for family behavior.
 - Dependencies: Phases 2, 3, and 4.
@@ -140,24 +141,24 @@ Readiness gates:
 
 ### Phase 6. Establish background architecture and performance budget
 - Objective: define a dedicated owner and budget for background presentation and speed-feel effects.
-- Why it exists: `TrackManager.cs` does not currently provide a robust background presentation layer, and spectacle added too early would compete with gameplay readability.
+- Why it exists: background spectacle added too early would compete with gameplay readability unless it has its own owner and limits.
 - In scope: background ownership model, layer plan, allowable effect types, theme hooks, memory budget, particle budget, draw-call expectations, safe-area considerations.
 - Out of scope: shipping final background art or motion FX content.
 - Dependencies: Phases 1 through 5.
 - Affected systems: gameplay scene ownership, theme application, possibly menu preview, performance validation.
-- Likely files/areas touched: `TrackManager.cs`, gameplay scene presentation ownership, theme config/data, future background config assets, `Assets/_Game/Art/Backgrounds/`, VFX/background folders.
+- Likely files/areas touched: `BackgroundPresentationController.cs`, `BackgroundPresentationConfig.cs`, gameplay scene wiring, theme config/data, `Assets/_Game/Config/Gameplay/`, and future background assets.
 - Performance concerns: background work must preserve frame pacing, restart speed, and small build size; avoid heavy full-screen effects in normal play.
 - Fairness/readability concerns: no layer may look like a hazard, obscure the line, or reduce danger contrast.
 - Validation requirements: device profiling, screenshot readability, repeated-retry smoke pass, safe-area review.
 - Definition of done: there is a documented and testable background architecture with a hard performance budget.
 - Exit criteria: background visuals can evolve without improvising architecture during art production.
 - What it unlocks: background refresh implementation and controlled motion FX prototypes.
-- What stays blocked: dense spectacle and dynamic multi-layer theme transitions.
+- What stays blocked: dense spectacle and unbudgeted background refresh.
 
 ### Phase 7. Expand theme system to a presentation-ready model
-- Objective: evolve the current color-oriented theme model into a presentation package model without overengineering it.
-- Why it exists: current `ThemeConfig` is adequate for colors and unlocks, but not yet for broader visual/art ownership.
-- In scope: theme-level presentation roles, asset references or sub-profiles, preview readiness, save compatibility, menu/settings ownership, default fallback rules.
+- Objective: evolve the current theme model into a presentation package model without overengineering it.
+- Why it exists: a broad refresh cannot stay clean if themes only own flat colors.
+- In scope: theme-level presentation roles, override references, preview readiness, save compatibility, menu/settings ownership, default fallback rules.
 - Out of scope: dynamic in-run transitions and broad per-theme audio score replacement.
 - Dependencies: Phases 3 through 6.
 - Affected systems: `ThemeConfig.cs`, `ThemeCatalog.cs`, `SaveService.cs`, settings UI, preview UI, gameplay installer, VFX/audio integration points.
@@ -177,23 +178,23 @@ Readiness gates:
 - Out of scope: building complex cinematic transitions or theme-specific gameplay changes.
 - Dependencies: Phase 7 and stable background/theme architecture.
 - Affected systems: gameplay scene presentation ownership, score/milestone hooks, theme application path, VFX/audio hooks.
-- Likely files/areas touched: future theme sequence config, gameplay installer, theme application owner, milestone hooks, tests.
+- Likely files/areas touched: `ThemeSequenceConfig.cs`, `ThemePresentationController.cs`, gameplay installer, milestone hooks, tests.
 - Performance concerns: transitions must not allocate heavily or stall retry flow.
 - Fairness/readability concerns: no transition may occur during a teaching moment, a death event, or a decision-critical hazard window; danger semantics remain stable through the transition.
 - Validation requirements: threshold tests, timing tests, manual readability checks, retry-state reset checks.
 - Definition of done: theme switching rules are explicit, limited, and testable.
-- Exit criteria: dynamic theme switching can be implemented without guesswork.
-- What it unlocks: controlled dynamic theme prototypes.
+- Exit criteria: theme switching can be implemented without guesswork and without unsafe runtime visual swaps.
+- What it unlocks: controlled dynamic theme prototypes and milestone-based theme refresh behavior.
 - What stays blocked: broad theme spectacle and aggressive audio/visual transition layering.
 
 ### Phase 9. Establish VFX refresh pipeline
 - Objective: define how themed or refreshed VFX will be authored, cataloged, overridden, budgeted, and validated.
-- Why it exists: the current VFX service is centralized, but the project still needs clear rules before adding richer authored effects.
+- Why it exists: the current VFX service is centralized, and the project now needs clear rules before adding richer authored effects.
 - In scope: semantic event map confirmation, prefab-vs-procedural policy, theme override policy, effect budget, pooling/reuse expectations, catalog ownership.
 - Out of scope: building every final VFX asset.
 - Dependencies: Phases 5 through 8 and `09-audio-vfx-guide.md`.
 - Affected systems: `VfxService.cs`, `VfxCatalog.cs`, gameplay feedback coordinator, theme data.
-- Likely files/areas touched: `VfxService.cs`, VFX config assets, `Assets/_Game/Prefabs/VFX/`, `Assets/_Game/Art/VFX/`, tests and validation tooling.
+- Likely files/areas touched: `VfxService.cs`, `ThemeVfxProfile.cs`, VFX config assets, `Assets/_Game/Prefabs/VFX/`, `Assets/_Game/Art/VFX/`, tests and validation tooling.
 - Performance concerns: avoid effect spam, keep object counts and overdraw low, protect restart speed.
 - Fairness/readability concerns: effects must never hide the line, player, or active danger core.
 - Validation requirements: effect budget checks, event coverage checks, manual clutter review, repeated-run fatigue review.
@@ -204,11 +205,11 @@ Readiness gates:
 
 ### Phase 10. Establish audio refresh pipeline
 - Objective: define how refreshed or theme-aware audio content is authored, routed, varied, and validated.
-- Why it exists: the current audio stack is semantically sound, but broader presentation refresh needs a disciplined content pipeline before replacing procedural fallback-heavy content.
+- Why it exists: the current audio stack is semantically sound, and the project now has the profile path needed for broader content refresh without parallel systems.
 - In scope: semantic cue ownership, mixer routing expectations, theme-aware variation rules, reuse-vs-replace rules, music variation rules, content budget, fallback behavior.
 - Out of scope: composing a full soundtrack or adding a new audio architecture.
 - Dependencies: Phase 7 and `09-audio-vfx-guide.md`.
-- Affected systems: `AudioService.cs`, `AudioCueCatalog.cs`, mixer asset/routing, settings persistence, feedback coordinator.
+- Affected systems: `AudioService.cs`, `AudioCueCatalog.cs`, `ThemeAudioProfile.cs`, mixer asset/routing, settings persistence, feedback coordinator.
 - Likely files/areas touched: `AudioService.cs`, audio catalogs, mixer assets, authored audio folders, tests.
 - Performance concerns: memory footprint, decode/load strategy, overlapping cue spam, clean relaunch behavior.
 - Fairness/readability concerns: feedback remains sharp, low-latency, and uncluttered; themed audio must not blur cue identity.
@@ -225,7 +226,7 @@ Readiness gates:
 - Out of scope: performing the rollout itself.
 - Dependencies: Phases 1 through 10.
 - Affected systems: validation tooling, tests, QA checklist, docs.
-- Likely files/areas touched: `.ai/11-testing-quality-bar.md`, release audit rules, tests, future refresh specs.
+- Likely files/areas touched: `.ai/11-testing-quality-bar.md`, release audit rules, approval audit rules, tests, future refresh specs.
 - Performance concerns: approval must include device frame pacing, build-size impact, startup and retry timing.
 - Fairness/readability concerns: approval must explicitly include collision honesty, spacing readability, theme clarity, and no-clutter confirmation.
 - Validation requirements: all required checks are enumerated, reproducible, and owned.
@@ -241,7 +242,7 @@ Readiness gates:
 - Out of scope: post-launch live-ops or feature expansion.
 - Dependencies: Phase 11.
 - Affected systems: implementation planning, QA, docs, release process.
-- Likely files/areas touched: future refresh specs, backlog sequencing, test plans, release checklists.
+- Likely files/areas touched: `PresentationRolloutPlanConfig.cs`, refresh approval audit tooling, backlog sequencing, test plans, release checklists.
 - Performance concerns: every rollout slice must be measured independently.
 - Fairness/readability concerns: every rollout slice must re-prove collision honesty and visual clarity before the next one starts.
 - Validation requirements: slice signoff after player refresh, hazard refresh, background refresh, theme expansion, VFX refresh, and audio refresh.
@@ -252,30 +253,26 @@ Readiness gates:
 
 ## 8. Now / Next / Later / Blocked
 ### Now
-- Establish background architecture and a strict performance budget.
-- Expand the theme system into a presentation-ready model.
+- Run refresh work only through the approval gate and the ordered rollout slices in `PresentationRolloutPlanConfig`.
+- Start with the player refresh slice, then obstacle refresh, then background/static-theme refresh only after signoff.
 
 ### Next
-- Define dynamic theme transition rules.
-- Establish VFX and audio refresh pipelines.
+- Replace procedural fallback content with authored assets slice-by-slice through the VFX and audio pipelines.
+- Re-run approval evidence after each slice before advancing to the next one.
 
 ### Later
-- Apply the refresh approval gate.
-- Apply the controlled rollout plan to each refresh slice.
+- Expand authored theme packages and runtime transition polish only if the earlier slices remain fair, readable, and performant.
 
 ### Blocked
-- Replacing gameplay background visuals with richer content before background architecture and budgets are defined.
-- Broad theme visual expansion beyond the current color-oriented baseline.
-- Dynamic theme switching during a run.
-- Large VFX refresh passes.
-- SFX/music presentation refresh beyond current semantic/pipeline-safe work.
+- Any all-at-once presentation overhaul.
+- Any refresh slice that skips automated checks, manual readability review, device checks, or stop/go approval.
+- Any VFX/audio replacement path that bypasses `ThemeVfxProfile`, `ThemeAudioProfile`, the semantic catalogs, or the approval audit.
 
 ## 9. Asset-swap gating rules
 - Player art swaps are allowed only through `PlayerVisualConfig` and `PlayerVisualView`; they remain blocked from touching collision or line anchoring code directly.
 - Obstacle art swaps are allowed only through `ObstacleVisualCatalog` and `HazardVisualView`; they remain blocked from touching collision or spacing code directly.
-- No background art or speed FX rollout is allowed until a background owner and effect budget exist.
-- No theme art rollout is allowed until theme data can own those assets without hardcoded branching.
-- No VFX or audio replacement sweep is allowed until the corresponding pipeline phase is complete.
+- Background and theme refresh work are now structurally allowed only through `BackgroundPresentationConfig`, `ThemeConfig`, `ThemeCatalog`, and `ThemeSequenceConfig`.
+- VFX and audio replacement is allowed only through the approved `ThemeVfxProfile` / `ThemeAudioProfile` plus semantic catalog/service pipeline, and only after the presentation refresh approval audit is clean for the current slice.
 - Temporary scene-local overrides are not allowed as a shortcut around these gates.
 
 ## 10. Performance protection rules
@@ -310,19 +307,20 @@ Before refresh implementation, the repo should have explicit ownership for:
 - obstacle collision tuning and spacing inputs
 - background presentation configuration and performance budget rules
 - theme presentation package data
-- optional theme transition sequencing data
-- theme-aware VFX override mapping where needed
-- theme-aware audio variation mapping where needed
+- theme transition sequencing data
+- theme-aware VFX override mapping
+- theme-aware audio variation mapping
+- presentation rollout gate data
 
-Recommended asset families for future implementation:
+Recommended asset families for refresh implementation:
 - `PlayerVisualConfig`
 - `ObstacleVisualCatalog`
 - `CollisionTuningConfig`
-- `ObstacleVisualConfig`
-- `BackgroundFxConfig`
+- `BackgroundPresentationConfig`
 - `ThemeSequenceConfig`
-- optional `ThemeVfxProfile`
-- optional `ThemeAudioProfile`
+- `ThemeVfxProfile`
+- `ThemeAudioProfile`
+- `PresentationRolloutPlanConfig`
 
 ## 14. Required validation before rollout
 The refresh approval gate must require:
@@ -363,17 +361,8 @@ When implementation later happens, update only the owning docs affected by the a
 - `18-visual-refresh-and-theme-system-guide.md` if the implementation strategy itself changes materially.
 
 ## 17. Recommendations
-- Do not begin with dynamic theme switching.
-- Do not begin with background spectacle.
-- Treat player and obstacle refresh as structurally unlocked, but only through `PlayerVisualConfig` / `PlayerVisualView` and `ObstacleVisualCatalog` / `HazardVisualView`.
-- Begin the next readiness slice with background architecture and theme-model expansion.
-- Keep collision, spacing, and line anchoring code off-limits to art swaps unless a later readiness phase explicitly reopens them.
+- All readiness phases are now structurally complete, and future presentation work must move through the approval gate plus the ordered rollout slices in `PresentationRolloutPlanConfig`.
+- Start actual refresh implementation with the player slice, then obstacle slice, then background/static-theme slice, re-running approval evidence after each stop/go point.
+- Keep collision, spacing, line anchoring, and transition rules off-limits to ad hoc asset swaps; they must continue to flow through config and controllers.
 - Keep this roadmap narrower than `16` and more restrictive than `18`.
 - Use it as the stop/go gate for any future visual refresh proposal.
-
-
-
-
-
-
-

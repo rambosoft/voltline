@@ -74,9 +74,29 @@ Responsibilities:
 
 - manage the current path
 - provide line position and local orientation data
-- request or generate upcoming obstacle segments
 - maintain safe spawn windows
 - advance the world at current speed
+- own only line/path presentation, not broader background spectacle
+
+### `BackgroundPresentationController`
+Owns gameplay background layers and speed-feel ambience.
+
+Responsibilities:
+
+- build the approved background layer stack from config
+- enforce lane quiet-zone and draw-call budget rules
+- animate subtle background motion without touching gameplay truth
+- apply theme-safe background transitions
+
+### `ThemePresentationController`
+Owns gameplay-scene theme application and milestone-gated theme sequencing.
+
+Responsibilities:
+
+- apply the selected theme at run start
+- apply only approved runtime theme transitions
+- keep theme changes out of gameplay rule ownership
+- coordinate theme updates across background, line, visuals, UI, and VFX
 
 ### `PlayerController`
 Owns player-side logic.
@@ -347,4 +367,6 @@ The important rule is that event flow remains readable and local.
 - Config lives in assets, not random scene objects.
 - System responsibilities stay small enough to explain in one sentence.
 - New runtime systems require explicit ownership justification.
+
+
 

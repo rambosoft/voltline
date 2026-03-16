@@ -145,23 +145,28 @@ namespace Voltline.Editor
             GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
             DifficultyCurveConfig difficultyCurve = AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
             GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            BackgroundPresentationConfig backgroundPresentationConfig = AssetDatabase.LoadAssetAtPath<BackgroundPresentationConfig>(ProjectConfigAssetPaths.BackgroundPresentation);
             PlayerVisualConfig playerVisualConfig = AssetDatabase.LoadAssetAtPath<PlayerVisualConfig>(ProjectConfigAssetPaths.PlayerVisualConfig);
             HazardPresentationCatalog hazardPresentationCatalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
             ObstacleVisualCatalog obstacleVisualCatalog = AssetDatabase.LoadAssetAtPath<ObstacleVisualCatalog>(ProjectConfigAssetPaths.ObstacleVisualCatalog);
             ObstacleCatalog obstacleCatalog = AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
             ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
+            ThemeSequenceConfig themeSequenceConfig = AssetDatabase.LoadAssetAtPath<ThemeSequenceConfig>(ProjectConfigAssetPaths.ThemeSequence);
+            PresentationRolloutPlanConfig presentationRolloutPlan = AssetDatabase.LoadAssetAtPath<PresentationRolloutPlanConfig>(ProjectConfigAssetPaths.PresentationRolloutPlan);
             AudioCueCatalog audioCueCatalog = AssetDatabase.LoadAssetAtPath<AudioCueCatalog>(ProjectConfigAssetPaths.AudioCueCatalog);
             VfxCatalog vfxCatalog = AssetDatabase.LoadAssetAtPath<VfxCatalog>(ProjectConfigAssetPaths.VfxCatalog);
-
             ConfigValidationResult validation = ProjectConfigValidator.ValidateProject(
                 gameBalance,
                 difficultyCurve,
                 gameplayPresentation,
+                backgroundPresentationConfig,
                 playerVisualConfig,
                 hazardPresentationCatalog,
                 obstacleVisualCatalog,
                 obstacleCatalog,
                 themeCatalog,
+                themeSequenceConfig,
+                presentationRolloutPlan,
                 audioCueCatalog,
                 vfxCatalog);
 
@@ -277,12 +282,14 @@ namespace Voltline.Editor
             SerializedObject serializedInstaller = new(installer);
             ValidateObjectReference(serializedInstaller, "gameBalance", result, true);
             ValidateObjectReference(serializedInstaller, "gameplayPresentation", result, true);
+            ValidateObjectReference(serializedInstaller, "backgroundPresentationConfig", result, true);
             ValidateObjectReference(serializedInstaller, "playerVisualConfig", result, true);
             ValidateObjectReference(serializedInstaller, "hazardPresentationCatalog", result, true);
             ValidateObjectReference(serializedInstaller, "obstacleVisualCatalog", result, true);
             ValidateObjectReference(serializedInstaller, "difficultyCurve", result, true);
             ValidateObjectReference(serializedInstaller, "obstacleCatalog", result, true);
             ValidateObjectReference(serializedInstaller, "themeCatalog", result, true);
+            ValidateObjectReference(serializedInstaller, "themeSequenceConfig", result, true);
             ValidateObjectReference(serializedInstaller, "audioCueCatalog", result, true);
             ValidateObjectReference(serializedInstaller, "vfxCatalog", result, true);
             ValidateObjectReference(serializedInstaller, "audioMixer", result, false);
@@ -486,3 +493,10 @@ namespace Voltline.Editor
     }
 }
 #endif
+
+
+
+
+
+
+

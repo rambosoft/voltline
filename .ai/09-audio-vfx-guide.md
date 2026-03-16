@@ -1,7 +1,7 @@
 # Audio and VFX Guide
 Status: Active
 Owner: Team
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Source of truth for: sound philosophy, music philosophy, mixer routing, event-to-sound mapping, event-to-VFX mapping, budgets and restrictions
 Depends on: 01-product-vision.md, 07-gameplay-systems.md, 08-ui-ux-style-guide.md
 Do not duplicate with: prototype one-off effect experiments
@@ -81,6 +81,7 @@ Rules:
 - every clip routes intentionally
 - UI clicks should never be as loud as death or milestone events
 - gameplay clarity beats music fullness
+- theme-aware audio variation flows through `ThemeAudioProfile` on `ThemeConfig`, not through ad hoc scene logic
 
 ## Core sound event map
 
@@ -240,6 +241,7 @@ Rules:
 - avoid large persistent emitters near active hazards
 - do not cover the player during key decision windows
 - every effect should be identifiable in one glance
+- theme-aware variation must stay inside `ThemeVfxProfile` budgets
 
 ## Suggested effect prefab list
 
@@ -279,7 +281,10 @@ Rules:
 - gameplay code requests semantic cues, not raw asset paths
 - audio lookup should happen via catalog/service
 - VFX spawning should happen via catalog/service
+- theme-aware VFX variation flows through `ThemeVfxProfile` on `ThemeConfig`
+- theme-aware audio variation flows through `ThemeAudioProfile` on `ThemeConfig`
 - feedback tuning must be centralized enough to rebalance quickly
+- broad presentation refresh rollout must pass `Tools > Voltline > Run Presentation Refresh Approval Audit`
 - avoid duplicating cue definitions across many prefabs
 
 ## When not to play feedback

@@ -8,9 +8,12 @@ namespace Voltline.UI
     public sealed class ResultPanelView : MonoBehaviour
     {
         private RectTransform root;
+        private Image panelImage;
         private TMP_Text messageText;
         private TMP_Text scoreText;
         private TMP_Text bestText;
+        private Image retryButtonImage;
+        private Image homeButtonImage;
         private OverlayTransitionController transitionController;
 
         public bool IsVisible => transitionController != null && transitionController.IsVisible;
@@ -22,6 +25,7 @@ namespace Voltline.UI
 
             RectTransform panel = UIFactory.CreatePanel("ResultPanel", root, UIFactory.PanelColor(0.95f));
             UIFactory.SetAnchors(panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(760f, 640f));
+            panelImage = panel.GetComponent<Image>();
 
             TMP_Text titleText = UIFactory.CreateText("Title", panel, "Run Over", 42, FontStyles.Bold, TextAlignmentOptions.Center, Color.white);
             UIFactory.SetAnchors((RectTransform)titleText.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -74f), new Vector2(460f, 58f));
@@ -37,12 +41,37 @@ namespace Voltline.UI
 
             Button retryButton = UIFactory.CreateButton("RetryButton", panel, "Retry", UIFactory.AccentColor(theme), new Color(0.05f, 0.08f, 0.12f, 1f), retryAction);
             UIFactory.SetAnchors((RectTransform)retryButton.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 174f), new Vector2(500f, 112f));
+            retryButtonImage = retryButton.GetComponent<Image>();
 
             Button homeButton = UIFactory.CreateButton("HomeButton", panel, "Home", UIFactory.PanelColor(1f), Color.white, homeAction);
             UIFactory.SetAnchors((RectTransform)homeButton.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 40f), new Vector2(500f, 78f));
+            homeButtonImage = homeButton.GetComponent<Image>();
 
             transitionController = gameObject.AddComponent<OverlayTransitionController>();
             transitionController.Initialize(root, panel, -26f);
+        }
+
+        public void ApplyTheme(ThemeConfig theme)
+        {
+            if (panelImage != null)
+            {
+                panelImage.color = UIFactory.PanelColor(0.95f);
+            }
+
+            if (bestText != null)
+            {
+                bestText.color = theme.PlayerAccentColor;
+            }
+
+            if (retryButtonImage != null)
+            {
+                retryButtonImage.color = UIFactory.AccentColor(theme);
+            }
+
+            if (homeButtonImage != null)
+            {
+                homeButtonImage.color = UIFactory.PanelColor(1f);
+            }
         }
 
         public void Show(int score, int bestScore, bool isNewBest, string message)

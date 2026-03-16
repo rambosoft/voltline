@@ -81,6 +81,20 @@ namespace Voltline.Tests.EditMode
 
             Assert.That(gameBalance.SideOffset, Is.GreaterThan(requiredClearance));
         }
+
+        [Test]
+        public void BackgroundPresentation_QuietZonePreservesReadableLane()
+        {
+            GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
+            GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            BackgroundPresentationConfig backgroundPresentationConfig = AssetDatabase.LoadAssetAtPath<BackgroundPresentationConfig>(ProjectConfigAssetPaths.BackgroundPresentation);
+            ObstacleVisualCatalog visualCatalog = AssetDatabase.LoadAssetAtPath<ObstacleVisualCatalog>(ProjectConfigAssetPaths.ObstacleVisualCatalog);
+            float widestVisualHalfWidth = visualCatalog.GetRequiredProfile(ObstacleFamily.SideBlockers).VisualHalfWidth;
+            float requiredClearance = (gameplayPresentation.TrackLineWidth * 0.5f) + widestVisualHalfWidth + 0.08f;
+
+            Assert.That(backgroundPresentationConfig.LaneQuietZoneHalfWidth, Is.GreaterThan(requiredClearance));
+            Assert.That(backgroundPresentationConfig.MaxRuntimeSpriteCount, Is.LessThanOrEqualTo(3));
+        }
     }
 }
 #endif

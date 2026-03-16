@@ -23,3 +23,12 @@ MonoBehaviour:
   playerAccentColor: {r: 1, g: 0.92, b: 0.28, a: 1}
   dangerColor: {r: 1, g: 0.23, b: 0.43, a: 1}
   milestoneColor: {r: 0.62, g: 0.44, b: 1, a: 1}
+  playerVisualOverride: {fileID: 0}
+  obstacleVisualOverride: {fileID: 0}
+  backgroundPresentationOverride: {fileID: 11400000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f2005, type: 2}
+  themeVfxProfile: {fileID: 11400000, guid: e8be7312608d494d87caed2d3bf5f7e1, type: 2}
+  themeAudioProfile: {fileID: 11400000, guid: 1f0bcfdb8b984bcd8217af7854e201f9, type: 2}
+  allowRuntimeSequenceSelection: 1
+  preferredTransitionDuration: 0.28
+
+

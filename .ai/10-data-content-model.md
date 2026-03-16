@@ -1,7 +1,7 @@
 # Data and Content Model
 Status: Active
 Owner: Team
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Source of truth for: what is code vs config vs content, ScriptableObject catalogs, IDs, persistence model, balancing workflow
 Depends on: 03-tech-stack.md, 04-architecture.md, 07-gameplay-systems.md
 Do not duplicate with: hardcoded scene values, throwaway prototype constants
@@ -100,6 +100,16 @@ Suggested fields:
 - player line clearance
 - player collision half extents
 
+#### `BackgroundPresentationConfig`
+Owns gameplay background layer rules and the allowed speed-feel budget.
+
+Suggested fields:
+- max runtime layer count
+- draw-call budget
+- lane quiet-zone width
+- maximum allowed layer alpha
+- layer definitions
+
 #### `DifficultyCurveConfig`
 Owns pacing and escalation rules.
 
@@ -137,7 +147,7 @@ Suggested fields:
 - minimum readable gap padding
 
 #### `ThemeConfig`
-Owns one theme's visual role definitions.
+Owns one theme's visual role definitions and presentation-package links.
 
 Suggested fields:
 - theme ID
@@ -147,10 +157,45 @@ Suggested fields:
 - player accent colors
 - danger colors
 - milestone colors
-- optional material/sprite overrides
+- optional player visual override
+- optional obstacle visual override
+- optional background presentation override
+- required `ThemeVfxProfile`
+- required `ThemeAudioProfile`
+- runtime transition allowance flag
+- preferred transition duration
 
 #### `ThemeCatalog`
 Owns all theme entries.
+
+#### `ThemeVfxProfile`
+Owns theme-aware VFX cue overrides and VFX safety budgets.
+
+Suggested fields:
+- semantic cue override entries
+- max active transient effects
+- max burst count per effect
+- minimum replay cooldown
+- death camera shake allow/disallow flag
+
+#### `ThemeAudioProfile`
+Owns theme-aware audio cue overrides and audio safety budgets.
+
+Suggested fields:
+- semantic cue override entries
+- max concurrent gameplay voices
+- max concurrent UI voices
+- minimum UI-click interval
+- music volume multiplier
+
+#### `PresentationRolloutPlanConfig`
+Owns the stop/go rollout gate for staged presentation refresh work.
+
+Suggested fields:
+- required global approval checks
+- ordered rollout slice list
+- per-slice collision/readability/performance requirements
+- per-slice stop/go blocking rules
 
 #### `AudioCueCatalog`
 Owns semantic cue mapping.
@@ -308,8 +353,10 @@ Suggested first themes:
 First release can ship with only one or two unlocked.
 
 Current launch baseline:
-- `theme.neon-night` is the default unlocked theme
-- `theme.candy-pop` is the first best-score unlock theme
+- `theme.neon-night` is the default unlocked theme and resolves to the default gameplay background presentation plus a dedicated `ThemeVfxProfile` and `ThemeAudioProfile`
+- `theme.candy-pop` is the first best-score unlock theme and owns a dedicated background presentation override plus its own `ThemeVfxProfile` and `ThemeAudioProfile`
+- runtime theme transitions are currently milestone-gated through `ThemeSequenceConfig` and are limited to background/color-safe theme changes
+- staged presentation rollout is governed by `PresentationRolloutPlanConfig`
 
 ## Difficulty data model
 
@@ -346,6 +393,8 @@ Examples:
 - no negative timing values
 - no missing prefab references in prefab-backed VFX entries
 - no missing clip mappings in Audio cue catalog where authored clips are expected
+- every `ThemeConfig` references a `ThemeVfxProfile` and `ThemeAudioProfile`
+- `PresentationRolloutPlanConfig` keeps the approved ordered rollout slice list and stop/go flags
 
 ## Non-negotiables
 
@@ -355,6 +404,3 @@ Examples:
 - Balance values should not be scattered across scene objects.
 - Runtime systems should read catalogs, not invent parallel registries.
 - Do not mutate content assets as a save mechanism.
-
-
-

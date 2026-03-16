@@ -41,6 +41,7 @@ namespace Voltline.UI
             ThemeConfig activeTheme = saveService.ResolveSelectedTheme(themeCatalog) ?? themeCatalog.DefaultTheme;
             AudioService audioService = AudioService.EnsureExists();
             audioService.Configure(audioCueCatalog, saveService, audioMixer);
+            audioService.ApplyTheme(activeTheme);
             audioService.PlayMusicLoop(AudioCueIds.MainLoop);
 
             BuildInterface(activeTheme);
@@ -79,6 +80,9 @@ namespace Voltline.UI
                 mainCamera.backgroundColor = Color.Lerp(activeTheme.BackgroundTopColor, activeTheme.BackgroundBottomColor, 0.5f);
             }
 
+            PlayerVisualConfig resolvedPlayerVisual = activeTheme.ResolvePlayerVisual(playerVisualConfig);
+            ObstacleVisualCatalog resolvedObstacleVisualCatalog = activeTheme.ResolveObstacleVisualCatalog(obstacleVisualCatalog);
+
             UIFactory.EnsureEventSystem();
             Canvas canvas = UIFactory.CreateCanvas("MainMenuCanvas", transform);
             RectTransform safeAreaRoot = UIFactory.CreateSafeAreaRoot(canvas);
@@ -104,7 +108,7 @@ namespace Voltline.UI
             RectTransform previewRoot = new GameObject("PreviewView", typeof(RectTransform)).GetComponent<RectTransform>();
             previewRoot.SetParent(safeAreaRoot, false);
             MainMenuPreviewView previewView = previewRoot.gameObject.AddComponent<MainMenuPreviewView>();
-            previewView.Initialize(previewRoot, activeTheme, playerVisualConfig, obstacleVisualCatalog);
+            previewView.Initialize(previewRoot, activeTheme, resolvedPlayerVisual, resolvedObstacleVisualCatalog);
 
             TMP_Text hintText = UIFactory.CreateText("Hint", safeAreaRoot, "Tap to flip sides", 28, FontStyles.Normal, TextAlignmentOptions.Center, new Color(0.9f, 0.94f, 1f, 1f));
             UIFactory.SetAnchors((RectTransform)hintText.transform, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(0f, -390f), new Vector2(460f, 44f));

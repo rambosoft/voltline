@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Voltline.Data;
 
 namespace Voltline.UI
@@ -9,6 +10,7 @@ namespace Voltline.UI
         private RectTransform root;
         private TMP_Text scoreText;
         private TMP_Text bestText;
+        private Image pauseButtonImage;
         private Vector3 scoreBaseScale;
         private Color scoreBaseColor;
         private Color milestoneColor;
@@ -32,6 +34,21 @@ namespace Voltline.UI
 
             UnityEngine.UI.Button pauseButton = UIFactory.CreateButton("PauseButton", root, "||", UIFactory.PanelColor(0.94f), Color.white, pauseAction);
             UIFactory.SetAnchors((RectTransform)pauseButton.transform, new Vector2(0f, 1f), new Vector2(0f, 1f), new Vector2(58f, -44f), new Vector2(84f, 84f));
+            pauseButtonImage = pauseButton.GetComponent<Image>();
+        }
+
+        public void ApplyTheme(ThemeConfig theme)
+        {
+            milestoneColor = theme.MilestoneColor;
+            if (bestText != null)
+            {
+                bestText.color = theme.PlayerAccentColor;
+            }
+
+            if (pauseButtonImage != null)
+            {
+                pauseButtonImage.color = UIFactory.PanelColor(0.94f);
+            }
         }
 
         private void Update()

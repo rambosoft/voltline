@@ -17,11 +17,14 @@ namespace Voltline.Tests.EditMode
             GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
             DifficultyCurveConfig difficultyCurve = AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
             GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            BackgroundPresentationConfig backgroundPresentationConfig = AssetDatabase.LoadAssetAtPath<BackgroundPresentationConfig>(ProjectConfigAssetPaths.BackgroundPresentation);
             PlayerVisualConfig playerVisualConfig = AssetDatabase.LoadAssetAtPath<PlayerVisualConfig>(ProjectConfigAssetPaths.PlayerVisualConfig);
             HazardPresentationCatalog hazardPresentationCatalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
             ObstacleVisualCatalog obstacleVisualCatalog = AssetDatabase.LoadAssetAtPath<ObstacleVisualCatalog>(ProjectConfigAssetPaths.ObstacleVisualCatalog);
             ObstacleCatalog obstacleCatalog = AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
             ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
+            ThemeSequenceConfig themeSequenceConfig = AssetDatabase.LoadAssetAtPath<ThemeSequenceConfig>(ProjectConfigAssetPaths.ThemeSequence);
+            PresentationRolloutPlanConfig presentationRolloutPlan = AssetDatabase.LoadAssetAtPath<PresentationRolloutPlanConfig>(ProjectConfigAssetPaths.PresentationRolloutPlan);
             AudioCueCatalog audioCueCatalog = AssetDatabase.LoadAssetAtPath<AudioCueCatalog>(ProjectConfigAssetPaths.AudioCueCatalog);
             VfxCatalog vfxCatalog = AssetDatabase.LoadAssetAtPath<VfxCatalog>(ProjectConfigAssetPaths.VfxCatalog);
 
@@ -29,11 +32,14 @@ namespace Voltline.Tests.EditMode
                 gameBalance,
                 difficultyCurve,
                 gameplayPresentation,
+                backgroundPresentationConfig,
                 playerVisualConfig,
                 hazardPresentationCatalog,
                 obstacleVisualCatalog,
                 obstacleCatalog,
                 themeCatalog,
+                themeSequenceConfig,
+                presentationRolloutPlan,
                 audioCueCatalog,
                 vfxCatalog);
 
@@ -119,7 +125,19 @@ namespace Voltline.Tests.EditMode
         }
 
         [Test]
-        public void ThemeCatalog_ContainsLaunchThemeUnlockSet()
+        public void BackgroundPresentationConfig_UsesSmallReadableBudget()
+        {
+            GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
+            PlayerVisualConfig playerVisualConfig = AssetDatabase.LoadAssetAtPath<PlayerVisualConfig>(ProjectConfigAssetPaths.PlayerVisualConfig);
+            BackgroundPresentationConfig backgroundPresentationConfig = AssetDatabase.LoadAssetAtPath<BackgroundPresentationConfig>(ProjectConfigAssetPaths.BackgroundPresentation);
+
+            Assert.That(backgroundPresentationConfig.MaxRuntimeSpriteCount, Is.LessThanOrEqualTo(3));
+            Assert.That(backgroundPresentationConfig.MaxExpectedDrawCalls, Is.LessThanOrEqualTo(3));
+            Assert.That(backgroundPresentationConfig.LaneQuietZoneHalfWidth, Is.GreaterThan(gameBalance.SideOffset + playerVisualConfig.VisibleHalfWidth));
+        }
+
+        [Test]
+        public void ThemeCatalog_ContainsLaunchThemeUnlockSet_AndPipelineProfiles()
         {
             ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
 
@@ -128,6 +146,60 @@ namespace Voltline.Tests.EditMode
             Assert.That(themeCatalog.TryGetTheme("theme.candy-pop", out ThemeConfig candyPop), Is.True);
             Assert.That(candyPop.UnlockedByDefault, Is.False);
             Assert.That(candyPop.UnlockBestScoreThreshold, Is.EqualTo(20));
+            Assert.That(candyPop.BackgroundPresentationOverride, Is.Not.Null);
+            Assert.That(candyPop.AllowRuntimeSequenceSelection, Is.True);
+            Assert.That(candyPop.ThemeVfxProfile, Is.Not.Null);
+            Assert.That(candyPop.ThemeAudioProfile, Is.Not.Null);
+        }
+
+        [Test]
+        public void ThemeSequenceConfig_TargetsCandyPopOnMilestoneWithoutRuntimeVisualSwaps()
+        {
+            ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
+            ThemeSequenceConfig themeSequenceConfig = AssetDatabase.LoadAssetAtPath<ThemeSequenceConfig>(ProjectConfigAssetPaths.ThemeSequence);
+
+            Assert.That(themeSequenceConfig.EnableRuntimeTransitions, Is.True);
+            Assert.That(themeSequenceConfig.Entries.Count, Is.EqualTo(1));
+            ThemeSequenceEntry entry = themeSequenceConfig.Entries[0];
+            Assert.That(entry.ScoreThreshold, Is.EqualTo(20));
+            Assert.That(entry.ThemeId, Is.EqualTo("theme.candy-pop"));
+            Assert.That(themeCatalog.TryGetTheme(entry.ThemeId, out ThemeConfig theme), Is.True);
+            Assert.That(theme.PlayerVisualOverride, Is.Null);
+            Assert.That(theme.ObstacleVisualOverride, Is.Null);
+            Assert.That(theme.ThemeVfxProfile, Is.Not.Null);
+            Assert.That(theme.ThemeAudioProfile, Is.Not.Null);
+        }
+
+        [Test]
+        public void ThemeProfiles_DefineRequiredSemanticEntries()
+        {
+            ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
+
+            for (int i = 0; i < themeCatalog.Themes.Count; i++)
+            {
+                ThemeConfig theme = themeCatalog.Themes[i];
+                Assert.That(theme, Is.Not.Null);
+                Assert.That(theme.ThemeVfxProfile, Is.Not.Null, theme.ThemeId);
+                Assert.That(theme.ThemeAudioProfile, Is.Not.Null, theme.ThemeId);
+                Assert.That(theme.ThemeVfxProfile.Entries.Count, Is.EqualTo(4), theme.ThemeId);
+                Assert.That(theme.ThemeAudioProfile.Entries.Count, Is.EqualTo(7), theme.ThemeId);
+            }
+        }
+
+        [Test]
+        public void PresentationRolloutPlan_UsesApprovedSliceOrder()
+        {
+            PresentationRolloutPlanConfig rolloutPlan = AssetDatabase.LoadAssetAtPath<PresentationRolloutPlanConfig>(ProjectConfigAssetPaths.PresentationRolloutPlan);
+
+            Assert.That(rolloutPlan, Is.Not.Null);
+            Assert.That(rolloutPlan.RequireConfigValidation, Is.True);
+            Assert.That(rolloutPlan.RequireReleaseAudit, Is.True);
+            Assert.That(rolloutPlan.RequirePresentationReadinessAudit, Is.True);
+            Assert.That(rolloutPlan.Slices.Count, Is.EqualTo(7));
+            Assert.That(rolloutPlan.Slices[0].SliceId, Is.EqualTo(PresentationRolloutSliceId.PlayerRefresh));
+            Assert.That(rolloutPlan.Slices[5].SliceId, Is.EqualTo(PresentationRolloutSliceId.VfxRefresh));
+            Assert.That(rolloutPlan.Slices[6].SliceId, Is.EqualTo(PresentationRolloutSliceId.AudioRefresh));
+            Assert.That(rolloutPlan.Slices[6].RequiresCollisionReview, Is.False);
         }
 
         [Test]

@@ -3,9 +3,12 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
+using Voltline.Audio;
 using Voltline.Core;
 using Voltline.Gameplay;
+using Voltline.Save;
 using Voltline.UI;
+using Voltline.VFX;
 
 namespace Voltline.Tests.PlayMode
 {
@@ -100,6 +103,60 @@ namespace Voltline.Tests.PlayMode
             LogAssert.NoUnexpectedReceived();
         }
 
+        [UnityTest]
+        public IEnumerator GameplayScene_ThemeSequenceTransitionsAtConfiguredMilestoneWithinBackgroundAndFeedbackBudgets()
+        {
+            SceneManager.LoadScene(SceneCatalog.Gameplay, LoadSceneMode.Single);
+            yield return null;
+            yield return null;
+
+            GameManager gameManager = Object.FindFirstObjectByType<GameManager>();
+            GameplaySceneInstaller installer = Object.FindFirstObjectByType<GameplaySceneInstaller>();
+            ScoreSystem scoreSystem = Object.FindFirstObjectByType<ScoreSystem>();
+            ThemePresentationController themePresentationController = Object.FindFirstObjectByType<ThemePresentationController>();
+            BackgroundPresentationController backgroundPresentationController = Object.FindFirstObjectByType<BackgroundPresentationController>();
+            VfxService vfxService = Object.FindFirstObjectByType<VfxService>();
+            AudioService audioService = AudioService.EnsureExists();
+
+            Assert.That(gameManager, Is.Not.Null);
+            Assert.That(installer, Is.Not.Null);
+            Assert.That(scoreSystem, Is.Not.Null);
+            Assert.That(themePresentationController, Is.Not.Null);
+            Assert.That(backgroundPresentationController, Is.Not.Null);
+            Assert.That(vfxService, Is.Not.Null);
+            Assert.That(audioService, Is.Not.Null);
+
+            SaveService saveService = SaveService.EnsureExists();
+            saveService.RecordRunScore(20);
+            saveService.SynchronizeThemeUnlocks(installer.ThemeCatalog);
+            saveService.SetSelectedThemeId(installer.ThemeCatalog.DefaultThemeId);
+
+            gameManager.RequestRestart();
+            yield return null;
+            yield return WaitForState(gameManager, RunState.Active, 1.5f);
+
+            Assert.That(themePresentationController.CurrentThemeId, Is.EqualTo(installer.ThemeCatalog.DefaultThemeId));
+            Assert.That(backgroundPresentationController.RuntimeLayerCount, Is.LessThanOrEqualTo(backgroundPresentationController.ConfiguredSpriteBudget));
+            Assert.That(vfxService.CurrentThemeVfxProfileName, Does.Contain("NeonNight"));
+            Assert.That(audioService.CurrentThemeAudioProfileName, Does.Contain("NeonNight"));
+
+            for (int i = scoreSystem.CurrentScore; i < 20; i++)
+            {
+                scoreSystem.RegisterClearedBeat();
+            }
+
+            yield return null;
+
+            Assert.That(themePresentationController.ActivatedTransitionCount, Is.EqualTo(1));
+            Assert.That(themePresentationController.CurrentThemeId, Is.EqualTo("theme.candy-pop"));
+            Assert.That(backgroundPresentationController.ActiveConfig, Is.Not.Null);
+            Assert.That(backgroundPresentationController.ActiveConfig.name, Does.Contain("CandyPop"));
+            Assert.That(backgroundPresentationController.RuntimeLayerCount, Is.LessThanOrEqualTo(backgroundPresentationController.ConfiguredSpriteBudget));
+            Assert.That(vfxService.CurrentThemeVfxProfileName, Does.Contain("CandyPop"));
+            Assert.That(audioService.CurrentThemeAudioProfileName, Does.Contain("CandyPop"));
+            LogAssert.NoUnexpectedReceived();
+        }
+
         private static IEnumerator WaitForState(GameManager gameManager, RunState state, float timeoutSeconds)
         {
             float elapsed = 0f;
@@ -125,4 +182,3 @@ namespace Voltline.Tests.PlayMode
         }
     }
 }
-

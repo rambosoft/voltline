@@ -7,15 +7,29 @@ namespace Voltline.Data
 {
     public static class ProjectConfigValidator
     {
+        private static readonly PresentationRolloutSliceId[] RequiredRolloutOrder =
+        {
+            PresentationRolloutSliceId.PlayerRefresh,
+            PresentationRolloutSliceId.ObstacleRefresh,
+            PresentationRolloutSliceId.BackgroundRefresh,
+            PresentationRolloutSliceId.StaticThemeRefresh,
+            PresentationRolloutSliceId.DynamicThemeTransitions,
+            PresentationRolloutSliceId.VfxRefresh,
+            PresentationRolloutSliceId.AudioRefresh,
+        };
+
         public static ConfigValidationResult ValidateProject(
             GameBalanceConfig gameBalance,
             DifficultyCurveConfig difficultyCurve,
             GameplayPresentationConfig gameplayPresentation,
+            BackgroundPresentationConfig backgroundPresentationConfig,
             PlayerVisualConfig playerVisualConfig,
             HazardPresentationCatalog hazardPresentationCatalog,
             ObstacleVisualCatalog obstacleVisualCatalog,
             ObstacleCatalog obstacleCatalog,
             ThemeCatalog themeCatalog,
+            ThemeSequenceConfig themeSequenceConfig,
+            PresentationRolloutPlanConfig presentationRolloutPlan,
             AudioCueCatalog audioCueCatalog,
             VfxCatalog vfxCatalog)
         {
@@ -24,14 +38,27 @@ namespace Voltline.Data
             ValidateGameBalance(gameBalance, result);
             ValidateDifficultyCurve(difficultyCurve, result);
             ValidateGameplayPresentation(gameplayPresentation, result);
+            ValidateBackgroundPresentationConfig(backgroundPresentationConfig, result);
             ValidatePlayerVisualConfig(playerVisualConfig, result);
             ValidateHazardPresentationCatalog(hazardPresentationCatalog, result);
             ValidateObstacleVisualCatalog(obstacleVisualCatalog, result);
             ValidateObstacleCatalog(obstacleCatalog, result);
             ValidateThemeCatalog(themeCatalog, result);
+            ValidateThemeSequenceConfig(themeCatalog, themeSequenceConfig, gameBalance, result);
+            ValidatePresentationRolloutPlanConfig(presentationRolloutPlan, result);
             ValidateAudioCueCatalog(audioCueCatalog, result);
             ValidateVfxCatalog(vfxCatalog, result);
-            ValidatePresentationReadinessRelationships(gameBalance, gameplayPresentation, playerVisualConfig, hazardPresentationCatalog, obstacleVisualCatalog, obstacleCatalog, result);
+            ValidatePresentationReadinessRelationships(
+                gameBalance,
+                gameplayPresentation,
+                backgroundPresentationConfig,
+                playerVisualConfig,
+                hazardPresentationCatalog,
+                obstacleVisualCatalog,
+                obstacleCatalog,
+                themeCatalog,
+                themeSequenceConfig,
+                result);
 
             return result;
         }
@@ -145,6 +172,52 @@ namespace Voltline.Data
             if (config.PlayerLineClearance < 0f) result.Add("GameplayPresentationConfig player line clearance must be non-negative.");
             if (config.PlayerCollisionHalfWidth <= 0f) result.Add("GameplayPresentationConfig player collision half-width must be positive.");
             if (config.PlayerCollisionHalfHeight <= 0f) result.Add("GameplayPresentationConfig player collision half-height must be positive.");
+        }
+
+        public static void ValidateBackgroundPresentationConfig(BackgroundPresentationConfig config, ConfigValidationResult result)
+        {
+            if (config == null)
+            {
+                result.Add("Missing BackgroundPresentationConfig asset.");
+                return;
+            }
+
+            if (config.MaxRuntimeSpriteCount <= 0) result.Add("BackgroundPresentationConfig max runtime sprite count must be positive.");
+            if (config.MaxExpectedDrawCalls <= 0) result.Add("BackgroundPresentationConfig max expected draw calls must be positive.");
+            if (config.LaneQuietZoneHalfWidth <= 0f) result.Add("BackgroundPresentationConfig lane quiet-zone half width must be positive.");
+            if (config.MaximumAllowedLayerAlpha <= 0f) result.Add("BackgroundPresentationConfig maximum allowed layer alpha must be positive.");
+
+            IReadOnlyList<BackgroundLayerDefinition> layers = config.Layers;
+            if (layers == null || layers.Count == 0)
+            {
+                result.Add("BackgroundPresentationConfig must define at least one background layer.");
+                return;
+            }
+
+            if (config.MaxExpectedDrawCalls < System.Math.Min(config.MaxRuntimeSpriteCount, layers.Count))
+            {
+                result.Add("BackgroundPresentationConfig expected draw-call budget must cover the configured runtime layer count.");
+            }
+
+            HashSet<string> layerIds = new();
+            for (int i = 0; i < layers.Count; i++)
+            {
+                BackgroundLayerDefinition layer = layers[i];
+                if (layer == null)
+                {
+                    result.Add($"BackgroundPresentationConfig layer at index {i} is missing.");
+                    continue;
+                }
+
+                if (!StableIdUtility.IsValid(layer.LayerId)) result.Add($"BackgroundPresentationConfig layer id '{layer.LayerId}' is invalid.");
+                if (!layerIds.Add(layer.LayerId)) result.Add($"BackgroundPresentationConfig contains duplicate layer id '{layer.LayerId}'.");
+                if (layer.Size.x <= 0f || layer.Size.y <= 0f) result.Add($"BackgroundPresentationConfig layer '{layer.LayerId}' size must be positive.");
+                if (layer.Alpha <= 0f || layer.Alpha > config.MaximumAllowedLayerAlpha) result.Add($"BackgroundPresentationConfig layer '{layer.LayerId}' alpha must be positive and stay within the configured maximum.");
+                if (layer.VerticalTravelMultiplier < 0f) result.Add($"BackgroundPresentationConfig layer '{layer.LayerId}' vertical travel multiplier must be non-negative.");
+                if (layer.VerticalLoopDistance <= 0f) result.Add($"BackgroundPresentationConfig layer '{layer.LayerId}' vertical loop distance must be positive.");
+                if (layer.HorizontalOscillationAmplitude < 0f) result.Add($"BackgroundPresentationConfig layer '{layer.LayerId}' horizontal oscillation amplitude must be non-negative.");
+                if (layer.HorizontalOscillationFrequency < 0f) result.Add($"BackgroundPresentationConfig layer '{layer.LayerId}' horizontal oscillation frequency must be non-negative.");
+            }
         }
 
         public static void ValidatePlayerVisualConfig(PlayerVisualConfig config, ConfigValidationResult result)
@@ -349,6 +422,11 @@ namespace Voltline.Data
                 if (!ids.Add(theme.ThemeId)) result.Add($"ThemeCatalog contains duplicate theme id '{theme.ThemeId}'.");
                 if (string.IsNullOrWhiteSpace(theme.DisplayName)) result.Add($"ThemeConfig '{theme.ThemeId}' must have a display name.");
                 if (theme.UnlockBestScoreThreshold < 0) result.Add($"ThemeConfig '{theme.ThemeId}' unlock best score threshold must be non-negative.");
+                if (theme.PreferredTransitionDuration < 0f) result.Add($"ThemeConfig '{theme.ThemeId}' preferred transition duration must be non-negative.");
+                if (theme.ThemeVfxProfile == null) result.Add($"ThemeConfig '{theme.ThemeId}' must reference a ThemeVfxProfile.");
+                if (theme.ThemeAudioProfile == null) result.Add($"ThemeConfig '{theme.ThemeId}' must reference a ThemeAudioProfile.");
+                if (theme.ThemeVfxProfile != null) ValidateThemeVfxProfile(theme.ThemeId, theme.ThemeVfxProfile, result);
+                if (theme.ThemeAudioProfile != null) ValidateThemeAudioProfile(theme.ThemeId, theme.ThemeAudioProfile, result);
                 if (catalog.DefaultTheme == theme && !theme.UnlockedByDefault) result.Add("ThemeCatalog default theme must be unlocked by default.");
                 if (catalog.DefaultTheme == theme) foundDefaultTheme = true;
             }
@@ -357,6 +435,187 @@ namespace Voltline.Data
             {
                 result.Add("ThemeCatalog default theme must also exist in the catalog list.");
             }
+        }
+
+        public static void ValidateThemeSequenceConfig(ThemeCatalog themeCatalog, ThemeSequenceConfig config, GameBalanceConfig gameBalance, ConfigValidationResult result)
+        {
+            if (config == null)
+            {
+                result.Add("Missing ThemeSequenceConfig asset.");
+                return;
+            }
+
+            if (config.MinimumScoreForTransitions < 0) result.Add("ThemeSequenceConfig minimum score for transitions must be non-negative.");
+            if (config.MinimumTransitionDurationSeconds <= 0f) result.Add("ThemeSequenceConfig minimum transition duration must be positive.");
+            if (config.MaximumTransitionDurationSeconds < config.MinimumTransitionDurationSeconds) result.Add("ThemeSequenceConfig maximum transition duration must not be lower than the minimum transition duration.");
+
+            if (!config.EnableRuntimeTransitions)
+            {
+                return;
+            }
+
+            IReadOnlyList<ThemeSequenceEntry> entries = config.Entries;
+            if (entries == null || entries.Count == 0)
+            {
+                result.Add("ThemeSequenceConfig must define at least one transition entry when runtime transitions are enabled.");
+                return;
+            }
+
+            HashSet<int> milestoneThresholds = gameBalance != null
+                ? new HashSet<int>(gameBalance.MilestoneThresholds)
+                : null;
+
+            int previousThreshold = -1;
+            for (int i = 0; i < entries.Count; i++)
+            {
+                ThemeSequenceEntry entry = entries[i];
+                if (entry == null)
+                {
+                    result.Add($"ThemeSequenceConfig entry at index {i} is missing.");
+                    continue;
+                }
+
+                if (entry.ScoreThreshold < config.MinimumScoreForTransitions) result.Add($"ThemeSequenceConfig entry at index {i} must not be below the minimum transition score.");
+                if (entry.ScoreThreshold <= previousThreshold) result.Add("ThemeSequenceConfig score thresholds must be strictly ascending.");
+                if (!StableIdUtility.IsValid(entry.ThemeId)) result.Add($"ThemeSequenceConfig entry theme id '{entry.ThemeId}' is invalid.");
+                if (entry.TransitionDurationSeconds <= 0f) result.Add($"ThemeSequenceConfig entry '{entry.ThemeId}' transition duration must be positive.");
+
+                if (milestoneThresholds != null && !milestoneThresholds.Contains(entry.ScoreThreshold))
+                {
+                    result.Add($"ThemeSequenceConfig entry '{entry.ThemeId}' must target an existing gameplay milestone threshold.");
+                }
+
+                if (themeCatalog == null || !themeCatalog.TryGetTheme(entry.ThemeId, out ThemeConfig theme) || theme == null)
+                {
+                    result.Add($"ThemeSequenceConfig entry '{entry.ThemeId}' must reference a theme that exists in ThemeCatalog.");
+                }
+                else
+                {
+                    if (!theme.AllowRuntimeSequenceSelection)
+                    {
+                        result.Add($"ThemeSequenceConfig entry '{entry.ThemeId}' targets a theme that does not allow runtime sequence selection.");
+                    }
+
+                    if (theme.PlayerVisualOverride != null)
+                    {
+                        result.Add($"ThemeSequenceConfig entry '{entry.ThemeId}' must not swap player visuals during runtime transitions yet.");
+                    }
+
+                    if (theme.ObstacleVisualOverride != null)
+                    {
+                        result.Add($"ThemeSequenceConfig entry '{entry.ThemeId}' must not swap obstacle visuals during runtime transitions yet.");
+                    }
+                }
+
+                previousThreshold = entry.ScoreThreshold;
+            }
+        }
+
+        public static void ValidatePresentationRolloutPlanConfig(PresentationRolloutPlanConfig config, ConfigValidationResult result)
+        {
+            if (config == null)
+            {
+                result.Add("Missing PresentationRolloutPlanConfig asset.");
+                return;
+            }
+
+            if (!config.RequireConfigValidation) result.Add("PresentationRolloutPlanConfig must require config validation.");
+            if (!config.RequireReleaseAudit) result.Add("PresentationRolloutPlanConfig must require the release audit.");
+            if (!config.RequirePresentationReadinessAudit) result.Add("PresentationRolloutPlanConfig must require the presentation readiness audit.");
+            if (!config.RequireEditModeSuite) result.Add("PresentationRolloutPlanConfig must require the Edit Mode suite.");
+            if (!config.RequirePlayModeSuite) result.Add("PresentationRolloutPlanConfig must require the Play Mode suite.");
+            if (!config.RequireManualCollisionReview) result.Add("PresentationRolloutPlanConfig must require manual collision review.");
+            if (!config.RequireManualReadabilityReview) result.Add("PresentationRolloutPlanConfig must require manual readability review.");
+            if (!config.RequireDevicePerformanceCheck) result.Add("PresentationRolloutPlanConfig must require device performance checks.");
+            if (!config.RequireSaveAndThemePersistenceCheck) result.Add("PresentationRolloutPlanConfig must require save and theme persistence checks.");
+            if (!config.RequireBuildSizeReview) result.Add("PresentationRolloutPlanConfig must require build-size review.");
+            if (!config.RequireNoConsoleNoise) result.Add("PresentationRolloutPlanConfig must require a no-console-noise check.");
+
+            IReadOnlyList<PresentationRolloutSliceDefinition> slices = config.Slices;
+            if (slices == null || slices.Count != RequiredRolloutOrder.Length)
+            {
+                result.Add("PresentationRolloutPlanConfig must define the full ordered rollout slice list.");
+                return;
+            }
+
+            for (int i = 0; i < RequiredRolloutOrder.Length; i++)
+            {
+                PresentationRolloutSliceDefinition slice = slices[i];
+                if (slice == null)
+                {
+                    result.Add($"PresentationRolloutPlanConfig slice at index {i} is missing.");
+                    continue;
+                }
+
+                if (slice.SliceId != RequiredRolloutOrder[i])
+                {
+                    result.Add($"PresentationRolloutPlanConfig slice at index {i} must be '{RequiredRolloutOrder[i]}'.");
+                }
+
+                if (!slice.RequiresAutomatedChecks) result.Add($"PresentationRolloutPlanConfig slice '{slice.SliceId}' must require automated checks.");
+                if (!slice.RequiresManualReadabilityReview) result.Add($"PresentationRolloutPlanConfig slice '{slice.SliceId}' must require manual readability review.");
+                if (!slice.RequiresDevicePerformanceCheck) result.Add($"PresentationRolloutPlanConfig slice '{slice.SliceId}' must require device performance checks.");
+                if (!slice.RequiresNoConsoleNoiseCheck) result.Add($"PresentationRolloutPlanConfig slice '{slice.SliceId}' must require a no-console-noise check.");
+                if (!slice.BlocksNextSliceUntilApproved) result.Add($"PresentationRolloutPlanConfig slice '{slice.SliceId}' must block the next slice until approval.");
+
+                bool shouldRequireCollisionReview = slice.SliceId != PresentationRolloutSliceId.AudioRefresh;
+                if (slice.RequiresCollisionReview != shouldRequireCollisionReview)
+                {
+                    result.Add($"PresentationRolloutPlanConfig slice '{slice.SliceId}' collision-review flag is not aligned with the approved rollout policy.");
+                }
+            }
+        }
+
+        public static void ValidateThemeVfxProfile(string themeId, ThemeVfxProfile profile, ConfigValidationResult result)
+        {
+            if (profile.MaxActiveTransientEffects <= 0) result.Add($"ThemeConfig '{themeId}' VFX profile must allow at least one active transient effect.");
+            if (profile.MaxBurstCountPerEffect <= 0) result.Add($"ThemeConfig '{themeId}' VFX profile burst budget must be positive.");
+            if (profile.MinimumReplayCooldownSeconds < 0f) result.Add($"ThemeConfig '{themeId}' VFX profile cooldown must be non-negative.");
+
+            HashSet<string> cueIds = new();
+            foreach (ThemeVfxProfile.ThemeVfxCueOverride entry in profile.Entries ?? Enumerable.Empty<ThemeVfxProfile.ThemeVfxCueOverride>())
+            {
+                if (entry == null)
+                {
+                    result.Add($"ThemeConfig '{themeId}' VFX profile contains a missing entry.");
+                    continue;
+                }
+
+                if (!StableIdUtility.IsValid(entry.CueId)) result.Add($"ThemeConfig '{themeId}' VFX profile cue id '{entry.CueId}' is invalid.");
+                if (!cueIds.Add(entry.CueId)) result.Add($"ThemeConfig '{themeId}' VFX profile contains duplicate cue id '{entry.CueId}'.");
+                if (!string.IsNullOrWhiteSpace(entry.OverrideVfxId) && !StableIdUtility.IsValid(entry.OverrideVfxId)) result.Add($"ThemeConfig '{themeId}' VFX profile override id '{entry.OverrideVfxId}' is invalid.");
+                if (entry.ScaleMultiplier <= 0f) result.Add($"ThemeConfig '{themeId}' VFX profile cue '{entry.CueId}' scale multiplier must be positive.");
+                if (entry.AlphaMultiplier <= 0f || entry.AlphaMultiplier > 1f) result.Add($"ThemeConfig '{themeId}' VFX profile cue '{entry.CueId}' alpha multiplier must be within (0, 1].");
+                if (entry.MaxBurstCount < 0) result.Add($"ThemeConfig '{themeId}' VFX profile cue '{entry.CueId}' max burst count must be non-negative.");
+            }
+
+            ValidateRequiredIds(cueIds, result, VfxCueIds.Flip, VfxCueIds.NearMiss, VfxCueIds.Death, VfxCueIds.Milestone);
+        }
+
+        public static void ValidateThemeAudioProfile(string themeId, ThemeAudioProfile profile, ConfigValidationResult result)
+        {
+            if (profile.MaxConcurrentGameplayVoices <= 0) result.Add($"ThemeConfig '{themeId}' audio profile gameplay voice budget must be positive.");
+            if (profile.MaxConcurrentUiVoices <= 0) result.Add($"ThemeConfig '{themeId}' audio profile UI voice budget must be positive.");
+            if (profile.MinimumUiClickIntervalSeconds < 0f) result.Add($"ThemeConfig '{themeId}' audio profile UI click interval must be non-negative.");
+            if (profile.MusicVolumeMultiplier <= 0f) result.Add($"ThemeConfig '{themeId}' audio profile music volume multiplier must be positive.");
+
+            HashSet<string> cueIds = new();
+            foreach (ThemeAudioProfile.ThemeAudioCueOverride entry in profile.Entries ?? Enumerable.Empty<ThemeAudioProfile.ThemeAudioCueOverride>())
+            {
+                if (entry == null)
+                {
+                    result.Add($"ThemeConfig '{themeId}' audio profile contains a missing entry.");
+                    continue;
+                }
+
+                if (!StableIdUtility.IsValid(entry.CueId)) result.Add($"ThemeConfig '{themeId}' audio profile cue id '{entry.CueId}' is invalid.");
+                if (!cueIds.Add(entry.CueId)) result.Add($"ThemeConfig '{themeId}' audio profile contains duplicate cue id '{entry.CueId}'.");
+                if (!string.IsNullOrWhiteSpace(entry.OverrideCueId) && !StableIdUtility.IsValid(entry.OverrideCueId)) result.Add($"ThemeConfig '{themeId}' audio profile override cue id '{entry.OverrideCueId}' is invalid.");
+                if (entry.VolumeMultiplier <= 0f) result.Add($"ThemeConfig '{themeId}' audio profile cue '{entry.CueId}' volume multiplier must be positive.");
+                if (entry.PitchMultiplier <= 0f) result.Add($"ThemeConfig '{themeId}' audio profile cue '{entry.CueId}' pitch multiplier must be positive.");
+            }
+
+            ValidateRequiredIds(cueIds, result, AudioCueIds.Flip, AudioCueIds.Score, AudioCueIds.NearMiss, AudioCueIds.Milestone, AudioCueIds.Death, AudioCueIds.UiClick, AudioCueIds.MainLoop);
         }
 
         public static void ValidateAudioCueCatalog(AudioCueCatalog catalog, ConfigValidationResult result)
@@ -428,10 +687,13 @@ namespace Voltline.Data
         private static void ValidatePresentationReadinessRelationships(
             GameBalanceConfig gameBalance,
             GameplayPresentationConfig gameplayPresentation,
+            BackgroundPresentationConfig backgroundPresentationConfig,
             PlayerVisualConfig playerVisualConfig,
             HazardPresentationCatalog hazardPresentationCatalog,
             ObstacleVisualCatalog obstacleVisualCatalog,
             ObstacleCatalog obstacleCatalog,
+            ThemeCatalog themeCatalog,
+            ThemeSequenceConfig themeSequenceConfig,
             ConfigValidationResult result)
         {
             if (gameBalance == null || gameplayPresentation == null || playerVisualConfig == null || hazardPresentationCatalog == null || obstacleVisualCatalog == null)
@@ -445,6 +707,11 @@ namespace Voltline.Data
             if (gameBalance.SideOffset <= requiredPlayerClearance)
             {
                 result.Add("GameBalanceConfig side offset must keep the player visual visibly clear of the line.");
+            }
+
+            if (backgroundPresentationConfig != null && backgroundPresentationConfig.LaneQuietZoneHalfWidth <= requiredPlayerClearance)
+            {
+                result.Add("BackgroundPresentationConfig quiet-zone half width must stay wider than the player readability clearance around the line.");
             }
 
             if (playerVisualConfig.VisibleHalfWidth < gameplayPresentation.PlayerCollisionHalfWidth)
@@ -483,28 +750,51 @@ namespace Voltline.Data
                 result.Add("GameBalanceConfig side offset must keep the widest obstacle visual profile visibly clear of the line.");
             }
 
-            if (obstacleCatalog == null)
+            if (backgroundPresentationConfig != null && backgroundPresentationConfig.LaneQuietZoneHalfWidth <= requiredHazardClearance)
+            {
+                result.Add("BackgroundPresentationConfig quiet-zone half width must stay wider than the widest obstacle readability clearance around the line.");
+            }
+
+            if (obstacleCatalog != null)
+            {
+                IReadOnlyList<ObstacleConfig> obstacles = obstacleCatalog.Obstacles;
+                for (int i = 0; i < obstacles.Count; i++)
+                {
+                    ObstacleConfig obstacle = obstacles[i];
+                    if (obstacle == null)
+                    {
+                        continue;
+                    }
+
+                    if (!hazardPresentationCatalog.TryGetProfile(obstacle.Family, out _))
+                    {
+                        result.Add($"ObstacleConfig '{obstacle.ObstacleId}' has no matching hazard presentation profile for family '{obstacle.Family}'.");
+                    }
+
+                    if (!obstacleVisualCatalog.TryGetProfile(obstacle.Family, out _))
+                    {
+                        result.Add($"ObstacleConfig '{obstacle.ObstacleId}' has no matching obstacle visual profile for family '{obstacle.Family}'.");
+                    }
+                }
+            }
+
+            if (themeCatalog == null || themeSequenceConfig == null || !themeSequenceConfig.EnableRuntimeTransitions)
             {
                 return;
             }
 
-            IReadOnlyList<ObstacleConfig> obstacles = obstacleCatalog.Obstacles;
-            for (int i = 0; i < obstacles.Count; i++)
+            for (int i = 0; i < themeSequenceConfig.Entries.Count; i++)
             {
-                ObstacleConfig obstacle = obstacles[i];
-                if (obstacle == null)
+                ThemeSequenceEntry entry = themeSequenceConfig.Entries[i];
+                if (entry == null || !themeCatalog.TryGetTheme(entry.ThemeId, out ThemeConfig theme) || theme == null)
                 {
                     continue;
                 }
 
-                if (!hazardPresentationCatalog.TryGetProfile(obstacle.Family, out _))
+                if (theme.BackgroundPresentationOverride != null
+                    && theme.BackgroundPresentationOverride.LaneQuietZoneHalfWidth <= requiredHazardClearance)
                 {
-                    result.Add($"ObstacleConfig '{obstacle.ObstacleId}' has no matching hazard presentation profile for family '{obstacle.Family}'.");
-                }
-
-                if (!obstacleVisualCatalog.TryGetProfile(obstacle.Family, out _))
-                {
-                    result.Add($"ObstacleConfig '{obstacle.ObstacleId}' has no matching obstacle visual profile for family '{obstacle.Family}'.");
+                    result.Add($"ThemeConfig '{theme.ThemeId}' background presentation override must preserve the line quiet-zone clearance.");
                 }
             }
         }

@@ -16,6 +16,13 @@ namespace Voltline.Data
         [SerializeField] private Color playerAccentColor = new(1f, 0.92f, 0.28f, 1f);
         [SerializeField] private Color dangerColor = new(1f, 0.23f, 0.43f, 1f);
         [SerializeField] private Color milestoneColor = new(0.62f, 0.44f, 1f, 1f);
+        [SerializeField] private PlayerVisualConfig playerVisualOverride;
+        [SerializeField] private ObstacleVisualCatalog obstacleVisualOverride;
+        [SerializeField] private BackgroundPresentationConfig backgroundPresentationOverride;
+        [SerializeField] private ThemeVfxProfile themeVfxProfile;
+        [SerializeField] private ThemeAudioProfile themeAudioProfile;
+        [SerializeField] private bool allowRuntimeSequenceSelection = true;
+        [SerializeField] private float preferredTransitionDuration = 0.32f;
 
         public string ThemeId => themeId;
         public string DisplayName => displayName;
@@ -28,5 +35,37 @@ namespace Voltline.Data
         public Color PlayerAccentColor => playerAccentColor;
         public Color DangerColor => dangerColor;
         public Color MilestoneColor => milestoneColor;
+        public PlayerVisualConfig PlayerVisualOverride => playerVisualOverride;
+        public ObstacleVisualCatalog ObstacleVisualOverride => obstacleVisualOverride;
+        public BackgroundPresentationConfig BackgroundPresentationOverride => backgroundPresentationOverride;
+        public ThemeVfxProfile ThemeVfxProfile => themeVfxProfile;
+        public ThemeAudioProfile ThemeAudioProfile => themeAudioProfile;
+        public bool AllowRuntimeSequenceSelection => allowRuntimeSequenceSelection;
+        public float PreferredTransitionDuration => preferredTransitionDuration;
+
+        public PlayerVisualConfig ResolvePlayerVisual(PlayerVisualConfig fallback)
+        {
+            return playerVisualOverride != null ? playerVisualOverride : fallback;
+        }
+
+        public ObstacleVisualCatalog ResolveObstacleVisualCatalog(ObstacleVisualCatalog fallback)
+        {
+            return obstacleVisualOverride != null ? obstacleVisualOverride : fallback;
+        }
+
+        public BackgroundPresentationConfig ResolveBackgroundPresentation(BackgroundPresentationConfig fallback)
+        {
+            return backgroundPresentationOverride != null ? backgroundPresentationOverride : fallback;
+        }
+
+        public ThemeVfxProfile ResolveThemeVfxProfile(ThemeVfxProfile fallback)
+        {
+            return themeVfxProfile != null ? themeVfxProfile : fallback;
+        }
+
+        public ThemeAudioProfile ResolveThemeAudioProfile(ThemeAudioProfile fallback)
+        {
+            return themeAudioProfile != null ? themeAudioProfile : fallback;
+        }
     }
 }

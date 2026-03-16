@@ -7,15 +7,14 @@ namespace Voltline.Tests.EditMode
     public sealed class PresentationReadinessAuditEditModeTests
     {
         [Test]
-        public void PresentationReadinessAudit_HasNoBlockingErrors_AndKeepsLaterBlockedWorkVisible()
+        public void PresentationReadinessAudit_HasNoBlockingErrors_AndReflectsUnlockedPipelines()
         {
             PresentationReadinessAuditResult result = PresentationReadinessAudit.Validate();
 
             Assert.That(result.Errors, Is.Empty);
-            Assert.That(result.Warnings, Has.None.Contains("Player visuals remain procedural"));
-            Assert.That(result.Warnings, Has.None.Contains("Hazard visuals remain procedural"));
-            Assert.That(result.Warnings, Has.Some.Contains("TrackManager still lacks a dedicated background presentation layer"));
-            Assert.That(result.Notes, Has.Some.Contains("Player and obstacle refresh slices are now structurally unlocked"));
+            Assert.That(result.Warnings, Has.None.Contains("VfxService and AudioService still lean on procedural fallback content"));
+            Assert.That(result.Notes, Has.Some.Contains("Theme-owned VFX and audio variation is now routed through ThemeVfxProfile and ThemeAudioProfile"));
+            Assert.That(result.Notes, Has.Some.Contains("Player, obstacle, background, theme-transition, VFX, and audio refresh slices are now structurally unlocked"));
         }
     }
 }

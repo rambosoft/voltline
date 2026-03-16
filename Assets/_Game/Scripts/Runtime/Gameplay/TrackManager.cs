@@ -19,6 +19,14 @@ namespace Voltline.Gameplay
         private Transform hazardsRoot;
         private float pulseTime;
         private float pulseStrength;
+        private Color displayedLineCoreColor;
+        private Color displayedLineGlowColor;
+        private Color transitionFromLineCoreColor;
+        private Color transitionFromLineGlowColor;
+        private Color transitionToLineCoreColor;
+        private Color transitionToLineGlowColor;
+        private float themeTransitionDuration;
+        private float themeTransitionElapsed;
 
         public float TravelDistance { get; private set; }
         public float PlayerAnchorY => -gameplayCamera.orthographicSize * 0.68f;
@@ -39,11 +47,28 @@ namespace Voltline.Gameplay
             gameplayCamera = targetCamera;
             gameplayCamera.orthographic = true;
             gameplayCamera.orthographicSize = presentationConfig.TrackCameraSize;
-            gameplayCamera.backgroundColor = Color.Lerp(theme.BackgroundTopColor, theme.BackgroundBottomColor, 0.5f);
 
             EnsureRuntimeHierarchy();
             EnsureLineRenderer();
+            ApplyTheme(activeTheme, 0f);
             ResetRun();
+        }
+
+        public void ApplyTheme(ThemeConfig activeTheme, float transitionDurationSeconds)
+        {
+            theme = activeTheme;
+            transitionFromLineCoreColor = displayedLineCoreColor == default ? activeTheme.LineCoreColor : displayedLineCoreColor;
+            transitionFromLineGlowColor = displayedLineGlowColor == default ? activeTheme.LineGlowColor : displayedLineGlowColor;
+            transitionToLineCoreColor = activeTheme.LineCoreColor;
+            transitionToLineGlowColor = activeTheme.LineGlowColor;
+            themeTransitionDuration = Mathf.Max(0f, transitionDurationSeconds);
+            themeTransitionElapsed = 0f;
+
+            if (themeTransitionDuration <= 0f)
+            {
+                displayedLineCoreColor = transitionToLineCoreColor;
+                displayedLineGlowColor = transitionToLineGlowColor;
+            }
         }
 
         private void Update()
@@ -55,13 +80,14 @@ namespace Voltline.Gameplay
 
             pulseTime += Time.deltaTime;
             pulseStrength = Mathf.Max(0f, pulseStrength - (Time.deltaTime * 2.4f));
+            UpdateThemeTransition(Time.deltaTime);
 
             float idlePulse = 0.5f + (Mathf.Sin(pulseTime * 2.25f) * 0.5f);
             float width = presentationConfig.TrackLineWidth * (1f + (idlePulse * 0.08f) + (pulseStrength * 0.22f));
             lineRenderer.startWidth = width;
             lineRenderer.endWidth = width;
-            lineRenderer.startColor = Color.Lerp(theme.LineCoreColor, theme.LineGlowColor, 0.28f + (idlePulse * 0.12f) + (pulseStrength * 0.25f));
-            lineRenderer.endColor = Color.Lerp(theme.LineGlowColor, Color.white, idlePulse * 0.08f + pulseStrength * 0.22f);
+            lineRenderer.startColor = Color.Lerp(displayedLineCoreColor, displayedLineGlowColor, 0.28f + (idlePulse * 0.12f) + (pulseStrength * 0.25f));
+            lineRenderer.endColor = Color.Lerp(displayedLineGlowColor, Color.white, idlePulse * 0.08f + pulseStrength * 0.22f);
         }
 
         public void ResetRun()
@@ -138,8 +164,6 @@ namespace Voltline.Gameplay
             Shader shader = Shader.Find("Sprites/Default") ?? Shader.Find("Universal Render Pipeline/2D/Sprite-Unlit-Default");
             lineMaterial = new Material(shader);
             lineRenderer.material = lineMaterial;
-            lineRenderer.startColor = theme.LineCoreColor;
-            lineRenderer.endColor = theme.LineGlowColor;
             UpdateLineGeometry();
         }
 
@@ -156,6 +180,23 @@ namespace Voltline.Gameplay
                 float t = LinePointCount > 1 ? i / (LinePointCount - 1f) : 0f;
                 float worldY = Mathf.Lerp(-extent, extent, t);
                 lineRenderer.SetPosition(i, new Vector3(GetTrackCenterX(worldY), worldY, LineZ));
+            }
+        }
+
+        private void UpdateThemeTransition(float deltaTime)
+        {
+            if (themeTransitionDuration <= 0f)
+            {
+                return;
+            }
+
+            themeTransitionElapsed += deltaTime;
+            float t = Mathf.Clamp01(themeTransitionElapsed / themeTransitionDuration);
+            displayedLineCoreColor = Color.Lerp(transitionFromLineCoreColor, transitionToLineCoreColor, t);
+            displayedLineGlowColor = Color.Lerp(transitionFromLineGlowColor, transitionToLineGlowColor, t);
+            if (t >= 1f)
+            {
+                themeTransitionDuration = 0f;
             }
         }
 

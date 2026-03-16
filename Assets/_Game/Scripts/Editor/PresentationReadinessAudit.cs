@@ -64,11 +64,14 @@ namespace Voltline.Editor
             GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
             DifficultyCurveConfig difficultyCurve = AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
             GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
+            BackgroundPresentationConfig backgroundPresentationConfig = AssetDatabase.LoadAssetAtPath<BackgroundPresentationConfig>(ProjectConfigAssetPaths.BackgroundPresentation);
             PlayerVisualConfig playerVisualConfig = AssetDatabase.LoadAssetAtPath<PlayerVisualConfig>(ProjectConfigAssetPaths.PlayerVisualConfig);
             HazardPresentationCatalog hazardPresentationCatalog = AssetDatabase.LoadAssetAtPath<HazardPresentationCatalog>(ProjectConfigAssetPaths.HazardPresentationCatalog);
             ObstacleVisualCatalog obstacleVisualCatalog = AssetDatabase.LoadAssetAtPath<ObstacleVisualCatalog>(ProjectConfigAssetPaths.ObstacleVisualCatalog);
             ObstacleCatalog obstacleCatalog = AssetDatabase.LoadAssetAtPath<ObstacleCatalog>(ProjectConfigAssetPaths.ObstacleCatalog);
             ThemeCatalog themeCatalog = AssetDatabase.LoadAssetAtPath<ThemeCatalog>(ProjectConfigAssetPaths.ThemeCatalog);
+            ThemeSequenceConfig themeSequenceConfig = AssetDatabase.LoadAssetAtPath<ThemeSequenceConfig>(ProjectConfigAssetPaths.ThemeSequence);
+            PresentationRolloutPlanConfig presentationRolloutPlan = AssetDatabase.LoadAssetAtPath<PresentationRolloutPlanConfig>(ProjectConfigAssetPaths.PresentationRolloutPlan);
             AudioCueCatalog audioCueCatalog = AssetDatabase.LoadAssetAtPath<AudioCueCatalog>(ProjectConfigAssetPaths.AudioCueCatalog);
             VfxCatalog vfxCatalog = AssetDatabase.LoadAssetAtPath<VfxCatalog>(ProjectConfigAssetPaths.VfxCatalog);
 
@@ -76,11 +79,14 @@ namespace Voltline.Editor
                 gameBalance,
                 difficultyCurve,
                 gameplayPresentation,
+                backgroundPresentationConfig,
                 playerVisualConfig,
                 hazardPresentationCatalog,
                 obstacleVisualCatalog,
                 obstacleCatalog,
                 themeCatalog,
+                themeSequenceConfig,
+                presentationRolloutPlan,
                 audioCueCatalog,
                 vfxCatalog);
 
@@ -91,8 +97,8 @@ namespace Voltline.Editor
 
             ValidateGameplaySceneInstaller(result);
             ValidateMainMenuDependencies(result);
-            AddDependencyNotes(result, gameplayPresentation, playerVisualConfig, hazardPresentationCatalog, obstacleVisualCatalog);
-            AddCurrentBlockers(result);
+            AddDependencyNotes(result, gameplayPresentation, backgroundPresentationConfig, playerVisualConfig, hazardPresentationCatalog, obstacleVisualCatalog, themeSequenceConfig);
+            AddPipelineNotes(result, themeCatalog, presentationRolloutPlan);
             AddContentReadinessNotes(result);
             return result;
         }
@@ -110,12 +116,16 @@ namespace Voltline.Editor
             SerializedObject serializedInstaller = new(installer);
             ValidateObjectReference(serializedInstaller, "gameBalance", result);
             ValidateObjectReference(serializedInstaller, "gameplayPresentation", result);
+            ValidateObjectReference(serializedInstaller, "backgroundPresentationConfig", result);
             ValidateObjectReference(serializedInstaller, "playerVisualConfig", result);
             ValidateObjectReference(serializedInstaller, "hazardPresentationCatalog", result);
             ValidateObjectReference(serializedInstaller, "obstacleVisualCatalog", result);
             ValidateObjectReference(serializedInstaller, "difficultyCurve", result);
             ValidateObjectReference(serializedInstaller, "obstacleCatalog", result);
             ValidateObjectReference(serializedInstaller, "themeCatalog", result);
+            ValidateObjectReference(serializedInstaller, "themeSequenceConfig", result);
+            ValidateObjectReference(serializedInstaller, "audioCueCatalog", result);
+            ValidateObjectReference(serializedInstaller, "vfxCatalog", result);
         }
 
         private static void ValidateMainMenuDependencies(PresentationReadinessAuditResult result)
@@ -132,19 +142,23 @@ namespace Voltline.Editor
             ValidateObjectReference(serializedMainMenu, "themeCatalog", result);
             ValidateObjectReference(serializedMainMenu, "playerVisualConfig", result);
             ValidateObjectReference(serializedMainMenu, "obstacleVisualCatalog", result);
+            ValidateObjectReference(serializedMainMenu, "audioCueCatalog", result);
         }
 
         private static void AddDependencyNotes(
             PresentationReadinessAuditResult result,
             GameplayPresentationConfig gameplayPresentation,
+            BackgroundPresentationConfig backgroundPresentationConfig,
             PlayerVisualConfig playerVisualConfig,
             HazardPresentationCatalog hazardPresentationCatalog,
-            ObstacleVisualCatalog obstacleVisualCatalog)
+            ObstacleVisualCatalog obstacleVisualCatalog,
+            ThemeSequenceConfig themeSequenceConfig)
         {
             result.AddNote($"Presentation dependency audit: player gameplay is owned by {nameof(PlayerController)} and visuals are now owned by {nameof(PlayerVisualView)} via {nameof(PlayerVisualConfig)}.");
             result.AddNote($"Presentation dependency audit: hazard gameplay is owned by {nameof(HazardManager)} and visuals are now owned by {nameof(HazardVisualView)} via {nameof(ObstacleVisualCatalog)}.");
-            result.AddNote($"Presentation dependency audit: track runtime is owned by {nameof(TrackManager)} and still reads {nameof(GameplayPresentationConfig)} for line/camera/path assumptions.");
-            result.AddNote($"Presentation dependency audit: theme state remains data-driven through {nameof(ThemeCatalog)} and save-driven selection.");
+            result.AddNote($"Presentation dependency audit: background runtime is now owned by {nameof(BackgroundPresentationController)} via {nameof(BackgroundPresentationConfig)}.");
+            result.AddNote($"Presentation dependency audit: theme application is now owned by {nameof(ThemePresentationController)} via {nameof(ThemeCatalog)} and {nameof(ThemeSequenceConfig)}.");
+            result.AddNote($"Presentation dependency audit: track runtime remains owned by {nameof(TrackManager)} for line/path behavior only.");
 
             if (gameplayPresentation != null && playerVisualConfig != null)
             {
@@ -155,13 +169,30 @@ namespace Voltline.Editor
             {
                 result.AddNote($"Frozen hazard baseline: {hazardPresentationCatalog.Entries.Count} collision/spacing profiles and {obstacleVisualCatalog.Entries.Count} visual profiles captured in config.");
             }
+
+            if (backgroundPresentationConfig != null)
+            {
+                result.AddNote($"Background budget baseline: up to {backgroundPresentationConfig.MaxRuntimeSpriteCount} runtime layers and {backgroundPresentationConfig.MaxExpectedDrawCalls} expected draw calls with a lane quiet-zone of {backgroundPresentationConfig.LaneQuietZoneHalfWidth:0.##}.");
+            }
+
+            if (themeSequenceConfig != null)
+            {
+                result.AddNote($"Runtime theme transitions are milestone-gated through {themeSequenceConfig.Entries.Count} configured theme-sequence entries.");
+            }
         }
 
-        private static void AddCurrentBlockers(PresentationReadinessAuditResult result)
+        private static void AddPipelineNotes(PresentationReadinessAuditResult result, ThemeCatalog themeCatalog, PresentationRolloutPlanConfig presentationRolloutPlan)
         {
-            result.AddWarning("TrackManager still lacks a dedicated background presentation layer. Background refresh and motion spectacle stay blocked until background architecture and budgets are defined.");
-            result.AddWarning("ThemeConfig is still color-oriented and theme application is still mostly initialization-time. Broad theme visual expansion and dynamic theme switching remain blocked.");
-            result.AddWarning("VfxService and AudioService still lean on procedural fallback content. Broad presentation replacement remains blocked until dedicated VFX and audio refresh pipelines are established.");
+            if (themeCatalog != null)
+            {
+                result.AddNote($"Theme-owned VFX and audio variation is now routed through {nameof(ThemeVfxProfile)} and {nameof(ThemeAudioProfile)} references on {nameof(ThemeConfig)}.");
+                result.AddNote($"Presentation feedback runtime remains centralized through {nameof(Voltline.VFX.VfxService)} and {nameof(Voltline.Audio.AudioService)} with semantic cue IDs.");
+            }
+
+            if (presentationRolloutPlan != null)
+            {
+                result.AddNote($"Broad refresh rollout is now governed by {nameof(PresentationRolloutPlanConfig)} with {presentationRolloutPlan.Slices.Count} ordered stop/go slices.");
+            }
         }
 
         private static void AddContentReadinessNotes(PresentationReadinessAuditResult result)
@@ -172,16 +203,16 @@ namespace Voltline.Editor
             int audioAssetCount = CountAuthoredAssets(audioRoot);
 
             result.AddNote($"Presentation content snapshot: {artAssetCount} non-meta assets under Assets/_Game/Art and {audioAssetCount} non-meta assets under Assets/_Game/Audio.");
-            result.AddNote("Player and obstacle refresh slices are now structurally unlocked. Background, theme-transition, VFX, and audio refresh slices remain gated by later readiness phases.");
+            result.AddNote("Player, obstacle, background, theme-transition, VFX, and audio refresh slices are now structurally unlocked. Broad refresh rollout remains gated by the approval audit and staged rollout plan.");
 
             if (artAssetCount <= 2)
             {
-                result.AddWarning("Authored art folders remain sparse. Player and obstacle refresh are structurally allowed, but broad background/theme rollout still needs later readiness phases and real authored assets.");
+                result.AddWarning("Authored art folders remain sparse. Presentation rollout is structurally ready, but later refresh slices still need real authored assets.");
             }
 
             if (audioAssetCount <= 3)
             {
-                result.AddWarning("Authored audio folders remain sparse. Treat broad cue/music replacement as blocked until the audio refresh pipeline phase is complete.");
+                result.AddWarning("Authored audio folders remain sparse. Audio refresh rollout is structurally ready, but it still needs real authored cue and music assets.");
             }
         }
 
@@ -209,3 +240,4 @@ namespace Voltline.Editor
     }
 }
 #endif
+

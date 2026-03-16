@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f41e17316a5440ca8d3d6a3fbbf3301, type: 3}
+  m_Name: CFG_BackgroundPresentation_CandyPop
+  m_EditorClassIdentifier: 
+  maxRuntimeSpriteCount: 3
+  maxExpectedDrawCalls: 3
+  laneQuietZoneHalfWidth: 1.55
+  maximumAllowedLayerAlpha: 0.16
+  layers:
+  - layerId: layer.candy.left
+    colorRole: 0
+    size: {x: 7.2, y: 8.8}
+    anchorOffset: {x: -2.8, y: 0.2}
+    alpha: 0.08
+    verticalTravelMultiplier: 0.12
+    verticalLoopDistance: 7.3
+    horizontalOscillationAmplitude: 0.16
+    horizontalOscillationFrequency: 0.24
+    sortingOrder: -12
+  - layerId: layer.candy.right
+    colorRole: 2
+    size: {x: 5.5, y: 9.6}
+    anchorOffset: {x: 2.7, y: -0.8}
+    alpha: 0.12
+    verticalTravelMultiplier: 0.18
+    verticalLoopDistance: 8.2
+    horizontalOscillationAmplitude: 0.18
+    horizontalOscillationFrequency: 0.31
+    sortingOrder: -11
+  - layerId: layer.candy.spark
+    colorRole: 3
+    size: {x: 3.8, y: 5.8}
+    anchorOffset: {x: -2.3, y: 2.6}
+    alpha: 0.1
+    verticalTravelMultiplier: 0.23
+    verticalLoopDistance: 6.1
+    horizontalOscillationAmplitude: 0.14
+    horizontalOscillationFrequency: 0.38
+    sortingOrder: -10

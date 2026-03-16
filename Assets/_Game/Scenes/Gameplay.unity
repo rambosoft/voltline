@@ -386,12 +386,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameBalance: {fileID: 11400000, guid: 8c92e31f78064ce99179c6d142f4c2e7, type: 2}
   gameplayPresentation: {fileID: 11400000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f2001, type: 2}
+  backgroundPresentationConfig: {fileID: 11400000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f2005, type: 2}
   playerVisualConfig: {fileID: 11400000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f2003, type: 2}
   hazardPresentationCatalog: {fileID: 11400000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f2002, type: 2}
   obstacleVisualCatalog: {fileID: 11400000, guid: 7b66a0e95e0c4c33b2ec9c2b4b8f2004, type: 2}
   difficultyCurve: {fileID: 11400000, guid: 4dce2fcd728e433d93635f522f6c566d, type: 2}
   obstacleCatalog: {fileID: 11400000, guid: 08d7e4d1288440f9ab8c0f98be8ef3ad, type: 2}
   themeCatalog: {fileID: 11400000, guid: 7038d79080204d47bc6ecdf5e273aa8b, type: 2}
+  themeSequenceConfig: {fileID: 11400000, guid: 7038d79080204d47bc6ecdf5e273aa8c, type: 2}
   audioCueCatalog: {fileID: 11400000, guid: 5d8c35b2df694648b626cf48d5e8f3b6, type: 2}
   vfxCatalog: {fileID: 11400000, guid: e34f7fe48ff345f9be2936137a6778af, type: 2}
   audioMixer: {fileID: 24100000, guid: 369026a18c987a5409269da44d653f5c, type: 2}

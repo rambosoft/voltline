@@ -1,7 +1,7 @@
 # Roadmap and Backlog
 Status: Active
 Owner: Team
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Source of truth for: prioritized future work, polish backlog, technical debt, blocked items, rejected ideas
 Depends on: 01-product-vision.md, 15-roadmap-backlog.md
 Do not duplicate with: source-of-truth gameplay or architecture docs
@@ -35,14 +35,17 @@ These are the highest-priority items for the next serious playable.
 ### Final release validation
 - run `Tools > Voltline > Validate Config`
 - run `Tools > Voltline > Run Release Audit`
+- run `Tools > Voltline > Run Presentation Readiness Audit`
+- run `Tools > Voltline > Run Presentation Refresh Approval Audit`
 - run the full Unity Edit Mode and Play Mode suites in editor
 - validate no console noise in menu/gameplay/retry/theme-selection flows
 - validate safe-area, persistence, and feel flows on representative mobile hardware
 - measure startup, common gameplay frame pacing, and build size on representative devices before final candidate approval
 
-### Release-candidate blockers
-- run `Tools > Voltline > Ensure Audio Mixer` and confirm the final `Music`, `SFX`, `Gameplay`, and `UI` routing before final release-candidate sign-off
-- replace the first-pass procedural audio clips and procedural VFX with authored assets if playtest fatigue or release polish review shows the current pass is insufficient
+### Controlled presentation rollout
+- if presentation refresh work begins, execute it slice-by-slice through `PresentationRolloutPlanConfig`
+- do not approve obstacle/background/theme/VFX/audio slices until the prior slice has passed automated checks, manual readability review, and device checks
+- replace the first-pass procedural audio clips and procedural VFX with authored assets only through the approved refresh slices if playtest fatigue or release polish review shows the current pass is insufficient
 
 ## Next
 
@@ -53,9 +56,10 @@ These items should happen after the current build is stable and validated.
 - finalize store copy, icons, screenshots, and submission metadata outside gameplay scope
 - verify release-safe debug posture in a non-development build
 
-### Presentation readiness continuation
-- establish background presentation architecture and a strict performance budget before any gameplay background refresh
-- expand the theme system beyond the current color-oriented model before any broad theme art rollout
+### Staged presentation refresh slices
+- execute the player refresh slice first through `PlayerVisualConfig` and `PlayerVisualView`
+- execute the obstacle refresh slice next through `ObstacleVisualCatalog`, `HazardPresentationCatalog`, and `HazardVisualView`
+- execute background/static-theme refresh slices only after player and obstacle slices are signed off
 
 ## Later
 
@@ -133,8 +137,3 @@ Questions to ask before promoting an item:
 - Roadmap notes do not override source-of-truth docs.
 - Blocked items stay blocked until the core loop earns complexity.
 - Rejected ideas should not quietly re-enter implementation through side doors.
-
-
-
-
-

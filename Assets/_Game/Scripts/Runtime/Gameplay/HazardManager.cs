@@ -25,6 +25,7 @@ namespace Voltline.Gameplay
 
         private GameBalanceConfig gameBalance;
         private HazardPresentationCatalog hazardPresentationCatalog;
+        private ObstacleVisualCatalog defaultObstacleVisualCatalog;
         private ObstacleVisualCatalog obstacleVisualCatalog;
         private DifficultyDirector difficultyDirector;
         private TrackManager trackManager;
@@ -72,10 +73,21 @@ namespace Voltline.Gameplay
         {
             gameBalance = balanceConfig;
             hazardPresentationCatalog = presentationCatalog;
-            obstacleVisualCatalog = visualCatalog;
+            defaultObstacleVisualCatalog = visualCatalog;
             difficultyDirector = director;
             trackManager = track;
+            ApplyTheme(activeTheme);
+        }
+
+        public void ApplyTheme(ThemeConfig activeTheme)
+        {
             theme = activeTheme;
+            ObstacleVisualCatalog resolvedCatalog = activeTheme != null ? activeTheme.ResolveObstacleVisualCatalog(defaultObstacleVisualCatalog) : defaultObstacleVisualCatalog;
+            if (resolvedCatalog != obstacleVisualCatalog)
+            {
+                obstacleVisualCatalog = resolvedCatalog;
+                RebuildActiveHazardViews();
+            }
         }
 
         public void ResetRun(int seed)
@@ -289,6 +301,28 @@ namespace Voltline.Gameplay
                 SpriteLayerState.Hidden,
                 CreateLayer(runtime.VisualProfile.UsesTelegraph, Vector3.zero, runtime.VisualProfile.TelegraphBoundsScale, new Color(theme.LineGlowColor.r, theme.LineGlowColor.g, theme.LineGlowColor.b, 0.16f), 0f)));
             activeHazards.Add(runtime);
+        }
+
+        private void RebuildActiveHazardViews()
+        {
+            for (int i = 0; i < activeHazards.Count; i++)
+            {
+                HazardRuntime hazard = activeHazards[i];
+                if (hazard.Root == null)
+                {
+                    continue;
+                }
+
+                if (hazard.VisualView != null)
+                {
+                    Destroy(hazard.VisualView);
+                }
+
+                hazard.VisualProfile = obstacleVisualCatalog.GetRequiredProfile(hazard.Config.Family);
+                HazardVisualView visualView = hazard.Root.AddComponent<HazardVisualView>();
+                visualView.Initialize(hazard.Root.transform, hazard.VisualProfile);
+                hazard.VisualView = visualView;
+            }
         }
 
         private void UpdateVisuals(HazardRuntime hazard, int currentScore, float worldY, float trackCenterX)

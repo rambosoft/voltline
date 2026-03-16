@@ -7,6 +7,7 @@ namespace Voltline.Gameplay
     {
         private GameBalanceConfig gameBalance;
         private GameplayPresentationConfig presentationConfig;
+        private PlayerVisualConfig defaultVisualConfig;
         private PlayerVisualConfig visualConfig;
         private ThemeConfig theme;
         private TrackManager trackManager;
@@ -42,11 +43,23 @@ namespace Voltline.Gameplay
         {
             gameBalance = balanceConfig;
             presentationConfig = gameplayPresentation;
-            visualConfig = playerVisual;
+            defaultVisualConfig = playerVisual;
             trackManager = track;
-            theme = activeTheme;
-            EnsureVisualView();
+            ApplyTheme(activeTheme);
             ResetRun();
+        }
+
+        public void ApplyTheme(ThemeConfig activeTheme)
+        {
+            theme = activeTheme;
+            PlayerVisualConfig resolvedVisualConfig = activeTheme != null ? activeTheme.ResolvePlayerVisual(defaultVisualConfig) : defaultVisualConfig;
+            if (resolvedVisualConfig != visualConfig || visualView == null)
+            {
+                visualConfig = resolvedVisualConfig;
+                RebuildVisualView();
+            }
+
+            ApplyVisualState(isDead ? theme.DangerColor : theme.PlayerAccentColor, isDead ? 45f : (isFlipping ? 25f : 0f));
         }
 
         public void ResetRun()
@@ -111,11 +124,12 @@ namespace Voltline.Gameplay
             ApplyVisualState(theme.DangerColor, 45f);
         }
 
-        private void EnsureVisualView()
+        private void RebuildVisualView()
         {
             if (visualView != null)
             {
-                return;
+                Destroy(visualView.gameObject);
+                visualView = null;
             }
 
             GameObject viewRoot = new("PlayerVisualRoot");

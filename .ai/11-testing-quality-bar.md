@@ -1,7 +1,7 @@
 # Testing and Quality Bar
 Status: Active
 Owner: Team
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Source of truth for: test philosophy, test scope, manual QA, performance budgets, device checks, acceptance criteria for done
 Depends on: 03-tech-stack.md, 07-gameplay-systems.md, 10-data-content-model.md
 Do not duplicate with: personal testing habits or undocumented checklists
@@ -72,7 +72,8 @@ At minimum, add automated tests for:
 - difficulty progression calculations
 - theme ID and catalog integrity
 - release-readiness audit checks for scene order, input asset integrity, and debug-safe defaults
-- presentation-readiness audit checks for frozen assumptions, config ownership, unlocked player/obstacle decoupling, and still-blocked later refresh work
+- presentation-readiness audit checks for frozen assumptions, config ownership, unlocked player/obstacle decoupling, unlocked background/theme-sequence readiness, and structurally unlocked VFX/audio refresh pipeline readiness
+- presentation refresh approval audit checks for the stop/go rollout gate and required manual/device verification notes
 
 ## What must be validated manually
 
@@ -183,6 +184,7 @@ After any change to gameplay systems, verify:
 - pause still freezes live progression safely
 - retry still resets all transient run state
 - theme changes do not reduce readability
+- milestone-gated theme transitions stay inside the approved runtime sequence rules
 
 ## Release-blocking bugs
 
@@ -227,6 +229,9 @@ Before creating a candidate mobile build:
 - run `Tools > Voltline > Validate Config`
 - run `Tools > Voltline > Run Release Audit`
 - run `Tools > Voltline > Run Presentation Readiness Audit` before any art/theme/presentation rollout work
+- run `Tools > Voltline > Run Presentation Refresh Approval Audit` before approving any staged refresh slice beyond readiness work
+- verify background presentation config and theme-sequence config are assigned in `Gameplay` and pass validation
+- verify theme-owned VFX/audio profiles and `PresentationRolloutPlanConfig` pass validation
 - verify scene list order
 - verify portrait orientation settings
 - verify package/import sanity
@@ -248,9 +253,3 @@ A feature is incomplete unless docs are updated when source-of-truth topics chan
 - Manual testing covers feel and readability.
 - Mobile safe area and performance must be validated before release.
 - No feature is done if docs and tests drift behind implementation.
-
-
-
-
-
-

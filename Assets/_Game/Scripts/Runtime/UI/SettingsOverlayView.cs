@@ -32,9 +32,13 @@ namespace Voltline.UI
         private SaveService saveService;
         private ThemeCatalog themeCatalog;
         private RectTransform root;
+        private Image panelImage;
+        private TMP_Text themeHintText;
+        private Image closeButtonImage;
         private VolumeRow musicRow;
         private VolumeRow sfxRow;
         private Button vibrationButton;
+        private Image vibrationButtonImage;
         private TMP_Text vibrationButtonLabel;
         private OverlayTransitionController transitionController;
         private readonly List<ThemeRow> themeRows = new();
@@ -50,6 +54,7 @@ namespace Voltline.UI
 
             RectTransform panel = UIFactory.CreatePanel("SettingsPanel", root, UIFactory.PanelColor(0.96f));
             UIFactory.SetAnchors(panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(760f, 1080f));
+            panelImage = panel.GetComponent<Image>();
 
             TMP_Text title = UIFactory.CreateText("Title", panel, "Settings", 52, FontStyles.Bold, TextAlignmentOptions.Center, Color.white);
             UIFactory.SetAnchors((RectTransform)title.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -82f), new Vector2(560f, 80f));
@@ -62,6 +67,7 @@ namespace Voltline.UI
 
             vibrationButton = UIFactory.CreateButton("VibrationButton", panel, "On", theme.PlayerAccentColor, new Color(0.08f, 0.08f, 0.12f, 1f), ToggleVibration);
             UIFactory.SetAnchors((RectTransform)vibrationButton.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(164f, -448f), new Vector2(188f, 62f));
+            vibrationButtonImage = vibrationButton.GetComponent<Image>();
             vibrationButtonLabel = vibrationButton.GetComponentInChildren<TMP_Text>();
             if (vibrationButtonLabel != null)
             {
@@ -73,8 +79,8 @@ namespace Voltline.UI
                 TMP_Text themeLabel = UIFactory.CreateText("ThemeLabel", panel, "Theme", 34, FontStyles.Bold, TextAlignmentOptions.Left, Color.white);
                 UIFactory.SetAnchors((RectTransform)themeLabel.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(-168f, -600f), new Vector2(220f, 50f));
 
-                TMP_Text themeHint = UIFactory.CreateText("ThemeHint", panel, "Unlocked themes only. Applies on next run.", 22, FontStyles.Normal, TextAlignmentOptions.Left, theme.PlayerAccentColor);
-                UIFactory.SetAnchors((RectTransform)themeHint.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(60f, -602f), new Vector2(420f, 42f));
+                themeHintText = UIFactory.CreateText("ThemeHint", panel, "Unlocked themes only. Applies on next run.", 22, FontStyles.Normal, TextAlignmentOptions.Left, theme.PlayerAccentColor);
+                UIFactory.SetAnchors((RectTransform)themeHintText.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(60f, -602f), new Vector2(420f, 42f));
 
                 RectTransform themeSection = UIFactory.CreatePanel("ThemeSection", panel, new Color(1f, 1f, 1f, 0.045f));
                 UIFactory.SetAnchors(themeSection, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -790f), new Vector2(560f, 250f));
@@ -170,10 +176,12 @@ namespace Voltline.UI
 
             Button closeButton = UIFactory.CreateButton("CloseButton", panel, "Close", theme.DangerColor, Color.white, closeAction);
             UIFactory.SetAnchors((RectTransform)closeButton.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 72f), new Vector2(420f, 92f));
+            closeButtonImage = closeButton.GetComponent<Image>();
 
             transitionController = gameObject.AddComponent<OverlayTransitionController>();
             transitionController.Initialize(root, panel, -24f);
 
+            ApplyTheme(theme);
             Refresh();
             saveService.ProfileChanged += Refresh;
         }
@@ -183,6 +191,44 @@ namespace Voltline.UI
             if (saveService != null)
             {
                 saveService.ProfileChanged -= Refresh;
+            }
+        }
+
+        public void ApplyTheme(ThemeConfig theme)
+        {
+            if (theme == null)
+            {
+                return;
+            }
+
+            if (panelImage != null)
+            {
+                panelImage.color = UIFactory.PanelColor(0.96f);
+            }
+
+            if (themeHintText != null)
+            {
+                themeHintText.color = theme.PlayerAccentColor;
+            }
+
+            if (musicRow.ValueText != null)
+            {
+                musicRow.ValueText.color = theme.PlayerAccentColor;
+            }
+
+            if (sfxRow.ValueText != null)
+            {
+                sfxRow.ValueText.color = theme.PlayerAccentColor;
+            }
+
+            if (vibrationButtonImage != null)
+            {
+                vibrationButtonImage.color = theme.PlayerAccentColor;
+            }
+
+            if (closeButtonImage != null)
+            {
+                closeButtonImage.color = theme.DangerColor;
             }
         }
 

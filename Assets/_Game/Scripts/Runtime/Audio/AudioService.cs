@@ -20,6 +20,7 @@ namespace Voltline.Audio
 
         private readonly List<AudioSourceSlot> gameplaySlots = new();
         private readonly List<AudioSourceSlot> uiSlots = new();
+        private readonly Dictionary<string, float> lastCuePlayTimes = new();
 
         private AudioCueCatalog cueCatalog;
         private SaveService saveService;
@@ -28,9 +29,11 @@ namespace Voltline.Audio
         private AudioMixerGroup musicGroup;
         private AudioMixerGroup gameplayGroup;
         private AudioMixerGroup uiGroup;
+        private ThemeAudioProfile activeProfile;
         private float musicBaseVolume = 1f;
 
         public static AudioService Instance => EnsureExists();
+        public string CurrentThemeAudioProfileName => activeProfile != null ? activeProfile.name : string.Empty;
 
         public static AudioService EnsureExists()
         {
@@ -96,9 +99,21 @@ namespace Voltline.Audio
             ApplyVolumes();
         }
 
+        public void ApplyTheme(ThemeConfig activeTheme)
+        {
+            activeProfile = activeTheme != null ? activeTheme.ThemeAudioProfile : null;
+            ApplyVolumes();
+            if (musicSource != null && musicSource.isPlaying)
+            {
+                PlayMusicLoop(AudioCueIds.MainLoop);
+            }
+        }
+
         public void PlayCue(string cueId)
         {
-            AudioCueCatalog.AudioCueDefinition definition = ResolveDefinition(cueId);
+            ThemeAudioProfile.ThemeAudioCueOverride profileOverride = ResolveProfileOverride(cueId);
+            string resolvedCueId = profileOverride != null ? profileOverride.ResolveCueId(cueId) : cueId;
+            AudioCueCatalog.AudioCueDefinition definition = ResolveDefinition(resolvedCueId);
             if (definition == null)
             {
                 return;
@@ -110,34 +125,45 @@ namespace Voltline.Audio
                 return;
             }
 
+            if (!CanPlayCue(definition.Route, resolvedCueId))
+            {
+                return;
+            }
+
             List<AudioSourceSlot> pool = definition.Route == AudioCueCatalog.AudioCueRoute.UiSfx ? uiSlots : gameplaySlots;
             CleanupPool(pool);
-            if (CountActive(pool, cueId) >= definition.MaxSimultaneousInstances)
+            if (CountActive(pool, resolvedCueId) >= definition.MaxSimultaneousInstances)
             {
                 return;
             }
 
             AudioSourceSlot slot = GetOrCreateSlot(pool, definition.Route == AudioCueCatalog.AudioCueRoute.UiSfx ? "UiSfx" : "GameplaySfx");
-            slot.CueId = cueId;
-            slot.BaseVolume = Random.Range(definition.MinVolume, definition.MaxVolume);
+            slot.CueId = resolvedCueId;
+            float volumeMultiplier = profileOverride != null ? profileOverride.VolumeMultiplier : 1f;
+            float pitchMultiplier = profileOverride != null ? profileOverride.PitchMultiplier : 1f;
+            slot.BaseVolume = Random.Range(definition.MinVolume, definition.MaxVolume) * volumeMultiplier;
             slot.Source.loop = false;
             slot.Source.clip = ResolveClip(definition);
-            slot.Source.pitch = Random.Range(definition.MinPitch, definition.MaxPitch);
+            slot.Source.pitch = Random.Range(definition.MinPitch, definition.MaxPitch) * Mathf.Max(0.25f, pitchMultiplier);
             slot.Source.outputAudioMixerGroup = ResolveRouteGroup(definition.Route);
-            slot.Source.volume = ResolveRouteVolume(definition.Route) * slot.BaseVolume;
+            slot.Source.volume = ResolveRouteVolume(definition.Route) * Mathf.Max(0f, slot.BaseVolume);
             slot.Source.Play();
+            lastCuePlayTimes[resolvedCueId] = Time.time;
         }
 
         public void PlayMusicLoop(string cueId)
         {
-            AudioCueCatalog.AudioCueDefinition definition = ResolveDefinition(cueId);
+            ThemeAudioProfile.ThemeAudioCueOverride profileOverride = ResolveProfileOverride(cueId);
+            string resolvedCueId = profileOverride != null ? profileOverride.ResolveCueId(cueId) : cueId;
+            AudioCueCatalog.AudioCueDefinition definition = ResolveDefinition(resolvedCueId);
             if (definition == null)
             {
                 return;
             }
 
             AudioClip clip = ResolveClip(definition);
-            musicBaseVolume = definition.MaxVolume;
+            float volumeMultiplier = profileOverride != null ? profileOverride.VolumeMultiplier : 1f;
+            musicBaseVolume = definition.MaxVolume * volumeMultiplier * (activeProfile != null ? activeProfile.MusicVolumeMultiplier : 1f);
             musicSource.outputAudioMixerGroup = ResolveRouteGroup(AudioCueCatalog.AudioCueRoute.Music);
             if (musicSource.clip == clip && musicSource.isPlaying)
             {
@@ -196,6 +222,28 @@ namespace Voltline.Audio
             ApplyPoolVolumes(uiSlots, AudioCueCatalog.AudioCueRoute.UiSfx);
         }
 
+        private bool CanPlayCue(AudioCueCatalog.AudioCueRoute route, string cueId)
+        {
+            if (route == AudioCueCatalog.AudioCueRoute.UiSfx && activeProfile != null)
+            {
+                if (lastCuePlayTimes.TryGetValue(cueId, out float previousTime)
+                    && Time.time - previousTime < activeProfile.MinimumUiClickIntervalSeconds)
+                {
+                    return false;
+                }
+            }
+
+            int activeCount = route == AudioCueCatalog.AudioCueRoute.UiSfx
+                ? CountAnyActive(uiSlots)
+                : CountAnyActive(gameplaySlots);
+
+            int maxCount = route == AudioCueCatalog.AudioCueRoute.UiSfx
+                ? (activeProfile != null ? activeProfile.MaxConcurrentUiVoices : 1)
+                : (activeProfile != null ? activeProfile.MaxConcurrentGameplayVoices : 4);
+
+            return activeCount < maxCount;
+        }
+
         private float ResolveRouteVolume(AudioCueCatalog.AudioCueRoute route)
         {
             if (saveService == null)
@@ -245,6 +293,13 @@ namespace Voltline.Audio
             };
         }
 
+        private ThemeAudioProfile.ThemeAudioCueOverride ResolveProfileOverride(string cueId)
+        {
+            return activeProfile != null && activeProfile.TryGetOverride(cueId, out ThemeAudioProfile.ThemeAudioCueOverride profileOverride)
+                ? profileOverride
+                : null;
+        }
+
         private AudioCueCatalog.AudioCueDefinition ResolveDefinition(string cueId)
         {
             if (cueCatalog != null && cueCatalog.TryGetDefinition(cueId, out AudioCueCatalog.AudioCueDefinition definition))
@@ -289,6 +344,20 @@ namespace Voltline.Audio
             for (int i = 0; i < pool.Count; i++)
             {
                 if (pool[i].Source != null && pool[i].Source.isPlaying && pool[i].CueId == cueId)
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private static int CountAnyActive(List<AudioSourceSlot> pool)
+        {
+            int count = 0;
+            for (int i = 0; i < pool.Count; i++)
+            {
+                if (pool[i].Source != null && pool[i].Source.isPlaying)
                 {
                     count++;
                 }

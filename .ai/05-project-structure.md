@@ -1,7 +1,7 @@
 # Project Structure
 Status: Active
 Owner: Team
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Source of truth for: repository layout, folder ownership, file naming, namespace rules, assembly boundaries, asset placement rules
 Depends on: 03-tech-stack.md, 04-architecture.md
 Do not duplicate with: ad-hoc folder conventions in implementation notes
@@ -12,7 +12,7 @@ Do not duplicate with: ad-hoc folder conventions in implementation notes
 ## Purpose
 
 This file defines how the Unity repository is laid out.  
-It prevents “where should this live?” drift and keeps the project rename-safe.
+It prevents "where should this live?" drift and keeps the project rename-safe.
 
 ## Root content rule
 
@@ -115,17 +115,22 @@ Rules:
 ### `Assets/_Game/Config`
 Owns ScriptableObject configuration assets.
 
-This is the project’s balancing and static-content heart.
+This is the project's balancing and static-content heart.
 
 Examples:
 
 - `GameBalanceConfig`
 - `DifficultyCurveConfig`
 - `GameplayPresentationConfig`
+- `BackgroundPresentationConfig`
 - `PlayerVisualConfig`
 - `HazardPresentationCatalog`
 - `ObstacleVisualCatalog`
 - `ObstacleCatalog`
+- `ThemeSequenceConfig`
+- `ThemeVfxProfile`
+- `ThemeAudioProfile`
+- `PresentationRolloutPlanConfig`
 - `AudioCueCatalog`
 - `VfxCatalog`
 - `ThemeCatalog`
@@ -135,7 +140,7 @@ Owns reusable prefab assets.
 
 Rules:
 
-- group by domain, not by “Misc”
+- group by domain, not by "Misc"
 - world hazards go in `Gameplay/Hazards`
 - UI prefabs go in `UI`
 - effects go in `VFX`
@@ -400,4 +405,3 @@ Assets/_Game/Scripts/Runtime/
 - Runtime code uses explicit assemblies.
 - New top-level folders require this document to be updated.
 - Naming must optimize clarity, not personal preference.
-

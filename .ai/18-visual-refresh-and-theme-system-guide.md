@@ -1,7 +1,7 @@
 # Visual Refresh and Theme System Guide
 Status: Active
 Owner: Team / AI
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Source of truth for: visual refresh planning, theme system planning, and presentation-layer change guidance
 Depends on: `.ai/00-index.md`, `.ai/01-product-vision.md`, `.ai/02-game-design-pillars.md`, `.ai/03-tech-stack.md`, `.ai/04-architecture.md`, `.ai/05-project-structure.md`, `.ai/06-scene-flow.md`, `.ai/07-gameplay-systems.md`, `.ai/08-ui-ux-style-guide.md`, `.ai/09-audio-vfx-guide.md`, `.ai/10-data-content-model.md`, `.ai/11-testing-quality-bar.md`, `.ai/12-adrs.md`, `.ai/14-agent-rules.md`, `.ai/15-roadmap-backlog.md`, `.ai/16-production-phases.md`
 Do not duplicate with: gameplay systems, core architecture, UI style guide, audio/VFX guide, or roadmap docs
@@ -24,13 +24,13 @@ This file is the execution guide for presentation refresh work. It owns how to e
 - Player collision is currently simplified, but the frozen readability/collision baseline now lives in `GameplayPresentationConfig` rather than static helper constants.
 - Obstacle visuals are now decoupled from gameplay collision/spacing: `HazardManager.cs` owns spawn/collision/spacing state, while `HazardVisualView.cs` renders family visuals from `ObstacleVisualCatalog`.
 - Obstacle collision and readable spacing remain routed through `HazardPresentationCatalog`, which now sits cleanly beside the obstacle visual catalog instead of being implicitly tied to procedural rendering.
-- Gameplay background is minimal: `TrackManager.cs` sets camera background color from `ThemeConfig`; there is no gameplay background layer system yet.
-- Themes already exist but are color-only: `ThemeConfig`, `ThemeCatalog`, `SaveService`, and `SettingsOverlayView` support unlock/select persistence, but not asset overrides or in-run switching.
-- VFX are mostly procedural: `VfxService.cs` falls back to transient sprite pulses/bursts.
-- Audio is semantic and service-based: `AudioService.cs` + `AudioCueCatalog.cs` + mixer routing are in place, but actual content still leans on procedural fallback clips.
+- Gameplay background now has a dedicated owner: `BackgroundPresentationController.cs` builds a small budgeted layer stack from `BackgroundPresentationConfig`, while `TrackManager.cs` keeps line/path ownership only.
+- Themes are now presentation-ready rather than color-only: `ThemeConfig`, `ThemeCatalog`, `ThemeSequenceConfig`, `SaveService`, and `ThemePresentationController` support unlock/select persistence, background overrides, static player/obstacle override hooks, and milestone-gated runtime theme transitions.
+- VFX are now pipeline-ready: `VfxService.cs` remains lightweight and semantic, while `ThemeVfxProfile` gives each theme a controlled override path plus explicit effect budgets.
+- Audio is now pipeline-ready: `AudioService.cs` + `AudioCueCatalog.cs` + mixer routing stay semantic, while `ThemeAudioProfile` gives each theme a controlled cue-override and concurrency path.
 - Content folders are still sparse: `Assets/_Game/Art/...` and most audio content folders contain structure more than real authored assets.
-- Main architectural limitation: background presentation still lacks a dedicated owner, and theme application is mostly initialization-time only.
-- Easy changes: richer player/obstacle art through config, more color themes, richer theme metadata, config additions. Risky changes: broad background spectacle, mid-run theme switching, and content-heavy VFX/audio refresh too early.
+- Main architectural limitation: broad authored refresh in VFX/audio is now structurally allowed, but still needs staged rollout under the approval gate rather than an all-at-once replacement pass.
+- Easy changes: richer player/obstacle art through config, richer background art through `BackgroundPresentationConfig`, broader static theme packages, and theme-safe VFX/audio replacement inside the current pipeline. Risky changes: unbudgeted background spectacle, aggressive transition layering, and content-heavy VFX/audio refresh without slice-by-slice validation.
 
 ## 4. Impact map
 Affected areas will include:
@@ -51,7 +51,7 @@ Affected areas will include:
 5. Refresh obstacle visuals and revalidate spacing/fairness.
 6. Add a dedicated background presentation layer.
 7. Expand the theme system beyond color-only.
-8. Add dynamic theme switching only after live theme application is safe.
+8. Add dynamic theme switching only through the approved milestone-gated `ThemeSequenceConfig` path.
 9. Update VFX and audio last so they match the final visual language.
 
 ## 6. Player asset refresh guide
@@ -119,11 +119,11 @@ Recommended theme responsibilities:
 
 Recommended direction for this repo:
 - keep `ThemeConfig` as the semantic top-level asset
-- add focused child assets only when needed, such as `PlayerVisualConfig`, `ObstacleVisualConfig`, `BackgroundFxConfig`, optional `ThemeVfxProfile`, and optional `ThemeAudioProfile`
+- route theme-owned player, obstacle, background, VFX, and audio variation through focused child assets such as `PlayerVisualConfig`, `ObstacleVisualCatalog`, `BackgroundPresentationConfig`, `ThemeVfxProfile`, and `ThemeAudioProfile`
 - avoid `switch(themeId)` logic in gameplay code
 
 ## 12. Dynamic theme switching
-- Best trigger model: milestone- or difficulty-band-based through a future `ThemeSequenceConfig`.
+- Best trigger model: milestone- or difficulty-band-based through `ThemeSequenceConfig`.
 - Switching should be infrequent, short, and readable.
 - Preferred transition behavior: brief background crossfade, line blend, subtle ambient VFX pulse, optional mild audio transition.
 - Do not switch themes during death resolution, pause, the first moments of a run, or during a teaching pattern.
@@ -145,7 +145,7 @@ Guidance:
 - theme variation should mostly change palette/material/style, not event meaning
 - keep the current semantic registry model via `VfxCatalog`
 - use prefab-backed VFX only for signature effects; keep cheap feedback lightweight
-- a future `ThemeVfxProfile` is a good fit if theme-specific overrides grow
+- use `ThemeVfxProfile` as the approved theme-specific VFX override path
 
 ## 14. SFX/audio refresh guide
 Keep the current semantic event map:
@@ -156,17 +156,18 @@ Guidance:
 - prefer reusing core cue identity and varying timbre only where it adds real value
 - preserve mixer discipline and gameplay clarity
 - avoid creating a second parallel audio lookup path
-- if needed later, use a small `ThemeAudioProfile` or themed clip groups inside `AudioCueCatalog`
+- use `ThemeAudioProfile` as the approved theme-aware audio override path
 
 ## 15. Data/config model recommendations
 Likely needed additions for a proper refresh:
 - `PlayerVisualConfig`
 - `CollisionTuningConfig`
-- `ObstacleVisualConfig`
-- `BackgroundFxConfig`
+- `ObstacleVisualCatalog`
+- `BackgroundPresentationConfig`
 - `ThemeSequenceConfig`
-- optional `ThemeVfxProfile`
-- optional `ThemeAudioProfile`
+- `ThemeVfxProfile`
+- `ThemeAudioProfile`
+- `PresentationRolloutPlanConfig`
 
 Recommended placement:
 - `Assets/_Game/Config/Themes/` for theme and theme-sequence assets
@@ -191,8 +192,12 @@ Most likely implementation touchpoints in the current repo:
 - `Assets/_Game/Scripts/Runtime/Save/SaveService.cs`
 - `Assets/_Game/Scripts/Runtime/Data/ThemeConfig.cs`
 - `Assets/_Game/Scripts/Runtime/Data/ThemeCatalog.cs`
+- `Assets/_Game/Scripts/Runtime/Data/ThemeSequenceConfig.cs`
+- `Assets/_Game/Scripts/Runtime/Data/ThemeVfxProfile.cs`
+- `Assets/_Game/Scripts/Runtime/Data/ThemeAudioProfile.cs`
 - `Assets/_Game/Scripts/Runtime/Data/AudioCueCatalog.cs`
 - `Assets/_Game/Scripts/Runtime/Data/VfxCatalog.cs`
+- `Assets/_Game/Scripts/Runtime/Data/PresentationRolloutPlanConfig.cs`
 - `Assets/_Game/Scenes/MainMenu.unity`
 - `Assets/_Game/Scenes/Gameplay.unity`
 
@@ -202,6 +207,7 @@ Edit Mode:
 - collision tuning integrity
 - theme ID and persistence integrity
 - VFX/audio catalog and theme override integrity
+- approval gate and rollout plan integrity
 
 Play Mode:
 - active theme applies in menu and gameplay
@@ -209,6 +215,7 @@ Play Mode:
 - retry resets transient presentation state
 - dynamic theme switching only occurs at allowed thresholds
 - UI/home/pause/results remain stable in themed runs
+- VFX/audio profiles swap cleanly with active theme changes
 
 Manual:
 - player readability at speed
@@ -225,6 +232,7 @@ Highest regression risks:
 - dynamic theme changes hiding danger cues
 - background motion overpowering the lane
 - asset-heavy themes hurting restart speed or frame pacing
+- unapproved slice creep beyond the rollout gate
 
 ## 18. Documentation update requirements
 Update the owning docs later if implementation changes their topics:
@@ -246,6 +254,7 @@ Update the owning docs later if implementation changes their topics:
 - Mini-phase E: expand the theme system from color-only to presentation packages
 - Mini-phase F: add dynamic theme switching with strict readability rules
 - Mini-phase G: align VFX/audio with the refreshed visual language
+- Mini-phase H: run each authored refresh slice only through `PresentationRolloutPlanConfig` and the approval audit
 
 Exit criteria for each phase:
 - A: dependencies are explicit
@@ -255,23 +264,21 @@ Exit criteria for each phase:
 - E: themes are data-driven and consistent
 - F: switching is readable and gameplay-safe
 - G: feedback feels cohesive without becoming noisy
+- H: each slice stops until automated, manual, and device evidence is clean
 
 ## 20. Recommendations
 Highest-value path for this repo right now:
-- do not start with art swapping
-- start by decoupling player visuals and obstacle visuals from collision and spacing ownership
-- keep the new presentation config assets as the frozen fairness baseline while decoupling happens
-- add the background motion system after silhouettes are stable
-- expand themes next
-- add dynamic theme switching only after live theme application is safe
-- refresh VFX/audio last so they match the final visual language
+- treat readiness as complete and use the approval gate before starting any broad presentation rollout
+- begin with the player refresh slice, then obstacle refresh, then background/static-theme slices through `PresentationRolloutPlanConfig`
+- keep the new presentation config assets as the frozen fairness baseline while authored content replaces procedural fallback
+- add dynamic theme switching polish only within the approved `ThemeSequenceConfig` path
+- refresh VFX/audio through `ThemeVfxProfile`, `ThemeAudioProfile`, and the semantic service/cue pipelines rather than ad hoc asset hooks
 
 Safest sequence:
-- config first
-- collision honesty second
-- visual assets third
-- theme expansion fourth
-- dynamic switching fifth
-- final VFX/audio cohesion pass last
-
-
+- approval gate first
+- player slice second
+- obstacle slice third
+- background/static-theme slice fourth
+- dynamic transition slice fifth
+- VFX slice sixth
+- audio slice seventh

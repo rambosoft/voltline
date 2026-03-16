@@ -64,6 +64,15 @@ namespace Voltline.UI
             isInitialized = true;
         }
 
+        public void ApplyTheme(ThemeConfig activeTheme)
+        {
+            theme = activeTheme;
+            hudView?.ApplyTheme(activeTheme);
+            pauseOverlayView?.ApplyTheme(activeTheme);
+            resultPanelView?.ApplyTheme(activeTheme);
+            settingsOverlayView?.ApplyTheme(activeTheme);
+        }
+
         private void OnDestroy()
         {
             if (scoreSystem != null)
