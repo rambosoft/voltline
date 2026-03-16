@@ -13,13 +13,62 @@ MonoBehaviour:
   m_Name: CFG_PlayerVisual_Default
   m_EditorClassIdentifier: 
   visualPrefab: {fileID: 0}
-  fallbackSprite: {fileID: 0}
+  fallbackSprite: {fileID: 21300000, guid: 4701b2a0dc5eb0f45b2c7270f08146e5, type: 3}
   overrideMaterial: {fileID: 0}
   fallbackColor: {r: 1, g: 1, b: 1, a: 1}
-  applyRuntimeTint: 1
+  applyRuntimeTint: 0
   visibleBoundsScale: {x: 0.68, y: 0.68}
   localOffset: {x: 0, y: 0}
   baseRotationOffset: 0
   sortingOrder: 4
   menuPreviewSize: {x: 88, y: 88}
   menuPreviewOffset: {x: 84, y: 116}
+  stateDefinitions:
+  - stateId: 0
+    sprite: {fileID: 21300000, guid: 4701b2a0dc5eb0f45b2c7270f08146e5, type: 3}
+    overrideMaterial: {fileID: 0}
+    durationSeconds: 0
+    visibleBounds: {x: 0.68, y: 0.68}
+    rotationSpeedDegreesPerSecond: 10
+    pulseAmplitude: 0
+    pulseFrequency: 0
+  - stateId: 1
+    sprite: {fileID: 21300000, guid: 476f739b7cf0f4b4d92b34377de7164d, type: 3}
+    overrideMaterial: {fileID: 0}
+    durationSeconds: 0.16
+    visibleBounds: {x: 0.68, y: 0.68}
+    rotationSpeedDegreesPerSecond: 0
+    pulseAmplitude: 0.18
+    pulseFrequency: 8
+  - stateId: 2
+    sprite: {fileID: 21300000, guid: 9a95c36b1ff0a154582e85dbd581807d, type: 3}
+    overrideMaterial: {fileID: 0}
+    durationSeconds: 0.18
+    visibleBounds: {x: 0.68, y: 0.68}
+    rotationSpeedDegreesPerSecond: 0
+    pulseAmplitude: 0.14
+    pulseFrequency: 7
+  - stateId: 3
+    sprite: {fileID: 21300000, guid: 8e0f3cc303e211e43b862366ca5ed8f9, type: 3}
+    overrideMaterial: {fileID: 0}
+    durationSeconds: 0.12
+    visibleBounds: {x: 0.68, y: 0.68}
+    rotationSpeedDegreesPerSecond: 0
+    pulseAmplitude: 0.12
+    pulseFrequency: 7
+  - stateId: 4
+    sprite: {fileID: 21300000, guid: 48d9111199ee86d43b3d546a8d0c781c, type: 3}
+    overrideMaterial: {fileID: 0}
+    durationSeconds: 0.24
+    visibleBounds: {x: 0.68, y: 0.68}
+    rotationSpeedDegreesPerSecond: 10
+    pulseAmplitude: 0.1
+    pulseFrequency: 6
+  - stateId: 5
+    sprite: {fileID: 21300000, guid: dedcbb314ea7a1c449350b5cb8843e09, type: 3}
+    overrideMaterial: {fileID: 0}
+    durationSeconds: 0
+    visibleBounds: {x: 0.68, y: 0.68}
+    rotationSpeedDegreesPerSecond: 0
+    pulseAmplitude: 0
+    pulseFrequency: 0

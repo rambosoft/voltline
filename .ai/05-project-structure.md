@@ -100,6 +100,7 @@ Owns raw and authored art assets.
 Rules:
 
 - keep source art grouped by role
+- state-driven player sprites belong under `Sprites/Characters/`
 - theme-specific variations go under `Themes/`
 - gameplay readability beats folder cleverness
 
@@ -405,3 +406,4 @@ Assets/_Game/Scripts/Runtime/
 - Runtime code uses explicit assemblies.
 - New top-level folders require this document to be updated.
 - Naming must optimize clarity, not personal preference.
+

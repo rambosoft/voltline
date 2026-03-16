@@ -13,6 +13,9 @@ namespace Voltline.Tests.PlayMode
         [UnityTest]
         public IEnumerator GameplayScene_ReachesActiveStateQuickly()
         {
+#if UNITY_EDITOR
+            GameplaySceneInstaller.ClearEditorSessionDebugStartingScoreOverride();
+#endif
             SceneManager.LoadScene(SceneCatalog.Gameplay, LoadSceneMode.Single);
             yield return null;
             yield return null;
@@ -26,6 +29,9 @@ namespace Voltline.Tests.PlayMode
         [UnityTest]
         public IEnumerator GameplayScene_FirstBeatCanBeCleared_AndRestartResetsScore()
         {
+#if UNITY_EDITOR
+            GameplaySceneInstaller.ClearEditorSessionDebugStartingScoreOverride();
+#endif
             SceneManager.LoadScene(SceneCatalog.Gameplay, LoadSceneMode.Single);
             yield return null;
             yield return null;
@@ -53,6 +59,9 @@ namespace Voltline.Tests.PlayMode
         [UnityTest]
         public IEnumerator GameplayScene_NoTapEventuallyDies_AndTapRetries()
         {
+#if UNITY_EDITOR
+            GameplaySceneInstaller.ClearEditorSessionDebugStartingScoreOverride();
+#endif
             SceneManager.LoadScene(SceneCatalog.Gameplay, LoadSceneMode.Single);
             yield return null;
             yield return null;

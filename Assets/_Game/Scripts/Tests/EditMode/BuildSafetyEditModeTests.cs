@@ -29,7 +29,37 @@ namespace Voltline.Tests.EditMode
             Assert.That(serializedObject.FindProperty("inputActions").objectReferenceValue, Is.Not.Null);
             Assert.That(serializedObject.FindProperty("audioCueCatalog").objectReferenceValue, Is.Not.Null);
             Assert.That(serializedObject.FindProperty("vfxCatalog").objectReferenceValue, Is.Not.Null);
+            Assert.That(installer.ReleaseBaselineDebugStartingScore, Is.EqualTo(0));
             Assert.That(installer.DebugStartingScore, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void GameplaySceneInstaller_EditorSessionOverrideDoesNotDirtyReleaseBaseline()
+        {
+            bool previousEnabled = GameplaySceneInstaller.EditorSessionDebugStartingScoreOverrideEnabled;
+            int previousScore = GameplaySceneInstaller.EditorSessionDebugStartingScore;
+
+            try
+            {
+                GameplaySceneInstaller.ClearEditorSessionDebugStartingScoreOverride();
+                EditorSceneManager.OpenScene(ProjectConfigAssetPaths.GameplayScene, OpenSceneMode.Single);
+
+                GameplaySceneInstaller installer = Object.FindFirstObjectByType<GameplaySceneInstaller>();
+                Assert.That(installer, Is.Not.Null);
+
+                GameplaySceneInstaller.EditorSessionDebugStartingScore = 15;
+                GameplaySceneInstaller.EditorSessionDebugStartingScoreOverrideEnabled = true;
+
+                SerializedObject serializedObject = new(installer);
+                Assert.That(serializedObject.FindProperty("debugStartingScore").intValue, Is.EqualTo(0));
+                Assert.That(installer.ReleaseBaselineDebugStartingScore, Is.EqualTo(0));
+                Assert.That(installer.DebugStartingScore, Is.EqualTo(15));
+            }
+            finally
+            {
+                GameplaySceneInstaller.EditorSessionDebugStartingScore = previousScore;
+                GameplaySceneInstaller.EditorSessionDebugStartingScoreOverrideEnabled = previousEnabled;
+            }
         }
 
         [Test]

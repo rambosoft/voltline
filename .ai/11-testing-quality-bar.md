@@ -185,6 +185,8 @@ After any change to gameplay systems, verify:
 - retry still resets all transient run state
 - theme changes do not reduce readability
 - milestone-gated theme transitions stay inside the approved runtime sequence rules
+- player visual states reset, trigger, and fall back correctly when state-specific art is partially populated
+- imported player-state sprites preserve the approved readable footprint instead of changing gameplay size
 
 ## Release-blocking bugs
 
@@ -253,3 +255,4 @@ A feature is incomplete unless docs are updated when source-of-truth topics chan
 - Manual testing covers feel and readability.
 - Mobile safe area and performance must be validated before release.
 - No feature is done if docs and tests drift behind implementation.
+

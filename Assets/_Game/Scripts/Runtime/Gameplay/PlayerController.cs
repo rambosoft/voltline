@@ -59,7 +59,7 @@ namespace Voltline.Gameplay
                 RebuildVisualView();
             }
 
-            ApplyVisualState(isDead ? theme.DangerColor : theme.PlayerAccentColor, isDead ? 45f : (isFlipping ? 25f : 0f));
+            ApplyVisualState(0f);
         }
 
         public void ResetRun()
@@ -71,7 +71,8 @@ namespace Voltline.Gameplay
             flipElapsed = 0f;
             currentOffsetFromCenter = GetOffsetForSide(PlayerSide.Top);
             currentX = trackManager.GetTrackCenterX(trackManager.PlayerAnchorY) + currentOffsetFromCenter;
-            ApplyVisualState(theme.PlayerAccentColor, 0f);
+            visualView?.ResetPresentationState();
+            ApplyVisualState(0f);
         }
 
         public bool RequestFlip()
@@ -86,6 +87,7 @@ namespace Voltline.Gameplay
             flipToOffset = GetOffsetForSide(targetSide);
             flipElapsed = 0f;
             isFlipping = true;
+            PlayVisualReaction(PlayerVisualPresentationStateId.Flip);
             Flipped?.Invoke(WorldPosition);
             return true;
         }
@@ -114,14 +116,26 @@ namespace Voltline.Gameplay
                 currentX = trackCenterX + currentOffsetFromCenter;
             }
 
-            ApplyVisualState(isDead ? theme.DangerColor : theme.PlayerAccentColor, isFlipping ? 25f : 0f);
+            visualView?.Advance(deltaTime);
+            ApplyVisualState(0f);
+        }
+
+        public void PlayVisualReaction(PlayerVisualPresentationStateId stateId)
+        {
+            if (visualView == null || isDead)
+            {
+                return;
+            }
+
+            visualView.PlayPresentationState(stateId);
         }
 
         public void MarkDead()
         {
             isDead = true;
             isFlipping = false;
-            ApplyVisualState(theme.DangerColor, 45f);
+            visualView?.PlayPresentationState(PlayerVisualPresentationStateId.Death);
+            ApplyVisualState(0f);
         }
 
         private void RebuildVisualView()
@@ -138,14 +152,24 @@ namespace Voltline.Gameplay
             visualView.Initialize(trackManager.PlayerRoot, visualConfig);
         }
 
-        private void ApplyVisualState(Color tint, float zRotation)
+        private void ApplyVisualState(float zRotation)
         {
             if (visualView == null)
             {
                 return;
             }
 
-            visualView.Apply(new PlayerVisualState(WorldPosition, tint, zRotation));
+            visualView.Apply(new PlayerVisualState(WorldPosition, ResolveActiveTint(), zRotation));
+        }
+
+        private Color ResolveActiveTint()
+        {
+            if (theme == null)
+            {
+                return Color.white;
+            }
+
+            return isDead ? theme.DangerColor : theme.PlayerAccentColor;
         }
 
         private float GetOffsetForSide(PlayerSide side)
@@ -154,3 +178,4 @@ namespace Voltline.Gameplay
         }
     }
 }
+

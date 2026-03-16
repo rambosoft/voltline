@@ -30,6 +30,7 @@ namespace Voltline.Gameplay
 
         public float TravelDistance { get; private set; }
         public float PlayerAnchorY => -gameplayCamera.orthographicSize * 0.68f;
+        public float TrackLineWidth => presentationConfig != null ? presentationConfig.TrackLineWidth : 0f;
         public float VisibleDistance => gameplayCamera.orthographicSize + 4f;
         public float LowerDespawnY => -gameplayCamera.orthographicSize - 2f;
         public Transform PlayerRoot => playerRoot;

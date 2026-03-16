@@ -110,6 +110,20 @@ Suggested fields:
 - maximum allowed layer alpha
 - layer definitions
 
+#### `PlayerVisualConfig`
+Owns the player's readable visual footprint and semantic state-driven art/effect behavior.
+
+Suggested fields:
+- visual prefab or fallback sprite
+- visible bounds scale
+- local offset
+- base rotation offset
+- sorting order
+- menu preview size/offset
+- state definition list for `Idle`, `Flip`, `NearMiss`, `Score`, `Milestone`, and `Death`
+- optional sprite/material override per state
+- per-state duration, scale multiplier, rotation speed, and pulse settings
+
 #### `DifficultyCurveConfig`
 Owns pacing and escalation rules.
 
@@ -404,3 +418,5 @@ Examples:
 - Balance values should not be scattered across scene objects.
 - Runtime systems should read catalogs, not invent parallel registries.
 - Do not mutate content assets as a save mechanism.
+
+

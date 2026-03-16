@@ -230,6 +230,38 @@ namespace Voltline.Data
 
             if (config.VisibleBoundsScale.x <= 0f || config.VisibleBoundsScale.y <= 0f) result.Add("PlayerVisualConfig visible bounds must be positive.");
             if (config.MenuPreviewSize.x <= 0f || config.MenuPreviewSize.y <= 0f) result.Add("PlayerVisualConfig menu preview size must be positive.");
+
+            IReadOnlyList<PlayerVisualStateDefinition> states = config.StateDefinitions;
+            if (states == null || states.Count == 0)
+            {
+                result.Add("PlayerVisualConfig must define player presentation states.");
+                return;
+            }
+
+            HashSet<PlayerVisualPresentationStateId> stateIds = new();
+            for (int i = 0; i < states.Count; i++)
+            {
+                PlayerVisualStateDefinition state = states[i];
+                if (state == null)
+                {
+                    result.Add($"PlayerVisualConfig state definition at index {i} is missing.");
+                    continue;
+                }
+
+                if (!stateIds.Add(state.StateId)) result.Add($"PlayerVisualConfig contains duplicate state '{state.StateId}'.");
+                if (state.VisibleBounds.x <= 0f || state.VisibleBounds.y <= 0f) result.Add($"PlayerVisualConfig state '{state.StateId}' visible bounds must be positive.");
+                if (state.DurationSeconds < 0f) result.Add($"PlayerVisualConfig state '{state.StateId}' duration must be non-negative.");
+                if (state.PulseAmplitude < 0f) result.Add($"PlayerVisualConfig state '{state.StateId}' pulse amplitude must be non-negative.");
+                if (state.PulseFrequency < 0f) result.Add($"PlayerVisualConfig state '{state.StateId}' pulse frequency must be non-negative.");
+            }
+
+            foreach (PlayerVisualPresentationStateId requiredState in System.Enum.GetValues(typeof(PlayerVisualPresentationStateId)))
+            {
+                if (!stateIds.Contains(requiredState))
+                {
+                    result.Add($"PlayerVisualConfig must define state '{requiredState}'.");
+                }
+            }
         }
 
         public static void ValidateHazardPresentationCatalog(HazardPresentationCatalog catalog, ConfigValidationResult result)
@@ -811,3 +843,6 @@ namespace Voltline.Data
         }
     }
 }
+
+
+

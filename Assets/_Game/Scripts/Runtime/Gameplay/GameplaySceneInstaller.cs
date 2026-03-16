@@ -34,10 +34,55 @@ namespace Voltline.Gameplay
         [SerializeField] private int startingSeed = 1337;
         [SerializeField] private int debugStartingScore = 0;
 
-        public int DebugStartingScore => RuntimeBuildFlags.GameplayDebugToolsEnabled ? Mathf.Max(0, debugStartingScore) : 0;
+#if UNITY_EDITOR
+        private const string EditorSessionDebugStartingScoreOverrideEnabledKey = "Voltline.Gameplay.DebugStartingScore.OverrideEnabled";
+        private const string EditorSessionDebugStartingScoreValueKey = "Voltline.Gameplay.DebugStartingScore.Value";
+#endif
+
+        public int ReleaseBaselineDebugStartingScore => Mathf.Max(0, debugStartingScore);
+        public int DebugStartingScore
+        {
+            get
+            {
+                if (!RuntimeBuildFlags.GameplayDebugToolsEnabled)
+                {
+                    return 0;
+                }
+
+#if UNITY_EDITOR
+                if (EditorSessionDebugStartingScoreOverrideEnabled)
+                {
+                    return EditorSessionDebugStartingScore;
+                }
+#endif
+
+                return ReleaseBaselineDebugStartingScore;
+            }
+        }
+
         public ThemeCatalog ThemeCatalog => themeCatalog;
         public ThemeSequenceConfig ThemeSequenceConfig => themeSequenceConfig;
         public BackgroundPresentationConfig BackgroundPresentationConfig => backgroundPresentationConfig;
+
+#if UNITY_EDITOR
+        public static bool EditorSessionDebugStartingScoreOverrideEnabled
+        {
+            get => SessionState.GetBool(EditorSessionDebugStartingScoreOverrideEnabledKey, false);
+            set => SessionState.SetBool(EditorSessionDebugStartingScoreOverrideEnabledKey, value);
+        }
+
+        public static int EditorSessionDebugStartingScore
+        {
+            get => Mathf.Max(0, SessionState.GetInt(EditorSessionDebugStartingScoreValueKey, 0));
+            set => SessionState.SetInt(EditorSessionDebugStartingScoreValueKey, Mathf.Max(0, value));
+        }
+
+        public static void ClearEditorSessionDebugStartingScoreOverride()
+        {
+            EditorSessionDebugStartingScoreOverrideEnabled = false;
+            EditorSessionDebugStartingScore = 0;
+        }
+#endif
 
         private void Awake()
         {

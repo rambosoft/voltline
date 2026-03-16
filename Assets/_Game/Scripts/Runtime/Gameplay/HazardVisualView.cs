@@ -164,10 +164,32 @@ namespace Voltline.Gameplay
             }
 
             Transform rendererTransform = renderer.transform;
+            Vector2 sourceSize = ResolveSourceSpriteSize(renderer.sprite);
             rendererTransform.localPosition = state.LocalPosition;
-            rendererTransform.localScale = new Vector3(state.Scale.x, state.Scale.y, 1f);
+            rendererTransform.localScale = new Vector3(
+                ResolveNormalizedScale(state.Scale.x, sourceSize.x),
+                ResolveNormalizedScale(state.Scale.y, sourceSize.y),
+                1f);
             rendererTransform.localRotation = Quaternion.Euler(0f, 0f, state.RotationDegrees);
             renderer.color = state.Color;
+        }
+
+        private static Vector2 ResolveSourceSpriteSize(Sprite sprite)
+        {
+            if (sprite == null)
+            {
+                return Vector2.one;
+            }
+
+            Vector2 size = sprite.bounds.size;
+            return new Vector2(
+                Mathf.Max(0.0001f, size.x),
+                Mathf.Max(0.0001f, size.y));
+        }
+
+        private static float ResolveNormalizedScale(float targetSize, float sourceSize)
+        {
+            return sourceSize <= 0.0001f ? targetSize : targetSize / sourceSize;
         }
     }
 }

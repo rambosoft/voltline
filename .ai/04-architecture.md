@@ -109,6 +109,17 @@ Responsibilities:
 - evaluate local collision / fail conditions as needed
 - publish player feedback events (flip, near miss, death context)
 
+### `PlayerVisualView`
+Owns player visual-state playback.
+
+Responsibilities:
+
+- render the currently active player look from `PlayerVisualConfig`
+- normalize authored sprite size back to the approved readable gameplay footprint
+- apply lightweight state-specific presentation effects such as idle rotation or transient pulse
+- keep visual-state timing out of gameplay collision ownership
+- fall back safely when optional state-specific art is still missing
+
 ### `HazardManager`
 Owns hazard lifecycle.
 
@@ -367,6 +378,7 @@ The important rule is that event flow remains readable and local.
 - Config lives in assets, not random scene objects.
 - System responsibilities stay small enough to explain in one sentence.
 - New runtime systems require explicit ownership justification.
+
 
 
 

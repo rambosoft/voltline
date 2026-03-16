@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.TestTools;
 using Voltline.Audio;
 using Voltline.Core;
+using Voltline.Data;
 using Voltline.Gameplay;
 using Voltline.Save;
 using Voltline.UI;
@@ -17,6 +18,9 @@ namespace Voltline.Tests.PlayMode
         [UnityTest]
         public IEnumerator GameplayScene_DefaultStartingScoreIsZero_AndTapFlipsPlayer()
         {
+#if UNITY_EDITOR
+            GameplaySceneInstaller.ClearEditorSessionDebugStartingScoreOverride();
+#endif
             SceneManager.LoadScene(SceneCatalog.Gameplay, LoadSceneMode.Single);
             yield return null;
             yield return null;
@@ -25,29 +29,38 @@ namespace Voltline.Tests.PlayMode
             GameplaySceneInstaller installer = Object.FindFirstObjectByType<GameplaySceneInstaller>();
             ScoreSystem scoreSystem = Object.FindFirstObjectByType<ScoreSystem>();
             PlayerController playerController = Object.FindFirstObjectByType<PlayerController>();
+            PlayerVisualView playerVisualView = Object.FindFirstObjectByType<PlayerVisualView>();
 
             Assert.That(gameManager, Is.Not.Null);
             Assert.That(installer, Is.Not.Null);
             Assert.That(scoreSystem, Is.Not.Null);
             Assert.That(playerController, Is.Not.Null);
+            Assert.That(playerVisualView, Is.Not.Null);
 
             yield return WaitForState(gameManager, RunState.Active, 1.5f);
 
             Assert.That(installer.DebugStartingScore, Is.EqualTo(0));
             Assert.That(scoreSystem.CurrentScore, Is.EqualTo(0));
             Assert.That(playerController.HasVisualView, Is.True);
+            Assert.That(playerVisualView.CurrentPresentationState, Is.EqualTo(PlayerVisualPresentationStateId.Idle));
 
             PlayerSide initialSide = playerController.CurrentSide;
             gameManager.DebugHandleTap();
-            yield return new WaitForSeconds(0.18f);
+            yield return null;
+            Assert.That(playerVisualView.CurrentPresentationState, Is.EqualTo(PlayerVisualPresentationStateId.Flip));
+            yield return new WaitForSeconds(0.22f);
 
             Assert.That(playerController.CurrentSide, Is.Not.EqualTo(initialSide));
+            Assert.That(playerVisualView.CurrentPresentationState, Is.EqualTo(PlayerVisualPresentationStateId.Idle));
             LogAssert.NoUnexpectedReceived();
         }
 
         [UnityTest]
         public IEnumerator GameplayScene_PauseFreezesTrackProgress_ThenResumeRestoresMotion()
         {
+#if UNITY_EDITOR
+            GameplaySceneInstaller.ClearEditorSessionDebugStartingScoreOverride();
+#endif
             SceneManager.LoadScene(SceneCatalog.Gameplay, LoadSceneMode.Single);
             yield return null;
             yield return null;
@@ -84,6 +97,9 @@ namespace Voltline.Tests.PlayMode
         [UnityTest]
         public IEnumerator GameplayScene_ResultHomeReturnsSafelyToMainMenu()
         {
+#if UNITY_EDITOR
+            GameplaySceneInstaller.ClearEditorSessionDebugStartingScoreOverride();
+#endif
             SceneManager.LoadScene(SceneCatalog.Gameplay, LoadSceneMode.Single);
             yield return null;
             yield return null;
@@ -106,6 +122,9 @@ namespace Voltline.Tests.PlayMode
         [UnityTest]
         public IEnumerator GameplayScene_ThemeSequenceTransitionsAtConfiguredMilestoneWithinBackgroundAndFeedbackBudgets()
         {
+#if UNITY_EDITOR
+            GameplaySceneInstaller.ClearEditorSessionDebugStartingScoreOverride();
+#endif
             SceneManager.LoadScene(SceneCatalog.Gameplay, LoadSceneMode.Single);
             yield return null;
             yield return null;
@@ -115,6 +134,7 @@ namespace Voltline.Tests.PlayMode
             ScoreSystem scoreSystem = Object.FindFirstObjectByType<ScoreSystem>();
             ThemePresentationController themePresentationController = Object.FindFirstObjectByType<ThemePresentationController>();
             BackgroundPresentationController backgroundPresentationController = Object.FindFirstObjectByType<BackgroundPresentationController>();
+            PlayerVisualView playerVisualView = Object.FindFirstObjectByType<PlayerVisualView>();
             VfxService vfxService = Object.FindFirstObjectByType<VfxService>();
             AudioService audioService = AudioService.EnsureExists();
 
@@ -123,6 +143,7 @@ namespace Voltline.Tests.PlayMode
             Assert.That(scoreSystem, Is.Not.Null);
             Assert.That(themePresentationController, Is.Not.Null);
             Assert.That(backgroundPresentationController, Is.Not.Null);
+            Assert.That(playerVisualView, Is.Not.Null);
             Assert.That(vfxService, Is.Not.Null);
             Assert.That(audioService, Is.Not.Null);
 
@@ -152,6 +173,7 @@ namespace Voltline.Tests.PlayMode
             Assert.That(backgroundPresentationController.ActiveConfig, Is.Not.Null);
             Assert.That(backgroundPresentationController.ActiveConfig.name, Does.Contain("CandyPop"));
             Assert.That(backgroundPresentationController.RuntimeLayerCount, Is.LessThanOrEqualTo(backgroundPresentationController.ConfiguredSpriteBudget));
+            Assert.That(playerVisualView.CurrentPresentationState, Is.EqualTo(PlayerVisualPresentationStateId.Milestone));
             Assert.That(vfxService.CurrentThemeVfxProfileName, Does.Contain("CandyPop"));
             Assert.That(audioService.CurrentThemeAudioProfileName, Does.Contain("CandyPop"));
             LogAssert.NoUnexpectedReceived();

@@ -55,7 +55,7 @@ MonoBehaviour:
     telegraphBoundsScale: {x: 0.26, y: 0.52}
   - family: 4
     visualPrefab: {fileID: 0}
-    mainSprite: {fileID: 0}
+    mainSprite: {fileID: 21300000, guid: d882aebdb3009444896a1af2194c94fc, type: 3}
     secondarySprite: {fileID: 0}
     accentSprite: {fileID: 0}
     telegraphSprite: {fileID: 0}
@@ -63,3 +63,4 @@ MonoBehaviour:
     baseSortingOrder: 3
     visualBoundsScale: {x: 0.82, y: 1.28}
     telegraphBoundsScale: {x: 1.12, y: 1.42}
+

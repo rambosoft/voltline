@@ -93,6 +93,7 @@ namespace Voltline.Gameplay
 
             audioService.PlayCue(AudioCueIds.NearMiss);
             vfxService.PlayEffect(VfxCueIds.NearMiss, position);
+            playerController?.PlayVisualReaction(PlayerVisualPresentationStateId.NearMiss);
         }
 
         private void HandleScoreChanged(int score)
@@ -100,6 +101,7 @@ namespace Voltline.Gameplay
             if (score > lastScore)
             {
                 audioService.PlayCue(AudioCueIds.Score);
+                playerController?.PlayVisualReaction(PlayerVisualPresentationStateId.Score);
             }
 
             lastScore = score;
@@ -109,6 +111,7 @@ namespace Voltline.Gameplay
         {
             audioService.PlayCue(AudioCueIds.Milestone);
             vfxService.PlayEffect(VfxCueIds.Milestone, playerController.WorldPosition, 1f + (milestone * 0.005f));
+            playerController?.PlayVisualReaction(PlayerVisualPresentationStateId.Milestone);
             trackManager?.PlayLinePulse(1f);
         }
 

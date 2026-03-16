@@ -20,7 +20,7 @@ This file is the execution guide for presentation refresh work. It owns how to e
 - Presentation work must not introduce feature creep.
 
 ## 3. Current-state analysis
-- Player visuals are now decoupled from gameplay hit logic: `PlayerController.cs` owns side/collision/flip state, while `PlayerVisualView.cs` renders the active look from `PlayerVisualConfig`.
+- Player visuals are now decoupled from gameplay hit logic: `PlayerController.cs` owns side/collision/flip state, while `PlayerVisualView.cs` renders the active look from `PlayerVisualConfig` and supports semantic state-driven art/effect playback for `Idle`, `Flip`, `NearMiss`, `Score`, `Milestone`, and `Death`.
 - Player collision is currently simplified, but the frozen readability/collision baseline now lives in `GameplayPresentationConfig` rather than static helper constants.
 - Obstacle visuals are now decoupled from gameplay collision/spacing: `HazardManager.cs` owns spawn/collision/spacing state, while `HazardVisualView.cs` renders family visuals from `ObstacleVisualCatalog`.
 - Obstacle collision and readable spacing remain routed through `HazardPresentationCatalog`, which now sits cleanly beside the obstacle visual catalog instead of being implicitly tied to procedural rendering.
@@ -57,7 +57,7 @@ Affected areas will include:
 ## 6. Player asset refresh guide
 - Keep gameplay-critical data separate from art: collision extents, side offset, line clearance, flip timing, and visual minimum size should be data-driven.
 - Visual-only data should include sprite/prefab, material, scale, pivot offset, glow/trail references, and theme overrides.
-- Recommended repo-specific path is now live: `PlayerController` drives `PlayerVisualView` via `PlayerVisualConfig`, so future player art replacement should happen there rather than inside gameplay hit logic.
+- Recommended repo-specific path is now live: `PlayerController` drives `PlayerVisualView` via `PlayerVisualConfig`, so future player art replacement should happen there rather than inside gameplay hit logic. State-specific player sprites and lightweight effects should be authored in `PlayerVisualConfig` definitions instead of branching through gameplay code.
 - Preserve one canonical pivot/orientation rule. Do not let themes silently change the perceived anchor on the line.
 - Avoid large decorative appendages that imply collision when they are cosmetic only.
 
@@ -160,7 +160,7 @@ Guidance:
 
 ## 15. Data/config model recommendations
 Likely needed additions for a proper refresh:
-- `PlayerVisualConfig`
+- `PlayerVisualConfig` (including semantic state definitions and lightweight per-state effect tuning)
 - `CollisionTuningConfig`
 - `ObstacleVisualCatalog`
 - `BackgroundPresentationConfig`
@@ -282,3 +282,4 @@ Safest sequence:
 - dynamic transition slice fifth
 - VFX slice sixth
 - audio slice seventh
+

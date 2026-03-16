@@ -25,6 +25,11 @@ namespace Voltline.Data
         public Sprite SecondarySprite => secondarySprite != null ? secondarySprite : RuntimeSpriteFactory.WhiteSprite;
         public Sprite AccentSprite => accentSprite != null ? accentSprite : RuntimeSpriteFactory.WhiteSprite;
         public Sprite TelegraphSprite => telegraphSprite != null ? telegraphSprite : RuntimeSpriteFactory.WhiteSprite;
+        public bool HasMainSprite => mainSprite != null;
+        public bool HasSecondarySprite => secondarySprite != null;
+        public bool HasAccentSprite => accentSprite != null;
+        public bool HasTelegraphSprite => telegraphSprite != null;
+        public bool UsesAuthoredLayers => visualPrefab != null || mainSprite != null || secondarySprite != null || accentSprite != null || telegraphSprite != null;
         public Material SharedMaterial => sharedMaterial;
         public int BaseSortingOrder => baseSortingOrder;
         public Vector2 VisualBoundsScale => visualBoundsScale;
@@ -40,6 +45,11 @@ namespace Voltline.Data
             Sprite secondarySprite,
             Sprite accentSprite,
             Sprite telegraphSprite,
+            bool hasMainSprite,
+            bool hasSecondarySprite,
+            bool hasAccentSprite,
+            bool hasTelegraphSprite,
+            bool usesAuthoredLayers,
             Material sharedMaterial,
             int baseSortingOrder,
             Vector2 visualBoundsScale,
@@ -50,6 +60,11 @@ namespace Voltline.Data
             SecondarySprite = secondarySprite;
             AccentSprite = accentSprite;
             TelegraphSprite = telegraphSprite;
+            HasMainSprite = hasMainSprite;
+            HasSecondarySprite = hasSecondarySprite;
+            HasAccentSprite = hasAccentSprite;
+            HasTelegraphSprite = hasTelegraphSprite;
+            UsesAuthoredLayers = usesAuthoredLayers;
             SharedMaterial = sharedMaterial;
             BaseSortingOrder = baseSortingOrder;
             VisualBoundsScale = visualBoundsScale;
@@ -61,6 +76,11 @@ namespace Voltline.Data
         public Sprite SecondarySprite { get; }
         public Sprite AccentSprite { get; }
         public Sprite TelegraphSprite { get; }
+        public bool HasMainSprite { get; }
+        public bool HasSecondarySprite { get; }
+        public bool HasAccentSprite { get; }
+        public bool HasTelegraphSprite { get; }
+        public bool UsesAuthoredLayers { get; }
         public Material SharedMaterial { get; }
         public int BaseSortingOrder { get; }
         public Vector2 VisualBoundsScale { get; }
@@ -90,6 +110,11 @@ namespace Voltline.Data
                         entry.SecondarySprite,
                         entry.AccentSprite,
                         entry.TelegraphSprite,
+                        entry.HasMainSprite,
+                        entry.HasSecondarySprite,
+                        entry.HasAccentSprite,
+                        entry.HasTelegraphSprite,
+                        entry.UsesAuthoredLayers,
                         entry.SharedMaterial,
                         entry.BaseSortingOrder,
                         entry.VisualBoundsScale,

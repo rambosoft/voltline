@@ -371,8 +371,8 @@ namespace Voltline.Gameplay
             Vector2 visual = hazard.VisualProfile.VisualBoundsScale;
             return new HazardVisualState(
                 CreateLayer(true, Vector3.zero, visual, core, 0f),
-                CreateLayer(true, new Vector3(0f, visual.y * 0.18f, 0f), new Vector2(visual.x * 0.72f, visual.y * 0.36f), core, 0f),
-                CreateLayer(true, new Vector3(0f, -visual.y * 0.18f, 0f), new Vector2(visual.x * 0.72f, visual.y * 0.36f), core, 0f),
+                CreateLayer(ShouldRenderSecondaryLayer(hazard), new Vector3(0f, visual.y * 0.18f, 0f), new Vector2(visual.x * 0.72f, visual.y * 0.36f), core, 0f),
+                CreateLayer(ShouldRenderAccentLayer(hazard), new Vector3(0f, -visual.y * 0.18f, 0f), new Vector2(visual.x * 0.72f, visual.y * 0.36f), core, 0f),
                 SpriteLayerState.Hidden);
         }
 
@@ -384,9 +384,9 @@ namespace Voltline.Gameplay
             Vector2 telegraph = hazard.VisualProfile.TelegraphBoundsScale;
             return new HazardVisualState(
                 CreateLayer(true, Vector3.zero, new Vector2(visual.x * 0.28f, visual.y * 1.12f), bladeColor, angle),
-                CreateLayer(true, Vector3.zero, new Vector2(visual.x * 0.21f, visual.y * 0.81f), bladeColor, -angle * 0.82f),
-                CreateLayer(true, Vector3.zero, new Vector2(visual.x * 0.42f, visual.x * 0.42f), theme.PlayerAccentColor, 0f),
-                CreateLayer(telegraph.x > 0f && telegraph.y > 0f, Vector3.zero, telegraph, new Color(theme.LineGlowColor.r, theme.LineGlowColor.g, theme.LineGlowColor.b, Mathf.Lerp(0.08f, 0.22f, telegraphStrength)), 0f));
+                CreateLayer(ShouldRenderSecondaryLayer(hazard), Vector3.zero, new Vector2(visual.x * 0.21f, visual.y * 0.81f), bladeColor, -angle * 0.82f),
+                CreateLayer(ShouldRenderAccentLayer(hazard), Vector3.zero, new Vector2(visual.x * 0.42f, visual.x * 0.42f), theme.PlayerAccentColor, 0f),
+                CreateLayer(ShouldRenderTelegraphLayer(hazard), Vector3.zero, telegraph, new Color(theme.LineGlowColor.r, theme.LineGlowColor.g, theme.LineGlowColor.b, Mathf.Lerp(0.08f, 0.22f, telegraphStrength)), 0f));
         }
 
         private HazardVisualState BuildElectricGateVisuals(HazardRuntime hazard, float telegraphStrength, float trackCenterX)
@@ -399,9 +399,9 @@ namespace Voltline.Gameplay
             Vector2 telegraph = hazard.VisualProfile.TelegraphBoundsScale;
             return new HazardVisualState(
                 CreateLayer(true, Vector3.zero, visual, new Color(1f, 0.85f, 0.28f, 1f), 0f),
-                CreateLayer(true, new Vector3(beamOffset, 0f, 0f), new Vector2(beamLength, 0.12f + telegraphStrength * 0.05f), new Color(1f, 0.94f, 0.4f, Mathf.Lerp(0.3f, 0.75f, telegraphStrength * arcPulse)), 0f),
-                CreateLayer(true, Vector3.zero, new Vector2(visual.x * 0.65f, visual.x * 0.65f), new Color(1f, 0.96f, 0.6f, 0.95f), 0f),
-                CreateLayer(telegraph.x > 0f && telegraph.y > 0f, new Vector3(beamOffset, 0f, 0f), new Vector2(beamLength + 0.22f, telegraph.y), new Color(1f, 0.95f, 0.35f, Mathf.Lerp(0.08f, 0.24f, telegraphStrength)), 0f));
+                CreateLayer(ShouldRenderSecondaryLayer(hazard), new Vector3(beamOffset, 0f, 0f), new Vector2(beamLength, 0.12f + telegraphStrength * 0.05f), new Color(1f, 0.94f, 0.4f, Mathf.Lerp(0.3f, 0.75f, telegraphStrength * arcPulse)), 0f),
+                CreateLayer(ShouldRenderAccentLayer(hazard), Vector3.zero, new Vector2(visual.x * 0.65f, visual.x * 0.65f), new Color(1f, 0.96f, 0.6f, 0.95f), 0f),
+                CreateLayer(ShouldRenderTelegraphLayer(hazard), new Vector3(beamOffset, 0f, 0f), new Vector2(beamLength + 0.22f, telegraph.y), new Color(1f, 0.95f, 0.35f, Mathf.Lerp(0.08f, 0.24f, telegraphStrength)), 0f));
         }
 
         private HazardVisualState BuildGapVisuals(HazardRuntime hazard, float telegraphStrength)
@@ -412,20 +412,41 @@ namespace Voltline.Gameplay
             gapCutout.a = 1f;
             return new HazardVisualState(
                 CreateLayer(true, Vector3.zero, hazard.VisualProfile.VisualBoundsScale, gapCutout, 0f),
-                CreateLayer(true, new Vector3(0f, 0.44f, 0f), new Vector2(0.48f, 0.08f), theme.LineGlowColor, 0f),
-                CreateLayer(true, new Vector3(0f, -0.44f, 0f), new Vector2(0.48f, 0.08f), theme.LineGlowColor, 0f),
-                CreateLayer(hazard.VisualProfile.UsesTelegraph, new Vector3(safeSideOffset, 0f, 0f), hazard.VisualProfile.TelegraphBoundsScale, new Color(theme.PlayerAccentColor.r, theme.PlayerAccentColor.g, theme.PlayerAccentColor.b, Mathf.Lerp(0.24f, 0.8f, telegraphStrength)), 0f));
+                CreateLayer(ShouldRenderSecondaryLayer(hazard), new Vector3(0f, 0.44f, 0f), new Vector2(0.48f, 0.08f), theme.LineGlowColor, 0f),
+                CreateLayer(ShouldRenderAccentLayer(hazard), new Vector3(0f, -0.44f, 0f), new Vector2(0.48f, 0.08f), theme.LineGlowColor, 0f),
+                CreateLayer(ShouldRenderTelegraphLayer(hazard), new Vector3(safeSideOffset, 0f, 0f), hazard.VisualProfile.TelegraphBoundsScale, new Color(theme.PlayerAccentColor.r, theme.PlayerAccentColor.g, theme.PlayerAccentColor.b, Mathf.Lerp(0.24f, 0.8f, telegraphStrength)), 0f));
         }
 
         private HazardVisualState BuildSideBlockerVisuals(HazardRuntime hazard, float telegraphStrength, float sideSign)
         {
             Vector2 visual = hazard.VisualProfile.VisualBoundsScale;
             Vector2 telegraph = hazard.VisualProfile.TelegraphBoundsScale;
+            float lineHalfWidth = trackManager != null ? trackManager.TrackLineWidth * 0.5f : 0f;
+            float visualHalfWidth = visual.x * 0.5f;
+            float gapToLine = Mathf.Max(0f, gameBalance.SideOffset - (lineHalfWidth + visualHalfWidth));
+            float visualOffsetX = -sideSign * gapToLine;
+            Vector2 orientedVisual = new(sideSign > 0f ? visual.x : -visual.x, visual.y);
+
             return new HazardVisualState(
-                CreateLayer(true, Vector3.zero, visual, theme.DangerColor, 0f),
-                CreateLayer(true, new Vector3(-sideSign * visual.x * 0.22f, 0f, 0f), new Vector2(visual.x * 0.11f, visual.y * 0.94f), new Color(1f, 1f, 1f, 0.42f), 0f),
-                CreateLayer(true, new Vector3(0f, visual.y * 0.24f, 0f), new Vector2(visual.x * 0.46f, visual.y * 0.1f), new Color(1f, 0.82f, 0.9f, 0.75f), 0f),
-                CreateLayer(telegraph.x > 0f && telegraph.y > 0f, Vector3.zero, telegraph, new Color(theme.DangerColor.r, theme.DangerColor.g, theme.DangerColor.b, Mathf.Lerp(0.08f, 0.22f, telegraphStrength)), 0f));
+                CreateLayer(true, new Vector3(visualOffsetX, 0f, 0f), orientedVisual, theme.DangerColor, 0f),
+                CreateLayer(ShouldRenderSecondaryLayer(hazard), new Vector3(visualOffsetX + (-sideSign * visual.x * 0.22f), 0f, 0f), new Vector2(visual.x * 0.11f, visual.y * 0.94f), new Color(1f, 1f, 1f, 0.42f), 0f),
+                CreateLayer(ShouldRenderAccentLayer(hazard), new Vector3(visualOffsetX, visual.y * 0.24f, 0f), new Vector2(visual.x * 0.46f, visual.y * 0.1f), new Color(1f, 0.82f, 0.9f, 0.75f), 0f),
+                CreateLayer(ShouldRenderTelegraphLayer(hazard), new Vector3(visualOffsetX, 0f, 0f), telegraph, new Color(theme.DangerColor.r, theme.DangerColor.g, theme.DangerColor.b, Mathf.Lerp(0.08f, 0.22f, telegraphStrength)), 0f));
+        }
+
+        private static bool ShouldRenderSecondaryLayer(HazardRuntime hazard)
+        {
+            return !hazard.VisualProfile.UsesAuthoredLayers || hazard.VisualProfile.HasSecondarySprite;
+        }
+
+        private static bool ShouldRenderAccentLayer(HazardRuntime hazard)
+        {
+            return !hazard.VisualProfile.UsesAuthoredLayers || hazard.VisualProfile.HasAccentSprite;
+        }
+
+        private static bool ShouldRenderTelegraphLayer(HazardRuntime hazard)
+        {
+            return hazard.VisualProfile.UsesTelegraph && (!hazard.VisualProfile.UsesAuthoredLayers || hazard.VisualProfile.HasTelegraphSprite);
         }
 
         private static SpriteLayerState CreateLayer(bool enabled, Vector3 localPosition, Vector2 scale, Color color, float rotationDegrees)
@@ -485,3 +506,6 @@ namespace Voltline.Gameplay
         }
     }
 }
+
+
+
