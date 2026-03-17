@@ -1,13 +1,14 @@
-# Architecture
+﻿# Architecture
 Status: Active
 Owner: Team
-Last updated: 2026-03-15
+Last updated: 2026-03-17
 Source of truth for: runtime system boundaries, ownership, dependencies, events, allowed patterns, banned patterns
 Depends on: 03-tech-stack.md, 07-gameplay-systems.md, 10-data-content-model.md
 Do not duplicate with: feature-specific implementation notes
 
 > Working title: **Voltline**  
-> Core concept / public-facing design name: **STAY ON THE LINE**
+> Current public-facing release title: **Voltline**  
+> Primary production theme direction: **Live Wire City**
 
 ## Architectural style
 
@@ -33,7 +34,9 @@ Responsible for app bootstrap, persistent services, save/load, settings, and sce
 
 ### Menu layer
 
-Responsible for title screen, preview/demo, navigation to gameplay, settings, and future daily challenge/cosmetic entry points.
+Responsible for title screen, preview/demo, navigation to gameplay, settings, optional splash/logo moment, optional Grid Status surface, and first-run tutorial treatment without leaving the approved three-scene model.
+
+Menu-facing branding, production copy, and UI token choices are now owned through `ThemeCatalog` references to `BrandingPresentationConfig`, `ProductionCopyConfig`, and `UIThemeConfig`, not hardcoded runtime strings.
 
 ### Gameplay layer
 
@@ -86,17 +89,27 @@ Responsibilities:
 - build the approved background layer stack from config
 - enforce lane quiet-zone and draw-call budget rules
 - animate subtle background motion without touching gameplay truth
-- apply theme-safe background transitions
+- apply world-district background changes and milestone pulse reactions inside the active theme
 
 ### `ThemePresentationController`
-Owns gameplay-scene theme application and milestone-gated theme sequencing.
+Owns gameplay-scene presentation application for the active Live Wire City package.
 
 Responsibilities:
 
-- apply the selected theme at run start
-- apply only approved runtime theme transitions
-- keep theme changes out of gameplay rule ownership
-- coordinate theme updates across background, line, visuals, UI, and VFX
+- apply the selected base theme at run start
+- keep the first-release shipping identity on one base theme instead of whole-theme milestone swapping
+- coordinate world progression updates across background, line, hazards, UI, audio, and VFX
+- keep presentation changes out of gameplay rule ownership
+
+### `WorldProgressionController`
+Owns score-band district state and milestone reaction state inside the active Live Wire City theme.
+
+Responsibilities:
+
+- resolve the current district from `WorldProgressionConfig`
+- publish district changes without replacing the base theme identity
+- trigger milestone reactions from config-owned progression data
+- keep district progression logic out of UI copy and out of gameplay hazard logic
 
 ### `PlayerController`
 Owns player-side logic.
@@ -176,10 +189,10 @@ Owns high-level UI state transitions.
 
 Responsibilities:
 
-- show/hide menu states
+- show/hide menu, result, share, and settings states
 - bind gameplay HUD
-- present death panel
-- coordinate retry/home/settings entry points
+- present death panel and optional share surface
+- coordinate retry/home/settings/share entry points
 - preserve UI hierarchy consistency
 
 ### `SaveService`
@@ -242,6 +255,10 @@ Obstacle prefabs should not each invent their own difficulty logic.
 Theme selection is data-driven via config and save state.  
 Individual views should read theme state, not define theme state.
 
+`ThemeCatalog` owns the surfaced theme list plus the shared first-release branding, production copy, and UI token configs so menu, HUD, pause, result, and settings stay aligned without hardcoded public-facing strings.
+
+`ThemePresentationController` and `WorldProgressionController` own first-release presentation progression through one surfaced `theme.live-wire-city` base theme plus score-band district changes from `WorldProgressionConfig`. `ThemeSequenceConfig` remains only as a dormant compatibility asset and is no longer the shipping runtime progression path.
+
 ### Audio/VFX ownership
 
 Audio/VFX trigger mapping is defined centrally.  
@@ -262,7 +279,7 @@ Individual gameplay scripts can request a named event, but should not hold uniqu
 ### Avoid unless necessary
 
 - generic service locators with no boundaries
-- “manager” classes that also serve as data stores, UI binders, and effect spawners
+- â€œmanagerâ€ classes that also serve as data stores, UI binders, and effect spawners
 - abstract factory layers that exist only for theory
 - deep inheritance trees for hazards
 
@@ -286,8 +303,8 @@ Rules:
 ## Scene ownership policy
 
 - `Bootstrap` owns startup only
-- `MainMenu` owns title/menu presentation and navigation to play
-- `Gameplay` owns the active run and result panel
+- `MainMenu` owns title/menu presentation, splash/logo moment, Grid Status, and first-run tutorial overlays
+- `Gameplay` owns the active run, result panel, and optional share overlay
 
 Settings can exist as a reusable overlay prefab/panel shared by menu and gameplay.
 
@@ -350,15 +367,15 @@ The important rule is that event flow remains readable and local.
 
 ## Example system boundary map
 
-- `GameManager`: “What state is the run in?”
-- `TrackManager`: “Where is the line and what comes next?”
-- `PlayerController`: “Which side is the player on and how does it flip?”
-- `HazardManager`: “Which hazards are live and what do they mean?”
-- `ScoreSystem`: “What is the score?”
-- `DifficultyDirector`: “How intense should the current run be?”
-- `UI`: “How is current state shown?”
-- `Audio/VFX`: “How does current state feel?”
-- `SaveService`: “What persists between sessions?”
+- `GameManager`: â€œWhat state is the run in?â€
+- `TrackManager`: â€œWhere is the line and what comes next?â€
+- `PlayerController`: â€œWhich side is the player on and how does it flip?â€
+- `HazardManager`: â€œWhich hazards are live and what do they mean?â€
+- `ScoreSystem`: â€œWhat is the score?â€
+- `DifficultyDirector`: â€œHow intense should the current run be?â€
+- `UI`: â€œHow is current state shown?â€
+- `Audio/VFX`: â€œHow does current state feel?â€
+- `SaveService`: â€œWhat persists between sessions?â€
 
 ## Banned patterns
 
@@ -378,6 +395,10 @@ The important rule is that event flow remains readable and local.
 - Config lives in assets, not random scene objects.
 - System responsibilities stay small enough to explain in one sentence.
 - New runtime systems require explicit ownership justification.
+
+
+
+
 
 
 

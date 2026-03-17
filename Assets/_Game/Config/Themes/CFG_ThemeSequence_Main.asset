@@ -1,4 +1,4 @@
-%YAML 1.1
+﻿%YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
@@ -12,12 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f41e17316a5440ca8d3d6a3fbbf3302, type: 3}
   m_Name: CFG_ThemeSequence_Main
   m_EditorClassIdentifier: 
-  enableRuntimeTransitions: 1
-  requireUnlockedTheme: 1
-  minimumScoreForTransitions: 20
+  enableRuntimeTransitions: 0
+  requireUnlockedTheme: 0
+  minimumScoreForTransitions: 0
   minimumTransitionDurationSeconds: 0.24
   maximumTransitionDurationSeconds: 0.5
-  entries:
-  - scoreThreshold: 20
-    themeId: theme.candy-pop
-    transitionDurationSeconds: 0.34
+  entries: []
+

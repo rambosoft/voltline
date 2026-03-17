@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c927ca8d01564300ac164c1b80724b43, type: 3}
   m_Name: CFG_Obstacle_SideBlockerBasic
   m_EditorClassIdentifier: 
-  obstacleId: obstacle.blocker.side.basic
-  displayName: Side Blocker
-  family: 4
+  obstacleId: obstacle.side-pressure.basic
+  displayName: Side Pressure Hazard
+  family: 5
   allowedFromScore: 12
   allowedToScore: -1
   minSpawnSpacing: 1.9

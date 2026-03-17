@@ -45,6 +45,34 @@ namespace Voltline.Gameplay
             ProcessMilestones();
         }
 
+        public void SetDebugScore(int score)
+        {
+            int clampedScore = Mathf.Max(0, score);
+            if (clampedScore == CurrentScore)
+            {
+                return;
+            }
+
+            bool isIncrease = clampedScore > CurrentScore;
+            CurrentScore = clampedScore;
+
+            if (!isIncrease)
+            {
+                nextMilestoneIndex = 0;
+                IReadOnlyList<int> milestones = gameBalance != null ? gameBalance.MilestoneThresholds : null;
+                while (milestones != null && nextMilestoneIndex < milestones.Count && CurrentScore >= milestones[nextMilestoneIndex])
+                {
+                    nextMilestoneIndex++;
+                }
+
+                ScoreChanged?.Invoke(CurrentScore);
+                return;
+            }
+
+            ScoreChanged?.Invoke(CurrentScore);
+            ProcessMilestones();
+        }
+
         private void ProcessMilestones()
         {
             IReadOnlyList<int> milestones = gameBalance != null ? gameBalance.MilestoneThresholds : null;

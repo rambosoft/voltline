@@ -1,13 +1,14 @@
-# Gameplay Systems
+﻿# Gameplay Systems
 Status: Active
 Owner: Team
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Source of truth for: concrete gameplay rules, state machine, input behavior, hazard rules, score rules, fail conditions, tuning defaults
 Depends on: 02-game-design-pillars.md, 04-architecture.md, 10-data-content-model.md
 Do not duplicate with: prototype notes, temporary tuning spreadsheets
 
 > Working title: **Voltline**  
-> Core concept / public-facing design name: **STAY ON THE LINE**
+> Current public-facing release title: **Voltline**  
+> Primary production theme direction: **Live Wire City**
 
 ## Gameplay summary
 
@@ -46,9 +47,9 @@ There are no combat verbs, no charge verbs, and no inventory verbs in the first 
 
 ### Player position logic
 
-The player is attached to the line’s local frame.
+The player is attached to the lineâ€™s local frame.
 
-The player’s world position is determined by:
+The playerâ€™s world position is determined by:
 
 - current distance/progress on the line
 - line tangent
@@ -56,7 +57,7 @@ The player’s world position is determined by:
 - current side value (`Top` or `Bottom` relative to the line)
 - configured side offset distance
 
-This keeps the character visually “riding” the line rather than floating independently in space.
+This keeps the character visually â€œridingâ€ the line rather than floating independently in space.
 
 ### Player side state
 
@@ -128,7 +129,7 @@ It should:
 - move forward continuously
 - curve smoothly
 - remain readable
-- support local “top/bottom” interpretation at all times
+- support local â€œtop/bottomâ€ interpretation at all times
 - react lightly to flips and milestones
 
 ### Line visual rule
@@ -146,34 +147,45 @@ Rules:
 
 ## Hazard families
 
-Initial approved hazard families:
+Current first-release Live Wire City hazard families:
 
-1. **Spikes**
-   - simple side occupancy danger
-   - fastest to read
+1. **Grounded blockers**
+   - wood barriers, insulated clamp blocks, grounded metal plates
+   - chunky blocking silhouette
+   - read as current drain or route denial
 
-2. **Rotating cutters**
-   - readable rotating danger
-   - good for timing pressure
+2. **Sharp utility hazards**
+   - exposed spikes, hooks, shard brackets, torn cable barbs
+   - fastest aggressive read
+   - rupture the transfer path visually and mechanically
 
-3. **Electric gates**
-   - warning -> active danger sequence
-   - supports timing and telegraphing
+3. **Active electric hazards**
+   - shorted nodes, unstable arcs, crossing live wires, pulse gates
+   - telegraphed warning then active danger state
+   - overload the transfer path
 
-4. **Broken line gaps**
-   - demands side timing and anticipation
+4. **Rotating industrial hazards**
+   - cutter discs, fan blades, maintenance rotors
+   - readable circular motion pressure
+   - mechanical city infrastructure gone wrong
 
-5. **Side blockers**
-   - chunks or bars that deny one side clearly
+5. **Broken conduit sections**
+   - cable gaps, collapsed supports, fractured insulation zones
+   - clearly missing path / broken line state
+   - infrastructure failure and transfer interruption
 
-These families are enough for first release.  
-More should only be added if they preserve readability and one-tap purity.
+6. **Side pressure hazards**
+   - compressing blocks, side interrupters, moving armatures
+   - heavy readable pressure from lane sides
+   - dynamic side denial without hiding the line
+
+These six families are the current gameplay-facing first-release baseline.
 
 ## Hazard introduction rules
 
 Use progressive onboarding inside real play:
 
-- score 0–3: simplest readable hazards only
+- score 0â€“3: simplest readable hazards only
 - early score range introduces one idea at a time
 - mixed patterns appear only after base patterns are understood
 - high difficulty remixes known hazards rather than inventing unreadable new logic
@@ -235,7 +247,7 @@ A challenge beat is usually:
 
 - a hazard cluster
 - a scoring gate positioned after a readable obstacle
-- a danger segment designed to represent one “survival success”
+- a danger segment designed to represent one â€œsurvival successâ€
 
 ### Score behavior
 - increment by 1 per cleared beat by default
@@ -248,20 +260,39 @@ Best score updates only on confirmed run-end or at safe persistence points, not 
 
 ## Milestones
 
-Initial milestone thresholds:
+Current first-release Live Wire City milestone thresholds:
 
 - 10
 - 20
 - 30
+- 40
 - 50
-- 75
-- 100
 
 Milestones should trigger:
 
 - short celebratory UI emphasis
 - mild VFX burst
 - stronger emotional framing, not long interruption
+- city-electric copy such as district recovery, grid stabilization, and full-charge messaging
+
+## Live Wire City world progression
+
+First-release presentation progression is one evolving city, not random whole-theme swapping.
+
+District states:
+
+- `0-9`: **Failing Grid**
+- `10-19`: **Local Power Restored**
+- `20-29`: **Grid Stabilization**
+- `30-39`: **Surge City**
+- `40+`: **Overclock City**
+
+Rules:
+
+- district state is driven by config-owned score bands
+- milestone reactions layer on top of the current district state
+- the base surfaced theme identity remains `theme.live-wire-city`
+- progression should enrich the world without changing one-tap rules, fairness, or retry speed
 
 ## Difficulty ramp
 
@@ -342,7 +373,7 @@ If daily challenge exists:
 - only seed/config differ
 - score remains directly comparable within that seed
 - daily seed must still respect fairness rules
-- daily challenge should feel “tough but believable,” not random punishment
+- daily challenge should feel â€œtough but believable,â€ not random punishment
 
 ## Debug hooks
 
@@ -381,7 +412,7 @@ These are initial targets, not immutable truths.
 - first mixed hazard sequences allowed after score **5**
 - first electric-gate sequences allowed after score **8**
 - first tighter gap + hazard combos allowed after score **12**
-- no “impossible-feeling” rhythm spikes before score **15**
+- no â€œimpossible-feelingâ€ rhythm spikes before score **15**
 
 These values now live in config assets and should be tuned through playtesting rather than rewritten in runtime code.
 
@@ -404,4 +435,6 @@ Before accepting a new pattern, confirm:
 - Score remains simple and visible.
 - Death stays immediate and understandable.
 - Restart remains central to the emotional loop.
+
+
 

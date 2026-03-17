@@ -11,6 +11,7 @@ namespace Voltline.Gameplay
         private GameBalanceConfig gameBalance;
         private GameplayPresentationConfig presentationConfig;
         private ThemeConfig theme;
+        private WorldDistrictStateDefinition currentDistrictState;
         private Camera gameplayCamera;
         private LineRenderer lineRenderer;
         private Material lineMaterial;
@@ -21,10 +22,16 @@ namespace Voltline.Gameplay
         private float pulseStrength;
         private Color displayedLineCoreColor;
         private Color displayedLineGlowColor;
+        private float displayedLineWidthMultiplier = 1f;
+        private float displayedPulseSpeedMultiplier = 1f;
         private Color transitionFromLineCoreColor;
         private Color transitionFromLineGlowColor;
         private Color transitionToLineCoreColor;
         private Color transitionToLineGlowColor;
+        private float transitionFromLineWidthMultiplier = 1f;
+        private float transitionToLineWidthMultiplier = 1f;
+        private float transitionFromPulseSpeedMultiplier = 1f;
+        private float transitionToPulseSpeedMultiplier = 1f;
         private float themeTransitionDuration;
         private float themeTransitionElapsed;
 
@@ -58,18 +65,13 @@ namespace Voltline.Gameplay
         public void ApplyTheme(ThemeConfig activeTheme, float transitionDurationSeconds)
         {
             theme = activeTheme;
-            transitionFromLineCoreColor = displayedLineCoreColor == default ? activeTheme.LineCoreColor : displayedLineCoreColor;
-            transitionFromLineGlowColor = displayedLineGlowColor == default ? activeTheme.LineGlowColor : displayedLineGlowColor;
-            transitionToLineCoreColor = activeTheme.LineCoreColor;
-            transitionToLineGlowColor = activeTheme.LineGlowColor;
-            themeTransitionDuration = Mathf.Max(0f, transitionDurationSeconds);
-            themeTransitionElapsed = 0f;
+            ApplyLineTargets(ResolveLineCoreColor(), ResolveLineGlowColor(), ResolveLineWidthMultiplier(), ResolvePulseSpeedMultiplier(), transitionDurationSeconds);
+        }
 
-            if (themeTransitionDuration <= 0f)
-            {
-                displayedLineCoreColor = transitionToLineCoreColor;
-                displayedLineGlowColor = transitionToLineGlowColor;
-            }
+        public void ApplyWorldDistrict(WorldDistrictStateDefinition districtState, float transitionDurationSeconds)
+        {
+            currentDistrictState = districtState;
+            ApplyLineTargets(ResolveLineCoreColor(), ResolveLineGlowColor(), ResolveLineWidthMultiplier(), ResolvePulseSpeedMultiplier(), transitionDurationSeconds);
         }
 
         private void Update()
@@ -79,12 +81,12 @@ namespace Voltline.Gameplay
                 return;
             }
 
-            pulseTime += Time.deltaTime;
+            pulseTime += Time.deltaTime * displayedPulseSpeedMultiplier;
             pulseStrength = Mathf.Max(0f, pulseStrength - (Time.deltaTime * 2.4f));
             UpdateThemeTransition(Time.deltaTime);
 
             float idlePulse = 0.5f + (Mathf.Sin(pulseTime * 2.25f) * 0.5f);
-            float width = presentationConfig.TrackLineWidth * (1f + (idlePulse * 0.08f) + (pulseStrength * 0.22f));
+            float width = presentationConfig.TrackLineWidth * displayedLineWidthMultiplier * (1f + (idlePulse * 0.08f) + (pulseStrength * 0.22f));
             lineRenderer.startWidth = width;
             lineRenderer.endWidth = width;
             lineRenderer.startColor = Color.Lerp(displayedLineCoreColor, displayedLineGlowColor, 0.28f + (idlePulse * 0.12f) + (pulseStrength * 0.25f));
@@ -195,10 +197,64 @@ namespace Voltline.Gameplay
             float t = Mathf.Clamp01(themeTransitionElapsed / themeTransitionDuration);
             displayedLineCoreColor = Color.Lerp(transitionFromLineCoreColor, transitionToLineCoreColor, t);
             displayedLineGlowColor = Color.Lerp(transitionFromLineGlowColor, transitionToLineGlowColor, t);
+            displayedLineWidthMultiplier = Mathf.Lerp(transitionFromLineWidthMultiplier, transitionToLineWidthMultiplier, t);
+            displayedPulseSpeedMultiplier = Mathf.Lerp(transitionFromPulseSpeedMultiplier, transitionToPulseSpeedMultiplier, t);
             if (t >= 1f)
             {
                 themeTransitionDuration = 0f;
             }
+        }
+
+        private void ApplyLineTargets(Color targetCore, Color targetGlow, float targetWidthMultiplier, float targetPulseSpeedMultiplier, float transitionDurationSeconds)
+        {
+            transitionFromLineCoreColor = displayedLineCoreColor == default ? targetCore : displayedLineCoreColor;
+            transitionFromLineGlowColor = displayedLineGlowColor == default ? targetGlow : displayedLineGlowColor;
+            transitionFromLineWidthMultiplier = displayedLineWidthMultiplier <= 0f ? targetWidthMultiplier : displayedLineWidthMultiplier;
+            transitionFromPulseSpeedMultiplier = displayedPulseSpeedMultiplier <= 0f ? targetPulseSpeedMultiplier : displayedPulseSpeedMultiplier;
+            transitionToLineCoreColor = targetCore;
+            transitionToLineGlowColor = targetGlow;
+            transitionToLineWidthMultiplier = targetWidthMultiplier;
+            transitionToPulseSpeedMultiplier = targetPulseSpeedMultiplier;
+            themeTransitionDuration = Mathf.Max(0f, transitionDurationSeconds);
+            themeTransitionElapsed = 0f;
+
+            if (themeTransitionDuration <= 0f)
+            {
+                displayedLineCoreColor = transitionToLineCoreColor;
+                displayedLineGlowColor = transitionToLineGlowColor;
+                displayedLineWidthMultiplier = transitionToLineWidthMultiplier;
+                displayedPulseSpeedMultiplier = transitionToPulseSpeedMultiplier;
+            }
+        }
+
+        private Color ResolveLineCoreColor()
+        {
+            if (currentDistrictState != null)
+            {
+                return currentDistrictState.LineCoreColor;
+            }
+
+            return theme != null ? theme.LineCoreColor : Color.white;
+        }
+
+        private Color ResolveLineGlowColor()
+        {
+            if (currentDistrictState != null)
+            {
+                return currentDistrictState.LineGlowColor;
+            }
+
+            return theme != null ? theme.LineGlowColor : Color.white;
+        }
+
+        private float ResolveLineWidthMultiplier()
+        {
+            return currentDistrictState != null ? Mathf.Max(0.75f, currentDistrictState.LineWidthMultiplier) : 1f;
+        }
+
+        private float ResolvePulseSpeedMultiplier()
+        {
+            return currentDistrictState != null ? Mathf.Max(0.5f, currentDistrictState.LinePulseSpeedMultiplier) : 1f;
         }
 
         private float EvaluateTrackCenterX(float pathDistance)

@@ -5,6 +5,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using Voltline.Data;
 using Voltline.Gameplay;
+using Voltline.UI;
 
 namespace Voltline.Tests.EditMode
 {
@@ -60,6 +61,28 @@ namespace Voltline.Tests.EditMode
                 GameplaySceneInstaller.EditorSessionDebugStartingScore = previousScore;
                 GameplaySceneInstaller.EditorSessionDebugStartingScoreOverrideEnabled = previousEnabled;
             }
+        }
+
+        [Test]
+        public void MainMenuScene_UsesThemeCatalogBackedBrandingContracts()
+        {
+            EditorSceneManager.OpenScene(ProjectConfigAssetPaths.MainMenuScene, OpenSceneMode.Single);
+
+            MainMenuView mainMenu = Object.FindFirstObjectByType<MainMenuView>();
+            Assert.That(mainMenu, Is.Not.Null);
+
+            SerializedObject serializedObject = new(mainMenu);
+            Assert.That(serializedObject.FindProperty("themeCatalog").objectReferenceValue, Is.Not.Null);
+            Assert.That(serializedObject.FindProperty("playerVisualConfig").objectReferenceValue, Is.Not.Null);
+            Assert.That(serializedObject.FindProperty("obstacleVisualCatalog").objectReferenceValue, Is.Not.Null);
+            Assert.That(serializedObject.FindProperty("audioCueCatalog").objectReferenceValue, Is.Not.Null);
+        }
+
+        [Test]
+        public void LiveWireCityWorldProgressionAsset_ExistsAtDocumentedPath()
+        {
+            WorldProgressionConfig progression = AssetDatabase.LoadAssetAtPath<WorldProgressionConfig>(ProjectConfigAssetPaths.WorldProgression);
+            Assert.That(progression, Is.Not.Null);
         }
 
         [Test]

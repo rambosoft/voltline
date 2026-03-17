@@ -1,13 +1,14 @@
-# UI / UX Style Guide
+﻿# UI / UX Style Guide
 Status: Active
 Owner: Team
-Last updated: 2026-03-15
+Last updated: 2026-03-17
 Source of truth for: screen behavior, hierarchy, HUD, menu rules, death flow, typography, spacing, accessibility, screenshot composition
 Depends on: 01-product-vision.md, 06-scene-flow.md, 07-gameplay-systems.md
 Do not duplicate with: art moodboards or isolated UI mock notes
 
 > Working title: **Voltline**  
-> Core concept / public-facing design name: **STAY ON THE LINE**
+> Current public-facing release title: **Voltline**  
+> Primary production theme direction: **Live Wire City**
 
 ## UX goals
 
@@ -20,7 +21,7 @@ The interface should feel:
 - modern
 - mobile-native
 - fast to navigate
-- visually consistent with the neon arcade fantasy
+- visually consistent with the Live Wire City electric-grid fantasy
 
 The UI must support the game loop, not compete with it.
 
@@ -50,6 +51,17 @@ UI style keywords:
 
 The UI should feel stylish enough for adults, but friendly enough for kids.
 
+## UI production ownership
+
+Current implementation ownership for first-release UI surfaces:
+
+- BrandingPresentationConfig owns placeholder-safe public title, subtitle, optional logo, and hidden/visible optional-entry gates
+- ProductionCopyConfig owns main menu, pause, result, settings, and theme-status copy
+- UIThemeConfig owns panel, button, text, border, shadow, and future typography tokens
+- ThemeCatalog is the shared runtime entry point for those UI-facing configs
+
+Do not hardcode public-facing UI strings back into runtime views once these config paths exist.
+
 ## Screen hierarchy
 
 Approved screen set for first release:
@@ -60,11 +72,17 @@ Approved screen set for first release:
 4. Result Panel
 5. Settings Overlay
 
+Current optional overlays promoted into the shipped shell:
+
+- splash/logo moment on app entry
+- Grid Status / district progression panel from the former Themes slot
+- first-run expanded tutorial overlay
+- result-share overlay with clipboard copy
+
 Future optional screens:
 
 - Daily Challenge panel
-- Themes/Skins panel
-- Best score/history panel
+- Themes panel once more than one production theme is intentionally surfaced
 
 ## Main Menu
 
@@ -74,26 +92,37 @@ Future optional screens:
 - get the player into a run quickly
 
 ### Required elements
-- game logo / working title
-- animated gameplay demo or idle preview
-- large primary Play button
-- best score display
-- smaller buttons for Settings and future modes
-- short mechanic hint: “Tap to flip sides”
+- placeholder-safe `Voltline` title or logo treatment
+- subtitle path, currently `Keep the grid alive`
+- animated gameplay demo lane in the middle of the screen
+- large dominant Play button
+- secondary row with `Daily`, `Grid`, `Best`, and `Settings` once optional Grid Status is promoted
+- best score summary access through the `Best` entry
+- short mechanic hint owned by production copy config, currently `Tap to flip sides`
+- bottom version text
+- optional splash/logo beat that auto-clears quickly and does not delay first play for long
+- optional Grid Status panel that stays in-scene and lightweight
+- optional first-run tutorial overlay that stays one action away from play
 
 ### Layout priority
 Top:
-- logo/title
+- title / logo
+- subtitle
 
 Middle:
-- animated line + character preview
+- animated line + city preview with one or two readable hazard examples
+
+Lower:
+- big Play button
+- fixed secondary row with four entries
 
 Bottom:
-- big Play button
-- small secondary actions
+- version text
 
 ### Menu rules
 - Play is the most visually prominent action
+- `Daily` stays visible but disabled until a later promotion
+- `Grid`, `Best`, and `Settings` stay active once the optional extras pass is promoted
 - demo/preview should run without requiring text explanation
 - no cluttered top bars
 - no long submenu chain before the first run
@@ -152,21 +181,23 @@ This screen is crucial to retention.
 ### Required result content
 - final score
 - best score
-- short emotional message
+- short city/power-grid themed message
 - big Retry button
 - smaller Home button
-- optional Share button
+- optional Share button when the promoted Phase 7 surface is enabled
 
 ### Emotional microcopy examples
-- So close
-- Almost 20
-- New Best
-- One more run
-- You survived 18
+- GRID FAILURE
+- DISTRICT DOWN
+- TRANSFER FAILED
+- LINE INTERRUPTED
+- You restored 3 districts
+- So close to full charge
 
 ### Layout rules
 - Retry is center priority
 - Retry must be visually larger than Home/Share
+- Share must remain secondary and must never delay Retry availability
 - result reveal is fast
 - panel should feel conclusive but not heavy
 - do not cover the entire screen with opaque noise unless testing proves it helps
@@ -178,8 +209,9 @@ Keep it minimal in first release.
 ### Allowed settings
 - Music volume
 - SFX volume
-- Vibration toggle (if implemented)
-- Theme selection (if unlocked themes exist)
+- Haptics toggle (if implemented)
+- reduced-effects toggle when surfaced
+- Theme selection only when intentionally surfaced; keep it hidden while the first release still exposes one production theme
 - maybe color-blind/readability options later if needed
 
 ### Rules
@@ -232,12 +264,12 @@ Each theme should still respect the same semantic roles:
 - neutral text/UI color
 
 ### Default working theme
-**Neon Night**
-- background: deep navy / purple
-- line: cyan glow
-- player: white with cyan/pink accents
-- danger: magenta-red
-- milestone/reward: warm gold or bright white
+**Live Wire City**
+- background: midnight navy / deep grid blue / charcoal steel
+- line: live cyan + electric blue + core white
+- player: bright electric core with cyan-white emphasis
+- danger: overload magenta / alert red / hot orange
+- milestone/reward: signal gold / voltage lime
 
 ## Animation behavior
 
@@ -252,8 +284,8 @@ UI motion should feel smooth and premium, never bouncy and noisy.
 - button emphasis
 
 ### Duration guidance
-- tiny micro-feedback: **0.08–0.18s**
-- panel transitions: **0.18–0.30s**
+- tiny micro-feedback: **0.08â€“0.18s**
+- panel transitions: **0.18â€“0.30s**
 - result entry: short and decisive
 
 Avoid long easing chains that slow re-entry into gameplay.
@@ -301,7 +333,7 @@ Good:
 - one big Retry button
 - visible score with tiny pop
 - minimal pause icon
-- clean settings panel with 2–4 controls
+- clean settings panel with 2â€“4 controls
 
 Bad:
 - five equal-size menu buttons
@@ -312,7 +344,7 @@ Bad:
 
 ## Premium-but-simple definition
 
-For this project, “premium but simple” means:
+For this project, â€œpremium but simpleâ€ means:
 
 - clean dark surfaces
 - bright accent colors
@@ -329,3 +361,6 @@ For this project, “premium but simple” means:
 - Safe-area handling is required.
 - Screenshots must look exciting without looking crowded.
 - UI must never make the run harder to read.
+
+
+

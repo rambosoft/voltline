@@ -17,6 +17,7 @@ namespace Voltline.Save
         public float SfxVolume => currentProfile != null ? currentProfile.sfxVolume : 1f;
         public bool VibrationEnabled => currentProfile == null || currentProfile.vibrationEnabled;
         public string SelectedThemeId => currentProfile != null ? currentProfile.selectedThemeId : SaveSchema.DefaultThemeId;
+        public bool HasSeenFirstLaunchHint => currentProfile != null && currentProfile.hasSeenFirstLaunchHint;
 
         public event System.Action ProfileChanged;
 
@@ -166,6 +167,17 @@ namespace Voltline.Save
             NotifyProfileChanged(true);
         }
 
+        public void SetHasSeenFirstLaunchHint(bool seen)
+        {
+            if (currentProfile == null || currentProfile.hasSeenFirstLaunchHint == seen)
+            {
+                return;
+            }
+
+            currentProfile.hasSeenFirstLaunchHint = seen;
+            NotifyProfileChanged(true);
+        }
+
         public void SetSelectedThemeId(string themeId)
         {
             if (string.IsNullOrWhiteSpace(themeId) || currentProfile.selectedThemeId == themeId || !IsThemeUnlocked(themeId))
@@ -281,5 +293,3 @@ namespace Voltline.Save
         }
     }
 }
-
-

@@ -108,11 +108,12 @@ namespace Voltline.Gameplay
 
         public bool IsSupportedFamily(ObstacleFamily family)
         {
-            return family == ObstacleFamily.Spikes ||
-                   family == ObstacleFamily.RotatingCutters ||
-                   family == ObstacleFamily.ElectricGates ||
-                   family == ObstacleFamily.BrokenLineGaps ||
-                   family == ObstacleFamily.SideBlockers;
+            return family == ObstacleFamily.GroundedBlockers
+                   || family == ObstacleFamily.SharpUtilityHazards
+                   || family == ObstacleFamily.ActiveElectricHazards
+                   || family == ObstacleFamily.RotatingIndustrialHazards
+                   || family == ObstacleFamily.BrokenConduitSections
+                   || family == ObstacleFamily.SidePressureHazards;
         }
     }
 }

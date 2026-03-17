@@ -1,13 +1,14 @@
-# Architecture Decision Records
+﻿# Architecture Decision Records
 Status: Active
 Owner: Team
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Source of truth for: major cross-cutting decisions, rationale, alternatives considered, consequences
 Depends on: 00-index.md
 Do not duplicate with: feature-specific implementation details
 
 > Working title: **Voltline**  
-> Core concept / public-facing design name: **STAY ON THE LINE**
+> Current public-facing release title: **Voltline**  
+> Primary production theme direction: **Live Wire City**
 
 ## How to use this file
 
@@ -209,7 +210,7 @@ The core identity of the game depends on instant understanding and timing master
 **Decision:** Keep the initial release scope small and polish-driven.
 
 **Context:**  
-The game’s value comes from feel, fairness, and style, not system count.
+The gameâ€™s value comes from feel, fairness, and style, not system count.
 
 **Alternatives considered:**  
 - progression-heavy design
@@ -256,3 +257,25 @@ The first release is intentionally small and does not need remote or large-scale
 - lower setup complexity
 - faster initial implementation
 - Addressables remain available later if content scale justifies them
+---
+
+## ADR-013
+**Date:** 2026-03-16  
+**Status:** Accepted  
+**Decision:** Ship first-release presentation as one surfaced `theme.live-wire-city` base theme with config-driven world progression and six Live Wire City hazard families.
+
+**Context:**  
+The Live Wire City production direction became the target-state source of truth. The project had already completed refresh-readiness work, but still reflected a multi-theme milestone-swap baseline and an older five-family hazard model. Reaching the final target required a deliberate migration rather than treating older docs as permanent blockers.
+
+**Alternatives considered:**  
+- continue shipping whole-theme milestone swapping through `ThemeSequenceConfig`
+- keep the older five-family hazard baseline and treat doc-20 families as visual aliases only
+- surface multiple production themes in the first release shell
+
+**Consequences:**  
+- `ThemeSequenceConfig` remains only as a dormant compatibility asset in the first-release shipping posture
+- `WorldProgressionConfig` and `WorldProgressionController` become the shipping runtime progression path
+- the first-release menu shell keeps one surfaced production theme while leaving later multi-theme support structurally possible
+- hazard catalogs, obstacle configs, validation, and tests now align to six Live Wire City hazard families
+- future implementation must keep docs updated when remaining legacy assumptions are retired
+

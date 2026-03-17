@@ -12,7 +12,13 @@ namespace Voltline.Data
         public const string ObstacleCatalog = "Assets/_Game/Config/Gameplay/CAT_ObstacleCatalog_Main.asset";
         public const string ThemeCatalog = "Assets/_Game/Config/Themes/CAT_ThemeCatalog_Main.asset";
         public const string ThemeSequence = "Assets/_Game/Config/Themes/CFG_ThemeSequence_Main.asset";
+        public const string ThemeAudioProfile = "Assets/_Game/Config/Themes/CFG_ThemeAudioProfile_LiveWireCity.asset";
+        public const string ThemeVfxProfile = "Assets/_Game/Config/Themes/CFG_ThemeVfxProfile_LiveWireCity.asset";
+        public const string WorldProgression = "Assets/_Game/Config/Themes/CFG_WorldProgression_LiveWireCity.asset";
         public const string PresentationRolloutPlan = "Assets/_Game/Config/Themes/CFG_PresentationRolloutPlan_Main.asset";
+        public const string BrandingPresentation = "Assets/_Game/Config/UI/CFG_BrandingPresentation_Voltline.asset";
+        public const string ProductionCopy = "Assets/_Game/Config/UI/CFG_ProductionCopy_LiveWireCity.asset";
+        public const string UiTheme = "Assets/_Game/Config/UI/CFG_UITheme_LiveWireCity.asset";
         public const string AudioCueCatalog = "Assets/_Game/Config/Audio/CAT_AudioCueCatalog_Main.asset";
         public const string VfxCatalog = "Assets/_Game/Config/Audio/CAT_VfxCatalog_Main.asset";
         public const string AudioMixer = "Assets/_Game/Audio/Mixers/MIX_Voltline.mixer";

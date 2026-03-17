@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: CAT_ObstacleCatalog_Main
   m_EditorClassIdentifier: 
   obstacles:
+  - {fileID: 11400000, guid: 96b6080fe2a2494194013a23d0d22001, type: 2}
   - {fileID: 11400000, guid: 4f4572010eea46c9b3252788f3f27df7, type: 2}
   - {fileID: 11400000, guid: 2d7115c4e8a84883b988790d95e40190, type: 2}
   - {fileID: 11400000, guid: 7249ceab65b64bf4a5934a2fd08fca44, type: 2}

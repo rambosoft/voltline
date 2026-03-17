@@ -1,13 +1,14 @@
 # Testing and Quality Bar
 Status: Active
 Owner: Team
-Last updated: 2026-03-16
+Last updated: 2026-03-17
 Source of truth for: test philosophy, test scope, manual QA, performance budgets, device checks, acceptance criteria for done
 Depends on: 03-tech-stack.md, 07-gameplay-systems.md, 10-data-content-model.md
 Do not duplicate with: personal testing habits or undocumented checklists
 
 > Working title: **Voltline**  
-> Core concept / public-facing design name: **STAY ON THE LINE**
+> Current public-facing release title: **Voltline**  
+> Primary production theme direction: **Live Wire City**
 
 ## Quality philosophy
 
@@ -72,7 +73,7 @@ At minimum, add automated tests for:
 - difficulty progression calculations
 - theme ID and catalog integrity
 - release-readiness audit checks for scene order, input asset integrity, and debug-safe defaults
-- presentation-readiness audit checks for frozen assumptions, config ownership, unlocked player/obstacle decoupling, unlocked background/theme-sequence readiness, and structurally unlocked VFX/audio refresh pipeline readiness
+- presentation-readiness audit checks for frozen assumptions, config ownership, single-theme Live Wire City progression readiness, six-family hazard coverage, front-door shell structure, and structurally unlocked VFX/audio rollout readiness
 - presentation refresh approval audit checks for the stop/go rollout gate and required manual/device verification notes
 
 ## What must be validated manually
@@ -183,10 +184,12 @@ After any change to gameplay systems, verify:
 - no hazard spawns in impossible intro window
 - pause still freezes live progression safely
 - retry still resets all transient run state
-- theme changes do not reduce readability
-- milestone-gated theme transitions stay inside the approved runtime sequence rules
+- district progression does not reduce readability or base-theme identity
+- milestone reactions and score-band district changes stay inside the approved `WorldProgressionConfig` rules
 - player visual states reset, trigger, and fall back correctly when state-specific art is partially populated
 - imported player-state sprites preserve the approved readable footprint instead of changing gameplay size
+- centered atmosphere layers can stay centered when lane quiet-zone enforcement is intentionally disabled
+- background parallax keeps skyline slowest, utility slightly faster, and streak/atmosphere support layers clearly lighter than gameplay motion
 
 ## Release-blocking bugs
 
@@ -224,6 +227,20 @@ Prefer writing tests first for:
 
 Do not overforce test-first on highly feel-driven VFX polish, but still validate outcomes.
 
+## Additional presentation-rollout checks
+
+When Live Wire City world progression and the production shell change, also verify:
+
+- `ThemeCatalog` references valid `BrandingPresentationConfig`, `ProductionCopyConfig`, `UIThemeConfig`, and `WorldProgressionConfig` assets through the surfaced theme
+- the main menu resolves `Voltline` title/subtitle, four-entry secondary row, and production copy through config instead of hardcoded runtime strings
+- `Daily` remains visible but disabled while the optional Grid Status surface is promoted through the former Themes slot
+- Grid Status tests cover the five district cards, current/online/locked states, and score-band formatting through config
+- result-copy tests cover configured city/power-grid title and message output, including districts restored and milestone-specific copy
+- result-share tests cover clipboard-ready summary/flavor generation without creating a new scene
+- first-run tutorial tests cover the promoted overlay flow and `hasSeenFirstLaunchHint` persistence
+- world progression tests cover all five districts and the `10/20/30/40/50` milestone ladder
+- obstacle and hazard validation covers all six Live Wire City families
+
 ## Build verification
 
 Before creating a candidate mobile build:
@@ -232,7 +249,7 @@ Before creating a candidate mobile build:
 - run `Tools > Voltline > Run Release Audit`
 - run `Tools > Voltline > Run Presentation Readiness Audit` before any art/theme/presentation rollout work
 - run `Tools > Voltline > Run Presentation Refresh Approval Audit` before approving any staged refresh slice beyond readiness work
-- verify background presentation config and theme-sequence config are assigned in `Gameplay` and pass validation
+- verify `Gameplay` still assigns the dormant legacy `ThemeSequenceConfig` asset and the active `WorldProgressionConfig` path passes validation through the surfaced Live Wire City theme
 - verify theme-owned VFX/audio profiles and `PresentationRolloutPlanConfig` pass validation
 - verify scene list order
 - verify portrait orientation settings
@@ -255,4 +272,9 @@ A feature is incomplete unless docs are updated when source-of-truth topics chan
 - Manual testing covers feel and readability.
 - Mobile safe area and performance must be validated before release.
 - No feature is done if docs and tests drift behind implementation.
+
+
+
+
+
 

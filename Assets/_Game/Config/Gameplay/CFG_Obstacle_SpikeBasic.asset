@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c927ca8d01564300ac164c1b80724b43, type: 3}
   m_Name: CFG_Obstacle_SpikeBasic
   m_EditorClassIdentifier: 
-  obstacleId: obstacle.spike.basic
-  displayName: Spike
-  family: 0
+  obstacleId: obstacle.sharp-utility.spike
+  displayName: Sharp Utility Hazard
+  family: 1
   allowedFromScore: 0
   allowedToScore: -1
   minSpawnSpacing: 1.8

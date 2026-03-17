@@ -31,9 +31,13 @@ namespace Voltline.Audio
         private AudioMixerGroup uiGroup;
         private ThemeAudioProfile activeProfile;
         private float musicBaseVolume = 1f;
+        private string currentMusicCueId = AudioCueIds.MainLoop;
 
         public static AudioService Instance => EnsureExists();
         public string CurrentThemeAudioProfileName => activeProfile != null ? activeProfile.name : string.Empty;
+        public string CurrentThemeAudioProfileId => activeProfile != null ? activeProfile.ProfileId : string.Empty;
+        public string LastPlayedCueId { get; private set; } = string.Empty;
+        public string CurrentMusicCueId => currentMusicCueId;
 
         public static AudioService EnsureExists()
         {
@@ -149,6 +153,7 @@ namespace Voltline.Audio
             slot.Source.volume = ResolveRouteVolume(definition.Route) * Mathf.Max(0f, slot.BaseVolume);
             slot.Source.Play();
             lastCuePlayTimes[resolvedCueId] = Time.time;
+            LastPlayedCueId = resolvedCueId;
         }
 
         public void PlayMusicLoop(string cueId)
@@ -165,6 +170,8 @@ namespace Voltline.Audio
             float volumeMultiplier = profileOverride != null ? profileOverride.VolumeMultiplier : 1f;
             musicBaseVolume = definition.MaxVolume * volumeMultiplier * (activeProfile != null ? activeProfile.MusicVolumeMultiplier : 1f);
             musicSource.outputAudioMixerGroup = ResolveRouteGroup(AudioCueCatalog.AudioCueRoute.Music);
+            currentMusicCueId = resolvedCueId;
+            LastPlayedCueId = resolvedCueId;
             if (musicSource.clip == clip && musicSource.isPlaying)
             {
                 ApplyVolumes();
@@ -409,12 +416,24 @@ namespace Voltline.Audio
         private static readonly Dictionary<string, AudioCueCatalog.AudioCueDefinition> Definitions = new()
         {
             { AudioCueIds.Flip, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.Flip, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.9f, 1f, 0.96f, 1.05f, 1) },
+            { AudioCueIds.FlipLiveWireCity, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.FlipLiveWireCity, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.92f, 1f, 0.98f, 1.04f, 1) },
             { AudioCueIds.Score, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.Score, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.6f, 0.75f, 1f, 1.04f, 2) },
+            { AudioCueIds.ScoreLiveWireCity, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.ScoreLiveWireCity, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.56f, 0.68f, 1f, 1.03f, 2) },
             { AudioCueIds.NearMiss, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.NearMiss, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.55f, 0.65f, 1f, 1f, 1) },
+            { AudioCueIds.NearMissLiveWireCity, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.NearMissLiveWireCity, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.52f, 0.62f, 1f, 1f, 1) },
             { AudioCueIds.Milestone, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.Milestone, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.72f, 0.82f, 1f, 1f, 1) },
+            { AudioCueIds.MilestoneLiveWireCity, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.MilestoneLiveWireCity, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.74f, 0.86f, 1f, 1f, 1) },
             { AudioCueIds.Death, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.Death, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.92f, 1f, 1f, 1f, 1) },
+            { AudioCueIds.DeathLiveWireCityGrounded, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.DeathLiveWireCityGrounded, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.86f, 0.94f, 1f, 1f, 1) },
+            { AudioCueIds.DeathLiveWireCitySharp, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.DeathLiveWireCitySharp, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.88f, 0.98f, 1f, 1f, 1) },
+            { AudioCueIds.DeathLiveWireCityElectric, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.DeathLiveWireCityElectric, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.9f, 1f, 1f, 1f, 1) },
+            { AudioCueIds.DeathLiveWireCityRotating, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.DeathLiveWireCityRotating, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.88f, 0.98f, 1f, 1f, 1) },
+            { AudioCueIds.DeathLiveWireCityBroken, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.DeathLiveWireCityBroken, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.84f, 0.92f, 1f, 1f, 1) },
+            { AudioCueIds.DeathLiveWireCitySide, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.DeathLiveWireCitySide, AudioCueCatalog.AudioCueRoute.GameplaySfx, 0.88f, 0.98f, 1f, 1f, 1) },
             { AudioCueIds.UiClick, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.UiClick, AudioCueCatalog.AudioCueRoute.UiSfx, 0.45f, 0.55f, 1f, 1f, 1) },
-            { AudioCueIds.MainLoop, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.MainLoop, AudioCueCatalog.AudioCueRoute.Music, 0.22f, 0.28f, 1f, 1f, 1) }
+            { AudioCueIds.UiClickLiveWireCity, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.UiClickLiveWireCity, AudioCueCatalog.AudioCueRoute.UiSfx, 0.32f, 0.42f, 1f, 1f, 1) },
+            { AudioCueIds.MainLoop, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.MainLoop, AudioCueCatalog.AudioCueRoute.Music, 0.22f, 0.28f, 1f, 1f, 1) },
+            { AudioCueIds.MainLoopLiveWireCity, new AudioCueCatalog.AudioCueDefinition(AudioCueIds.MainLoopLiveWireCity, AudioCueCatalog.AudioCueRoute.Music, 0.26f, 0.32f, 1f, 1f, 1) },
         };
 
         public static AudioCueCatalog.AudioCueDefinition Get(string cueId)

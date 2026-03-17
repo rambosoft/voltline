@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e7bb8a239a547f5a4ab16e7a2f6f99d, type: 3}
+  m_Name: CFG_ThemeAudioProfile_LiveWireCity
+  m_EditorClassIdentifier: 
+  profileId: theme.live-wire-city.audio
+  maxConcurrentGameplayVoices: 5
+  maxConcurrentUiVoices: 1
+  minimumUiClickIntervalSeconds: 0.06
+  musicVolumeMultiplier: 1
+  entries:
+  - cueId: audio.flip.default
+    overrideCueId: audio.flip.live-wire-city
+    volumeMultiplier: 1
+    pitchMultiplier: 1
+  - cueId: audio.score.default
+    overrideCueId: audio.score.live-wire-city
+    volumeMultiplier: 1
+    pitchMultiplier: 1
+  - cueId: audio.near-miss.default
+    overrideCueId: audio.near-miss.live-wire-city
+    volumeMultiplier: 1
+    pitchMultiplier: 1
+  - cueId: audio.milestone.default
+    overrideCueId: audio.milestone.live-wire-city
+    volumeMultiplier: 1
+    pitchMultiplier: 1
+  - cueId: audio.death.default
+    overrideCueId: audio.death.live-wire-city.electric
+    volumeMultiplier: 1
+    pitchMultiplier: 1
+  - cueId: audio.ui.click.default
+    overrideCueId: audio.ui.click.live-wire-city
+    volumeMultiplier: 1
+    pitchMultiplier: 1
+  - cueId: audio.music.main-loop
+    overrideCueId: audio.music.main-loop.live-wire-city
+    volumeMultiplier: 1
+    pitchMultiplier: 1

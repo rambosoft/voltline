@@ -21,6 +21,14 @@ MonoBehaviour:
     minPitch: 0.96
     maxPitch: 1.05
     maxSimultaneousInstances: 1
+  - cueId: audio.flip.live-wire-city
+    route: 1
+    clips: []
+    minVolume: 0.92
+    maxVolume: 1
+    minPitch: 0.98
+    maxPitch: 1.04
+    maxSimultaneousInstances: 1
   - cueId: audio.score.default
     route: 1
     clips: []
@@ -29,11 +37,27 @@ MonoBehaviour:
     minPitch: 1
     maxPitch: 1.04
     maxSimultaneousInstances: 2
+  - cueId: audio.score.live-wire-city
+    route: 1
+    clips: []
+    minVolume: 0.56
+    maxVolume: 0.68
+    minPitch: 1
+    maxPitch: 1.03
+    maxSimultaneousInstances: 2
   - cueId: audio.near-miss.default
     route: 1
     clips: []
     minVolume: 0.55
     maxVolume: 0.65
+    minPitch: 1
+    maxPitch: 1
+    maxSimultaneousInstances: 1
+  - cueId: audio.near-miss.live-wire-city
+    route: 1
+    clips: []
+    minVolume: 0.52
+    maxVolume: 0.62
     minPitch: 1
     maxPitch: 1
     maxSimultaneousInstances: 1
@@ -45,11 +69,67 @@ MonoBehaviour:
     minPitch: 1
     maxPitch: 1
     maxSimultaneousInstances: 1
+  - cueId: audio.milestone.live-wire-city
+    route: 1
+    clips: []
+    minVolume: 0.74
+    maxVolume: 0.86
+    minPitch: 1
+    maxPitch: 1
+    maxSimultaneousInstances: 1
   - cueId: audio.death.default
     route: 1
     clips: []
     minVolume: 0.92
     maxVolume: 1
+    minPitch: 1
+    maxPitch: 1
+    maxSimultaneousInstances: 1
+  - cueId: audio.death.live-wire-city.grounded
+    route: 1
+    clips: []
+    minVolume: 0.86
+    maxVolume: 0.94
+    minPitch: 1
+    maxPitch: 1
+    maxSimultaneousInstances: 1
+  - cueId: audio.death.live-wire-city.sharp
+    route: 1
+    clips: []
+    minVolume: 0.88
+    maxVolume: 0.98
+    minPitch: 1
+    maxPitch: 1
+    maxSimultaneousInstances: 1
+  - cueId: audio.death.live-wire-city.electric
+    route: 1
+    clips: []
+    minVolume: 0.9
+    maxVolume: 1
+    minPitch: 1
+    maxPitch: 1
+    maxSimultaneousInstances: 1
+  - cueId: audio.death.live-wire-city.rotating
+    route: 1
+    clips: []
+    minVolume: 0.88
+    maxVolume: 0.98
+    minPitch: 1
+    maxPitch: 1
+    maxSimultaneousInstances: 1
+  - cueId: audio.death.live-wire-city.broken
+    route: 1
+    clips: []
+    minVolume: 0.84
+    maxVolume: 0.92
+    minPitch: 1
+    maxPitch: 1
+    maxSimultaneousInstances: 1
+  - cueId: audio.death.live-wire-city.side
+    route: 1
+    clips: []
+    minVolume: 0.88
+    maxVolume: 0.98
     minPitch: 1
     maxPitch: 1
     maxSimultaneousInstances: 1
@@ -61,11 +141,27 @@ MonoBehaviour:
     minPitch: 1
     maxPitch: 1
     maxSimultaneousInstances: 1
+  - cueId: audio.ui.click.live-wire-city
+    route: 2
+    clips: []
+    minVolume: 0.32
+    maxVolume: 0.42
+    minPitch: 1
+    maxPitch: 1
+    maxSimultaneousInstances: 1
   - cueId: audio.music.main-loop
     route: 0
     clips: []
     minVolume: 0.22
     maxVolume: 0.28
+    minPitch: 1
+    maxPitch: 1
+    maxSimultaneousInstances: 1
+  - cueId: audio.music.main-loop.live-wire-city
+    route: 0
+    clips: []
+    minVolume: 0.26
+    maxVolume: 0.32
     minPitch: 1
     maxPitch: 1
     maxSimultaneousInstances: 1

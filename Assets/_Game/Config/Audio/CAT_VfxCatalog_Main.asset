@@ -19,7 +19,19 @@ MonoBehaviour:
     scale: 1
     lifetimeCategory: 1
     usePoolingHint: 0
+  - vfxId: vfx.flip.live-wire-city
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1
+    lifetimeCategory: 1
+    usePoolingHint: 0
   - vfxId: vfx.near-miss.default
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1
+    lifetimeCategory: 1
+    usePoolingHint: 0
+  - vfxId: vfx.near-miss.live-wire-city
     spawnMode: 0
     prefab: {fileID: 0}
     scale: 1
@@ -31,9 +43,51 @@ MonoBehaviour:
     scale: 1.1
     lifetimeCategory: 1
     usePoolingHint: 0
+  - vfxId: vfx.death.live-wire-city.grounded
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1.05
+    lifetimeCategory: 1
+    usePoolingHint: 0
+  - vfxId: vfx.death.live-wire-city.sharp
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1.08
+    lifetimeCategory: 1
+    usePoolingHint: 0
+  - vfxId: vfx.death.live-wire-city.electric
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1.12
+    lifetimeCategory: 1
+    usePoolingHint: 0
+  - vfxId: vfx.death.live-wire-city.rotating
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1.08
+    lifetimeCategory: 1
+    usePoolingHint: 0
+  - vfxId: vfx.death.live-wire-city.broken
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1.02
+    lifetimeCategory: 1
+    usePoolingHint: 0
+  - vfxId: vfx.death.live-wire-city.side
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1.06
+    lifetimeCategory: 1
+    usePoolingHint: 0
   - vfxId: vfx.milestone.default
     spawnMode: 0
     prefab: {fileID: 0}
     scale: 1.15
+    lifetimeCategory: 1
+    usePoolingHint: 0
+  - vfxId: vfx.milestone.live-wire-city
+    spawnMode: 0
+    prefab: {fileID: 0}
+    scale: 1.18
     lifetimeCategory: 1
     usePoolingHint: 0

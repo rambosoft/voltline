@@ -61,6 +61,12 @@ namespace Voltline.Editor
         {
             PresentationReadinessAuditResult result = new();
 
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                result.AddError("Exit play mode before running the presentation readiness audit.");
+                return result;
+            }
+
             GameBalanceConfig gameBalance = AssetDatabase.LoadAssetAtPath<GameBalanceConfig>(ProjectConfigAssetPaths.GameBalance);
             DifficultyCurveConfig difficultyCurve = AssetDatabase.LoadAssetAtPath<DifficultyCurveConfig>(ProjectConfigAssetPaths.DifficultyCurve);
             GameplayPresentationConfig gameplayPresentation = AssetDatabase.LoadAssetAtPath<GameplayPresentationConfig>(ProjectConfigAssetPaths.GameplayPresentation);
@@ -97,7 +103,7 @@ namespace Voltline.Editor
 
             ValidateGameplaySceneInstaller(result);
             ValidateMainMenuDependencies(result);
-            AddDependencyNotes(result, gameplayPresentation, backgroundPresentationConfig, playerVisualConfig, hazardPresentationCatalog, obstacleVisualCatalog, themeSequenceConfig);
+            AddDependencyNotes(result, gameplayPresentation, backgroundPresentationConfig, playerVisualConfig, hazardPresentationCatalog, obstacleVisualCatalog, themeCatalog, themeSequenceConfig);
             AddPipelineNotes(result, themeCatalog, presentationRolloutPlan);
             AddContentReadinessNotes(result);
             return result;
@@ -152,12 +158,13 @@ namespace Voltline.Editor
             PlayerVisualConfig playerVisualConfig,
             HazardPresentationCatalog hazardPresentationCatalog,
             ObstacleVisualCatalog obstacleVisualCatalog,
+            ThemeCatalog themeCatalog,
             ThemeSequenceConfig themeSequenceConfig)
         {
             result.AddNote($"Presentation dependency audit: player gameplay is owned by {nameof(PlayerController)} and visuals are now owned by {nameof(PlayerVisualView)} via {nameof(PlayerVisualConfig)}.");
             result.AddNote($"Presentation dependency audit: hazard gameplay is owned by {nameof(HazardManager)} and visuals are now owned by {nameof(HazardVisualView)} via {nameof(ObstacleVisualCatalog)}.");
             result.AddNote($"Presentation dependency audit: background runtime is now owned by {nameof(BackgroundPresentationController)} via {nameof(BackgroundPresentationConfig)}.");
-            result.AddNote($"Presentation dependency audit: theme application is now owned by {nameof(ThemePresentationController)} via {nameof(ThemeCatalog)} and {nameof(ThemeSequenceConfig)}.");
+            result.AddNote($"Presentation dependency audit: theme application is now owned by {nameof(ThemePresentationController)} via {nameof(ThemeCatalog)} and {nameof(WorldProgressionController)}.");
             result.AddNote($"Presentation dependency audit: track runtime remains owned by {nameof(TrackManager)} for line/path behavior only.");
 
             if (gameplayPresentation != null && playerVisualConfig != null)
@@ -175,9 +182,15 @@ namespace Voltline.Editor
                 result.AddNote($"Background budget baseline: up to {backgroundPresentationConfig.MaxRuntimeSpriteCount} runtime layers and {backgroundPresentationConfig.MaxExpectedDrawCalls} expected draw calls with a lane quiet-zone of {backgroundPresentationConfig.LaneQuietZoneHalfWidth:0.##}.");
             }
 
-            if (themeSequenceConfig != null)
+            if (themeCatalog != null && themeCatalog.DefaultTheme != null && themeCatalog.DefaultTheme.ResolveWorldProgressionConfig() != null)
             {
-                result.AddNote($"Runtime theme transitions are milestone-gated through {themeSequenceConfig.Entries.Count} configured theme-sequence entries.");
+                WorldProgressionConfig progression = themeCatalog.DefaultTheme.ResolveWorldProgressionConfig();
+                result.AddNote($"Live Wire City world progression: {progression.DistrictStates.Count} configured districts and {progression.MilestoneReactions.Count} milestone reactions routed through {nameof(WorldProgressionConfig)}.");
+            }
+
+            if (themeSequenceConfig != null && !themeSequenceConfig.EnableRuntimeTransitions)
+            {
+                result.AddNote("Legacy ThemeSequenceConfig remains present only as a dormant compatibility asset. Shipping runtime progression no longer swaps whole themes at milestones.");
             }
         }
 
@@ -185,8 +198,13 @@ namespace Voltline.Editor
         {
             if (themeCatalog != null)
             {
-                result.AddNote($"Theme-owned VFX and audio variation is now routed through {nameof(ThemeVfxProfile)} and {nameof(ThemeAudioProfile)} references on {nameof(ThemeConfig)}.");
+                result.AddNote($"Theme-owned VFX and audio variation is now routed through {nameof(ThemeVfxProfile)} and {nameof(ThemeAudioProfile)} references on {nameof(ThemeConfig)} with dedicated Live Wire City profile ids.");
+                result.AddNote("Failure feedback is now family-aware: grounded, sharp, electric, rotating, broken, and side-pressure hazards each resolve distinct death audio/VFX semantics.");
+                result.AddNote($"Branding and UI production support is now routed through {nameof(BrandingPresentationConfig)}, {nameof(ProductionCopyConfig)}, and {nameof(UIThemeConfig)} references on {nameof(ThemeCatalog)}.");
+                result.AddNote("First-release UI posture keeps theme selection structurally supported but hidden while only one production theme is surfaced.");
                 result.AddNote($"Presentation feedback runtime remains centralized through {nameof(Voltline.VFX.VfxService)} and {nameof(Voltline.Audio.AudioService)} with semantic cue IDs.");
+                result.AddNote("Main menu now ships the Live Wire City front door shell with Grid promoted through the former Themes slot, Best/Settings active, and Daily still disabled.");
+                result.AddNote("Optional extras now remain additive inside the existing scene model: splash/logo moment, Grid Status overlay, share surface, and expanded first-run tutorial all reuse the same branding, copy, save, and world-progression ownership.");
             }
 
             if (presentationRolloutPlan != null)
@@ -203,11 +221,11 @@ namespace Voltline.Editor
             int audioAssetCount = CountAuthoredAssets(audioRoot);
 
             result.AddNote($"Presentation content snapshot: {artAssetCount} non-meta assets under Assets/_Game/Art and {audioAssetCount} non-meta assets under Assets/_Game/Audio.");
-            result.AddNote("Player, obstacle, background, theme-transition, VFX, and audio refresh slices are now structurally unlocked. Broad refresh rollout remains gated by the approval audit and staged rollout plan.");
+            result.AddNote("Player, hazard-family migration, world progression, front door, and background rollout are now structurally unlocked. Broad refresh rollout remains gated by the approval audit and staged rollout plan.");
 
-            if (artAssetCount <= 2)
+            if (artAssetCount <= 6)
             {
-                result.AddWarning("Authored art folders remain sparse. Presentation rollout is structurally ready, but later refresh slices still need real authored assets.");
+                result.AddWarning("Authored art folders remain sparse. Live Wire City rollout is structurally ready, but later slices still need real authored art assets.");
             }
 
             if (audioAssetCount <= 3)
@@ -240,4 +258,7 @@ namespace Voltline.Editor
     }
 }
 #endif
+
+
+
 

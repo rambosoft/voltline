@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c927ca8d01564300ac164c1b80724b43, type: 3}
   m_Name: CFG_Obstacle_CutterBasic
   m_EditorClassIdentifier: 
-  obstacleId: obstacle.cutter.rotating.basic
-  displayName: Rotating Cutter
-  family: 1
+  obstacleId: obstacle.rotating-industrial.cutter.basic
+  displayName: Rotating Industrial Hazard
+  family: 3
   allowedFromScore: 8
   allowedToScore: -1
   minSpawnSpacing: 2.2

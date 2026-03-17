@@ -5,9 +5,9 @@ namespace Voltline.Data
     [CreateAssetMenu(fileName = "CFG_Obstacle", menuName = "Voltline/Config/Obstacle")]
     public sealed class ObstacleConfig : ScriptableObject
     {
-        [SerializeField] private string obstacleId = "obstacle.spike.basic";
-        [SerializeField] private string displayName = "Spike";
-        [SerializeField] private ObstacleFamily family = ObstacleFamily.Spikes;
+        [SerializeField] private string obstacleId = "obstacle.Sharp Utility Hazard.basic";
+        [SerializeField] private string displayName = "Sharp Utility Hazard";
+        [SerializeField] private ObstacleFamily family = ObstacleFamily.SharpUtilityHazards;
         [SerializeField] private int allowedFromScore;
         [SerializeField] private int allowedToScore = -1;
         [SerializeField] private float minSpawnSpacing = 1.5f;

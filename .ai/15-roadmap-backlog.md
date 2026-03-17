@@ -1,18 +1,18 @@
 # Roadmap and Backlog
 Status: Active
 Owner: Team
-Last updated: 2026-03-16
+Last updated: 2026-03-17
 Source of truth for: prioritized future work, polish backlog, technical debt, blocked items, rejected ideas
 Depends on: 01-product-vision.md, 15-roadmap-backlog.md
 Do not duplicate with: source-of-truth gameplay or architecture docs
 
 > Working title: **Voltline**  
-> Core concept / public-facing design name: **STAY ON THE LINE**
+> Current public-facing release title: **Voltline**  
+> Primary production theme direction: **Live Wire City**
 
 ## Purpose
 
-This file holds future work without polluting the source-of-truth docs with half-decided implementation details.
-
+This file holds future work without polluting the source-of-truth docs with half-decided implementation details.  
 Use it for priority control, not truth ownership.
 
 ## Priority philosophy
@@ -30,58 +30,43 @@ Prioritize in this order:
 
 ## Now
 
-These are the highest-priority items for the next serious playable.
+These are the highest-priority items after the completed Live Wire City Phase 3 to 8 rollout, including the promoted Phase 7 optional surfaces.
 
 ### Final release validation
-- run `Tools > Voltline > Validate Config`
-- run `Tools > Voltline > Run Release Audit`
-- run `Tools > Voltline > Run Presentation Readiness Audit`
-- run `Tools > Voltline > Run Presentation Refresh Approval Audit`
+- run Tools > Voltline > Validate Config
+- run Tools > Voltline > Run Release Audit
+- run Tools > Voltline > Run Presentation Readiness Audit
+- run Tools > Voltline > Run Presentation Refresh Approval Audit
 - run the full Unity Edit Mode and Play Mode suites in editor
-- validate no console noise in menu/gameplay/retry/theme-selection flows
+- validate no console noise in menu/gameplay/retry/world-progression flows
 - validate safe-area, persistence, and feel flows on representative mobile hardware
 - measure startup, common gameplay frame pacing, and build size on representative devices before final candidate approval
 
-### Controlled presentation rollout
-- if presentation refresh work begins, execute it slice-by-slice through `PresentationRolloutPlanConfig`
-- do not approve obstacle/background/theme/VFX/audio slices until the prior slice has passed automated checks, manual readability review, and device checks
-- replace the first-pass procedural audio clips and procedural VFX with authored assets only through the approved refresh slices if playtest fatigue or release polish review shows the current pass is insufficient
-
 ## Next
 
-These items should happen after the current build is stable and validated.
+These items should happen after release-candidate validation is clean.
 
-### Publishing prep
-- perform clean-install and relaunch checks on candidate builds
-- finalize store copy, icons, screenshots, and submission metadata outside gameplay scope
-- verify release-safe debug posture in a non-development build
+### Remaining optional extras
+- daily challenge surface
 
-### Staged presentation refresh slices
-- execute the player refresh slice first through `PlayerVisualConfig` and `PlayerVisualView`
-- execute the obstacle refresh slice next through `ObstacleVisualCatalog`, `HazardPresentationCatalog`, and `HazardVisualView`
-- execute background/static-theme refresh slices only after player and obstacle slices are signed off
+### Final brand asset replacement
+- replace placeholder-safe title treatment with final approved logo and font package when available
 
 ## Later
 
 Only pursue after the game already feels strong.
 
-### Optional features
-- daily challenge seed mode
-- ghost/replay-style share image
-- cosmetic themes/skins expansion
-- best score history view
-- lightweight leaderboard page outside the game app
-
-### Technical options
-- object pooling if profiling justifies it
+### Technical and content options
+- additional production themes after the single-theme Live Wire City release posture is stable
 - Addressables if content scale grows
 - analytics/event instrumentation if release strategy requires it
 
 ## Technical debt backlog
 
-Track debt explicitly. Initial likely areas:
+Track debt explicitly. Current likely areas:
 
-- refine the current curved line/path presentation only if playtesting shows readability or performance issues
+- retire or archive legacy theme assets once Live Wire City fully replaces them
+- replace placeholder-safe logo/text-only branding surfaces when final brand assets are approved
 - add lightweight automated safe-area coverage only if the Unity test harness or device setup justifies it
 
 ## Blocked ideas

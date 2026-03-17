@@ -5,7 +5,7 @@ namespace Voltline.Save
     public static class SaveSchema
     {
         public const int CurrentVersion = 1;
-        public const string DefaultThemeId = "theme.neon-night";
+        public const string DefaultThemeId = "theme.live-wire-city";
 
         public static PlayerProfileSaveData CreateDefaultProfile(string defaultThemeId)
         {

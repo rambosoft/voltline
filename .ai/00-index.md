@@ -1,7 +1,7 @@
 # Project Index
 Status: Active
 Owner: Team
-Last updated: 2026-03-15
+Last updated: 2026-03-16
 Source of truth for: document authority, reading order, conflict resolution, project-wide update protocol
 Depends on: 01-product-vision.md, 03-tech-stack.md, 04-architecture.md
 Do not duplicate with: feature notes, ad-hoc implementation comments, backlog items
@@ -52,6 +52,8 @@ Read these in order before making any cross-cutting change:
 17. `17-repo-alignment-audit.md`
 18. `18-visual-refresh-and-theme-system-guide.md`
 19. `19-presentation-refresh-readiness-roadmap.md`
+20. `20-live-wire-city-production-style-guide.md`
+21. `21-live-wire-city-production-roadmap.md`
 
 Read `13-feature-spec-template.md` before proposing or implementing any new feature.
 
@@ -71,6 +73,8 @@ When documents disagree, follow this authority order:
 10. `17-repo-alignment-audit.md`
 11. `18-visual-refresh-and-theme-system-guide.md`
 12. `19-presentation-refresh-readiness-roadmap.md`
+13. `20-live-wire-city-production-style-guide.md`
+14. `21-live-wire-city-production-roadmap.md`
 
 If a lower-authority document conflicts with a higher-authority document, the higher one wins.
 
@@ -119,6 +123,8 @@ The public name can change later without forcing a repository rename.
 - `17-repo-alignment-audit.md` owns **current repo-to-doc alignment status and baseline remediation order**
 - `18-visual-refresh-and-theme-system-guide.md` owns **visual refresh planning and theme-system evolution guidance**
 - `19-presentation-refresh-readiness-roadmap.md` owns **strict readiness and gating before refresh implementation begins**
+- `20-live-wire-city-production-style-guide.md` owns **the final Live Wire City presentation direction across UI, gameplay presentation, audio, VFX, and production polish targets**
+- `21-live-wire-city-production-roadmap.md` owns **the phased production transition from the current repo state to a production-ready Live Wire City release presentation**
 
 ## Update protocol
 
@@ -199,5 +205,9 @@ This `.ai` folder is healthy when:
 - Need the current repo alignment snapshot before baseline cleanup? Read `17`.
 - Need the visual-refresh/theme-system implementation map? Read `18`.
 - Need the pre-refresh gating roadmap before any presentation implementation starts? Read `19`.
+- Need the Live Wire City creative production target? Read `20`.
+- Need the execution roadmap from readiness-complete repo state to Live Wire City production quality? Read `21`.
+
+
 
 

@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bd3cfab7a37497a95ee7758c9902c40, type: 3}
   m_Name: CFG_GameBalance_Default
   m_EditorClassIdentifier: 
-  baseSpeed: 6
-  earlySpeedRampPerPoint: 0.12
+  baseSpeed: 5.2
+  earlySpeedRampPerPoint: 0.075
   flipDurationSeconds: 0.09
   sideOffset: 0.82
   nearMissThreshold: 0.18
-  safeStartWindowSeconds: 1.2
+  safeStartWindowSeconds: 1.6
   minimumReadableTelegraphSeconds: 0.75
   resultPanelRevealDelaySeconds: 0.6
   retryAvailabilityDelaySeconds: 1
@@ -25,6 +25,5 @@ MonoBehaviour:
   - 10
   - 20
   - 30
+  - 40
   - 50
-  - 75
-  - 100

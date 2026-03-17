@@ -2,27 +2,28 @@ using UnityEngine;
 
 namespace Voltline.Data
 {
-    [CreateAssetMenu(fileName = "THM_NeonNight", menuName = "Voltline/Config/Theme")]
+    [CreateAssetMenu(fileName = "THM_LiveWireCity", menuName = "Voltline/Config/Theme")]
     public sealed class ThemeConfig : ScriptableObject
     {
-        [SerializeField] private string themeId = "theme.neon-night";
-        [SerializeField] private string displayName = "Neon Night";
+        [SerializeField] private string themeId = "theme.live-wire-city";
+        [SerializeField] private string displayName = "Live Wire City";
         [SerializeField] private bool unlockedByDefault = true;
         [SerializeField] private int unlockBestScoreThreshold;
-        [SerializeField] private Color backgroundTopColor = new(0.015f, 0.028f, 0.07f, 1f);
-        [SerializeField] private Color backgroundBottomColor = new(0.03f, 0.005f, 0.085f, 1f);
-        [SerializeField] private Color lineCoreColor = new(0.2f, 0.95f, 1f, 1f);
-        [SerializeField] private Color lineGlowColor = new(0.06f, 0.68f, 1f, 1f);
-        [SerializeField] private Color playerAccentColor = new(1f, 0.92f, 0.28f, 1f);
-        [SerializeField] private Color dangerColor = new(1f, 0.23f, 0.43f, 1f);
-        [SerializeField] private Color milestoneColor = new(0.62f, 0.44f, 1f, 1f);
+        [SerializeField] private Color backgroundTopColor = new(0.012f, 0.027f, 0.06f, 1f);
+        [SerializeField] private Color backgroundBottomColor = new(0.024f, 0.048f, 0.104f, 1f);
+        [SerializeField] private Color lineCoreColor = new(0.188f, 0.941f, 1f, 1f);
+        [SerializeField] private Color lineGlowColor = new(0.067f, 0.565f, 1f, 1f);
+        [SerializeField] private Color playerAccentColor = new(0.918f, 0.957f, 1f, 1f);
+        [SerializeField] private Color dangerColor = new(1f, 0.239f, 0.557f, 1f);
+        [SerializeField] private Color milestoneColor = new(1f, 0.847f, 0.357f, 1f);
         [SerializeField] private PlayerVisualConfig playerVisualOverride;
         [SerializeField] private ObstacleVisualCatalog obstacleVisualOverride;
         [SerializeField] private BackgroundPresentationConfig backgroundPresentationOverride;
         [SerializeField] private ThemeVfxProfile themeVfxProfile;
         [SerializeField] private ThemeAudioProfile themeAudioProfile;
-        [SerializeField] private bool allowRuntimeSequenceSelection = true;
-        [SerializeField] private float preferredTransitionDuration = 0.32f;
+        [SerializeField] private WorldProgressionConfig worldProgressionConfig;
+        [SerializeField] private bool allowRuntimeSequenceSelection;
+        [SerializeField] private float preferredTransitionDuration = 0.28f;
 
         public string ThemeId => themeId;
         public string DisplayName => displayName;
@@ -40,6 +41,7 @@ namespace Voltline.Data
         public BackgroundPresentationConfig BackgroundPresentationOverride => backgroundPresentationOverride;
         public ThemeVfxProfile ThemeVfxProfile => themeVfxProfile;
         public ThemeAudioProfile ThemeAudioProfile => themeAudioProfile;
+        public WorldProgressionConfig WorldProgressionConfig => worldProgressionConfig;
         public bool AllowRuntimeSequenceSelection => allowRuntimeSequenceSelection;
         public float PreferredTransitionDuration => preferredTransitionDuration;
 
@@ -66,6 +68,11 @@ namespace Voltline.Data
         public ThemeAudioProfile ResolveThemeAudioProfile(ThemeAudioProfile fallback)
         {
             return themeAudioProfile != null ? themeAudioProfile : fallback;
+        }
+
+        public WorldProgressionConfig ResolveWorldProgressionConfig(WorldProgressionConfig fallback = null)
+        {
+            return worldProgressionConfig != null ? worldProgressionConfig : fallback;
         }
     }
 }

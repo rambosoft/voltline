@@ -1,4 +1,4 @@
-# Project Structure
+﻿# Project Structure
 Status: Active
 Owner: Team
 Last updated: 2026-03-16
@@ -7,7 +7,8 @@ Depends on: 03-tech-stack.md, 04-architecture.md
 Do not duplicate with: ad-hoc folder conventions in implementation notes
 
 > Working title: **Voltline**  
-> Core concept / public-facing design name: **STAY ON THE LINE**
+> Current public-facing release title: **Voltline**  
+> Primary production theme direction: **Live Wire City**
 
 ## Purpose
 
@@ -128,7 +129,11 @@ Examples:
 - `HazardPresentationCatalog`
 - `ObstacleVisualCatalog`
 - `ObstacleCatalog`
-- `ThemeSequenceConfig`
+- `WorldProgressionConfig`
+- `ThemeSequenceConfig` (dormant compatibility asset in the first-release Live Wire City shipping posture)
+- `BrandingPresentationConfig`
+- `ProductionCopyConfig`
+- `UIThemeConfig`
 - `ThemeVfxProfile`
 - `ThemeAudioProfile`
 - `PresentationRolloutPlanConfig`
@@ -406,4 +411,7 @@ Assets/_Game/Scripts/Runtime/
 - Runtime code uses explicit assemblies.
 - New top-level folders require this document to be updated.
 - Naming must optimize clarity, not personal preference.
+
+
+
 

@@ -28,6 +28,7 @@ namespace Voltline.Data
             }
         }
 
+        [SerializeField] private string profileId = "theme.live-wire-city.vfx";
         [SerializeField] private int maxActiveTransientEffects = 24;
         [SerializeField] private int maxBurstCountPerEffect = 10;
         [SerializeField] private float minimumReplayCooldownSeconds = 0.04f;
@@ -36,6 +37,7 @@ namespace Voltline.Data
 
         private Dictionary<string, ThemeVfxCueOverride> lookup;
 
+        public string ProfileId => profileId;
         public int MaxActiveTransientEffects => maxActiveTransientEffects;
         public int MaxBurstCountPerEffect => maxBurstCountPerEffect;
         public float MinimumReplayCooldownSeconds => minimumReplayCooldownSeconds;

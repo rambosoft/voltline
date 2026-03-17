@@ -1,4 +1,4 @@
-#if UNITY_EDITOR
+﻿#if UNITY_EDITOR
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -126,6 +126,12 @@ namespace Voltline.Editor
         public static ReleaseAuditResult Validate()
         {
             ReleaseAuditResult result = new();
+
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+            {
+                result.AddError("Exit play mode before running the release audit.");
+                return result;
+            }
 
             ValidateConfigAssets(result);
             ValidateBuildSceneOrder(result);
@@ -493,6 +499,7 @@ namespace Voltline.Editor
     }
 }
 #endif
+
 
 
 

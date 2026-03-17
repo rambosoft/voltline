@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using Voltline.Audio;
@@ -86,22 +86,13 @@ namespace Voltline.Gameplay
 
         private void Awake()
         {
-            if (gameBalance == null
-                || gameplayPresentation == null
-                || backgroundPresentationConfig == null
-                || playerVisualConfig == null
-                || hazardPresentationCatalog == null
-                || obstacleVisualCatalog == null
-                || difficultyCurve == null
-                || obstacleCatalog == null
-                || themeCatalog == null
-                || themeCatalog.DefaultTheme == null
-                || themeSequenceConfig == null
-                || audioCueCatalog == null
-                || vfxCatalog == null
-                || inputActions == null)
+#if UNITY_EDITOR
+            AssignDefaultReferences();
+#endif
+
+            if (!HasRequiredConfigReferences(out string missingReferences))
             {
-                Debug.LogError("GameplaySceneInstaller is missing required config references.");
+                Debug.LogError($"GameplaySceneInstaller is missing required config references: {missingReferences}");
                 enabled = false;
                 return;
             }
@@ -132,6 +123,7 @@ namespace Voltline.Gameplay
             PlayerController playerController = GetOrAddComponent<PlayerController>();
             BackgroundPresentationController backgroundPresentationController = GetOrAddComponent<BackgroundPresentationController>();
             ThemePresentationController themePresentationController = GetOrAddComponent<ThemePresentationController>();
+            WorldProgressionController worldProgressionController = GetOrAddComponent<WorldProgressionController>();
             VfxService vfxService = GetOrAddComponent<VfxService>();
             GameplayFeedbackCoordinator feedbackCoordinator = GetOrAddComponent<GameplayFeedbackCoordinator>();
 
@@ -146,6 +138,13 @@ namespace Voltline.Gameplay
             uiStateCoordinator.Initialize(gameManager, scoreSystem, activeTheme, themeCatalog, saveService);
             vfxService.Initialize(vfxCatalog, activeTheme, gameplayCamera);
             feedbackCoordinator.Initialize(gameManager, playerController, hazardManager, scoreSystem, trackManager, audioService, vfxService);
+
+            if (RuntimeBuildFlags.GameplayDebugToolsEnabled)
+            {
+                GameplayDebugScoreOverlay debugScoreOverlay = GetOrAddComponent<GameplayDebugScoreOverlay>();
+                debugScoreOverlay.Initialize(scoreSystem, worldProgressionController, gameManager);
+            }
+
             themePresentationController.Initialize(
                 themeCatalog,
                 themeSequenceConfig,
@@ -157,12 +156,46 @@ namespace Voltline.Gameplay
                 trackManager,
                 playerController,
                 hazardManager,
+                worldProgressionController,
                 uiStateCoordinator,
                 audioService,
                 vfxService,
                 activeTheme);
         }
 
+        private bool HasRequiredConfigReferences(out string missingReferences)
+        {
+            System.Collections.Generic.List<string> missing = new();
+
+            if (gameBalance == null) missing.Add(nameof(gameBalance));
+            if (gameplayPresentation == null) missing.Add(nameof(gameplayPresentation));
+            if (backgroundPresentationConfig == null) missing.Add(nameof(backgroundPresentationConfig));
+            if (playerVisualConfig == null) missing.Add(nameof(playerVisualConfig));
+            if (hazardPresentationCatalog == null) missing.Add(nameof(hazardPresentationCatalog));
+            if (obstacleVisualCatalog == null) missing.Add(nameof(obstacleVisualCatalog));
+            if (difficultyCurve == null) missing.Add(nameof(difficultyCurve));
+            if (obstacleCatalog == null) missing.Add(nameof(obstacleCatalog));
+            if (themeCatalog == null)
+            {
+                missing.Add(nameof(themeCatalog));
+            }
+            else
+            {
+                if (themeCatalog.DefaultTheme == null) missing.Add("themeCatalog.DefaultTheme");
+                if (themeCatalog.BrandingPresentationConfig == null) missing.Add("themeCatalog.BrandingPresentationConfig");
+                if (themeCatalog.ProductionCopyConfig == null) missing.Add("themeCatalog.ProductionCopyConfig");
+                if (themeCatalog.UiThemeConfig == null) missing.Add("themeCatalog.UiThemeConfig");
+                if (themeCatalog.DefaultTheme != null && themeCatalog.DefaultTheme.ResolveWorldProgressionConfig() == null) missing.Add("themeCatalog.DefaultTheme.WorldProgressionConfig");
+            }
+
+            if (themeSequenceConfig == null) missing.Add(nameof(themeSequenceConfig));
+            if (audioCueCatalog == null) missing.Add(nameof(audioCueCatalog));
+            if (vfxCatalog == null) missing.Add(nameof(vfxCatalog));
+            if (inputActions == null) missing.Add(nameof(inputActions));
+
+            missingReferences = string.Join(", ", missing);
+            return missing.Count == 0;
+        }
         private T GetOrAddComponent<T>() where T : Component
         {
             T component = GetComponent<T>();
@@ -201,3 +234,7 @@ namespace Voltline.Gameplay
 #endif
     }
 }
+
+
+
+

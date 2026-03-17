@@ -1,0 +1,3159 @@
+fileFormatVersion: 2
+guid: 8356ffa18492c9e4792cabe02c9db967
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2049524030540409416
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_0
+  - first:
+      213: -1523095835612895740
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_1
+  - first:
+      213: 6350448924708901593
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_2
+  - first:
+      213: -8070802892607688922
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_3
+  - first:
+      213: 4185577981862808262
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_4
+  - first:
+      213: 4872952768517010811
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_5
+  - first:
+      213: 1542755467037024247
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_6
+  - first:
+      213: -5935685785659163484
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_7
+  - first:
+      213: 80324008683210383
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_8
+  - first:
+      213: 4221377773710428933
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_9
+  - first:
+      213: -1395978509242068134
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_10
+  - first:
+      213: 8494505267448692108
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_11
+  - first:
+      213: -191161364898094328
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_12
+  - first:
+      213: -3289386193141084273
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_13
+  - first:
+      213: 3984665992360977659
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_14
+  - first:
+      213: -1812596728098135088
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_15
+  - first:
+      213: 986344580795471867
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_16
+  - first:
+      213: 6376387871097784759
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_17
+  - first:
+      213: -3743252790848312166
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_18
+  - first:
+      213: -683721902083703591
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_19
+  - first:
+      213: -5172585204063383766
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_20
+  - first:
+      213: -1567398196752515444
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_21
+  - first:
+      213: 751341096651270422
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_22
+  - first:
+      213: 3442694850032003190
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_23
+  - first:
+      213: 8405026474133469722
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_24
+  - first:
+      213: -8686230237024986036
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_25
+  - first:
+      213: 741614747613375389
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_26
+  - first:
+      213: -4744325186859199972
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_27
+  - first:
+      213: 7578119754214941176
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_28
+  - first:
+      213: -8817586627172984465
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_29
+  - first:
+      213: 8382210584939217929
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_30
+  - first:
+      213: -4803826477466786391
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_31
+  - first:
+      213: 6093961027588530189
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_32
+  - first:
+      213: 6074111016798601114
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_33
+  - first:
+      213: -6517892802803936491
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_34
+  - first:
+      213: -4075938744047790719
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_35
+  - first:
+      213: 272849982399452765
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_36
+  - first:
+      213: 2253090276617279814
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_37
+  - first:
+      213: -8034178624838299710
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_38
+  - first:
+      213: -2803280424840862761
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_39
+  - first:
+      213: -798201636056927843
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_40
+  - first:
+      213: -3502812612897688879
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_41
+  - first:
+      213: -3821134244345360783
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_42
+  - first:
+      213: 2950595596405263639
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_43
+  - first:
+      213: -5695008761368168938
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_44
+  - first:
+      213: -123633233157493899
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_45
+  - first:
+      213: -1432547984124813897
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_46
+  - first:
+      213: -6480762023471602537
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_47
+  - first:
+      213: -3538528649328349723
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_48
+  - first:
+      213: 7773245861106246373
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_49
+  - first:
+      213: -7373733327875512610
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_50
+  - first:
+      213: 1227056363523750824
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_51
+  - first:
+      213: -2332653561977210621
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_52
+  - first:
+      213: -2040880117523718160
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_53
+  - first:
+      213: 7293386012543067040
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_54
+  - first:
+      213: -4954837749907163451
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_55
+  - first:
+      213: 8686295311427718214
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_56
+  - first:
+      213: -2374253613809221592
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_57
+  - first:
+      213: 7528359120531426104
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_58
+  - first:
+      213: -721432630682343881
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_59
+  - first:
+      213: 3353748553871878396
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_60
+  - first:
+      213: 6902215622544721292
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_61
+  - first:
+      213: 7200461894944840357
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_62
+  - first:
+      213: 1673987904417257288
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_63
+  - first:
+      213: 2420059523826052374
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_64
+  - first:
+      213: 7584467613695798722
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_65
+  - first:
+      213: 260053332991456649
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_66
+  - first:
+      213: 4918439487681595339
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_67
+  - first:
+      213: 2846106189299785898
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_68
+  - first:
+      213: -5964933296986944352
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_69
+  - first:
+      213: 3081011024807373236
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_70
+  - first:
+      213: -5081447451888578339
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_71
+  - first:
+      213: 8279983456326334898
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_72
+  - first:
+      213: -6768594585927538161
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_73
+  - first:
+      213: 7072754610020917363
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_74
+  - first:
+      213: -529533733402184099
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_75
+  - first:
+      213: 3213720119778123828
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_76
+  - first:
+      213: -2693996786603411976
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_77
+  - first:
+      213: 5093516400668051877
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_78
+  - first:
+      213: 5438519532323650258
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_79
+  - first:
+      213: 5592364564694438073
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_80
+  - first:
+      213: -2469405715378312371
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_81
+  - first:
+      213: -360589635152219613
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_82
+  - first:
+      213: 8228902935342911513
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_83
+  - first:
+      213: -6278383313600519514
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_84
+  - first:
+      213: 4653456581748690443
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_85
+  - first:
+      213: -6870042339050888958
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_86
+  - first:
+      213: 5694784282338980931
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_87
+  - first:
+      213: 2221594980398154735
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_88
+  - first:
+      213: -8124408137875592970
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_89
+  - first:
+      213: -3774605762030094898
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_90
+  - first:
+      213: 4920865635214456136
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_91
+  - first:
+      213: -6556037722616788606
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_92
+  - first:
+      213: -1758726183840491811
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_93
+  - first:
+      213: -3745355178908637121
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_94
+  - first:
+      213: -3609917861765146259
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_95
+  - first:
+      213: -4067003352652013187
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_96
+  - first:
+      213: 328722683878463080
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_97
+  - first:
+      213: 3570879244524995348
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_98
+  - first:
+      213: 1798983058162340464
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_99
+  - first:
+      213: 8982534854126369509
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_100
+  - first:
+      213: 3346243580961599701
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_101
+  - first:
+      213: -7195987199030967262
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_102
+  - first:
+      213: -1117818833750908490
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_103
+  - first:
+      213: -6787313875176996968
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_104
+  - first:
+      213: -3911059097606285621
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_105
+  - first:
+      213: -9205673323920589931
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_106
+  - first:
+      213: 2184501496695477751
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_107
+  - first:
+      213: -300001077178604217
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_108
+  - first:
+      213: -7352070914107499639
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_109
+  - first:
+      213: -820379865295144953
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_110
+  - first:
+      213: 5351703551231685753
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_111
+  - first:
+      213: -2480294345673424019
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_112
+  - first:
+      213: 3530406171602554538
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_113
+  - first:
+      213: 6530565398109792204
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_114
+  - first:
+      213: 6878162422983238573
+    second: SPR_LWC_BG_SkylineWindows_Right_Dense_115
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_0
+      rect:
+        serializedVersion: 2
+        x: 799
+        y: 801
+        width: 51
+        height: 318
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b51309c0c0ae83e0800000000000000
+      internalID: -2049524030540409416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_1
+      rect:
+        serializedVersion: 2
+        x: 847
+        y: 985
+        width: 18
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 406aa6f3860ecdae0800000000000000
+      internalID: -1523095835612895740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_2
+      rect:
+        serializedVersion: 2
+        x: 867
+        y: 975
+        width: 9
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9d21981a6a3512850800000000000000
+      internalID: 6350448924708901593
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_3
+      rect:
+        serializedVersion: 2
+        x: 842
+        y: 961
+        width: 10
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62f6ce5b78fbeff80800000000000000
+      internalID: -8070802892607688922
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_4
+      rect:
+        serializedVersion: 2
+        x: 855
+        y: 947
+        width: 20
+        height: 26
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6ca01a49ff8261a30800000000000000
+      internalID: 4185577981862808262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_5
+      rect:
+        serializedVersion: 2
+        x: 843
+        y: 926
+        width: 21
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7576b699b430a340800000000000000
+      internalID: 4872952768517010811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_6
+      rect:
+        serializedVersion: 2
+        x: 864
+        y: 923
+        width: 11
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7ff98046ce7f86510800000000000000
+      internalID: 1542755467037024247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_7
+      rect:
+        serializedVersion: 2
+        x: 918
+        y: 877
+        width: 19
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4ac337ff93530ada0800000000000000
+      internalID: -5935685785659163484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_8
+      rect:
+        serializedVersion: 2
+        x: 759
+        y: 882
+        width: 30
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f868f74a24e5d1100800000000000000
+      internalID: 80324008683210383
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_9
+      rect:
+        serializedVersion: 2
+        x: 842
+        y: 888
+        width: 32
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 50b4db828b8559a30800000000000000
+      internalID: 4221377773710428933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_10
+      rect:
+        serializedVersion: 2
+        x: 875
+        y: 844
+        width: 76
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a531c8a21fc70ace0800000000000000
+      internalID: -1395978509242068134
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_11
+      rect:
+        serializedVersion: 2
+        x: 722
+        y: 635
+        width: 47
+        height: 247
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8db6f0f88b82e570800000000000000
+      internalID: 8494505267448692108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_12
+      rect:
+        serializedVersion: 2
+        x: 771
+        y: 700
+        width: 8
+        height: 172
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 803687e50cbd85df0800000000000000
+      internalID: -191161364898094328
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_13
+      rect:
+        serializedVersion: 2
+        x: 780
+        y: 840
+        width: 34
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f8f40cc6fa0c952d0800000000000000
+      internalID: -3289386193141084273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_14
+      rect:
+        serializedVersion: 2
+        x: 787
+        y: 827
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf4614fbb906c4730800000000000000
+      internalID: 3984665992360977659
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_15
+      rect:
+        serializedVersion: 2
+        x: 842
+        y: 823
+        width: 31
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0d3ecac11ec58d6e0800000000000000
+      internalID: -1812596728098135088
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_16
+      rect:
+        serializedVersion: 2
+        x: 872
+        y: 833
+        width: 36
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf7127c9b2330bd00800000000000000
+      internalID: 986344580795471867
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_17
+      rect:
+        serializedVersion: 2
+        x: 873
+        y: 805
+        width: 45
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7b984e63cfa7d7850800000000000000
+      internalID: 6376387871097784759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_18
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 819
+        width: 27
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9c2ff85b6b4d0cc0800000000000000
+      internalID: -3743252790848312166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_19
+      rect:
+        serializedVersion: 2
+        x: 784
+        y: 788
+        width: 30
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9dc75257d8ee286f0800000000000000
+      internalID: -683721902083703591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_20
+      rect:
+        serializedVersion: 2
+        x: 921
+        y: 796
+        width: 13
+        height: 15
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2f4c5599294738b0800000000000000
+      internalID: -5172585204063383766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_21
+      rect:
+        serializedVersion: 2
+        x: 924
+        y: 810
+        width: 12
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c8e7afcf4ab7f3ae0800000000000000
+      internalID: -1567398196752515444
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_22
+      rect:
+        serializedVersion: 2
+        x: 844
+        y: 712
+        width: 44
+        height: 89
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6192d032fbc4d6a00800000000000000
+      internalID: 751341096651270422
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_23
+      rect:
+        serializedVersion: 2
+        x: 891
+        y: 765
+        width: 33
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6786936d9b8e6cf20800000000000000
+      internalID: 3442694850032003190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_24
+      rect:
+        serializedVersion: 2
+        x: 906
+        y: 797
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a1aba76eb07a4a470800000000000000
+      internalID: 8405026474133469722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_25
+      rect:
+        serializedVersion: 2
+        x: 933
+        y: 792
+        width: 18
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c4c5edcfe9f447780800000000000000
+      internalID: -8686230237024986036
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_26
+      rect:
+        serializedVersion: 2
+        x: 659
+        y: 727
+        width: 29
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d9bafa70faeba4a00800000000000000
+      internalID: 741614747613375389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_27
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 775
+        width: 24
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c12915a0165c82eb0800000000000000
+      internalID: -4744325186859199972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_28
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 745
+        width: 11
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f12a5f04c3ea2960800000000000000
+      internalID: 7578119754214941176
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_29
+      rect:
+        serializedVersion: 2
+        x: 819
+        y: 738
+        width: 16
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f699e1f1ea3a1a580800000000000000
+      internalID: -8817586627172984465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_30
+      rect:
+        serializedVersion: 2
+        x: 933
+        y: 769
+        width: 11
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90442dbbd18935470800000000000000
+      internalID: 8382210584939217929
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_31
+      rect:
+        serializedVersion: 2
+        x: 943
+        y: 774
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9a5e9ff3541655db0800000000000000
+      internalID: -4803826477466786391
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_32
+      rect:
+        serializedVersion: 2
+        x: 956
+        y: 775
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d002d747449129450800000000000000
+      internalID: 6093961027588530189
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_33
+      rect:
+        serializedVersion: 2
+        x: 686
+        y: 733
+        width: 20
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9f319aa9c39b4450800000000000000
+      internalID: 6074111016798601114
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_34
+      rect:
+        serializedVersion: 2
+        x: 782
+        y: 755
+        width: 22
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 513dbc4770bcb85a0800000000000000
+      internalID: -6517892802803936491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_35
+      rect:
+        serializedVersion: 2
+        x: 893
+        y: 761
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 18597cabe4b5f67c0800000000000000
+      internalID: -4075938744047790719
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_36
+      rect:
+        serializedVersion: 2
+        x: 901
+        y: 752
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d5614e50d9b59c300800000000000000
+      internalID: 272849982399452765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_37
+      rect:
+        serializedVersion: 2
+        x: 927
+        y: 752
+        width: 17
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 649d8a05ba5944f10800000000000000
+      internalID: 2253090276617279814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_38
+      rect:
+        serializedVersion: 2
+        x: 944
+        y: 738
+        width: 15
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cf0a7c8b1dd08090800000000000000
+      internalID: -8034178624838299710
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_39
+      rect:
+        serializedVersion: 2
+        x: 891
+        y: 743
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7d3ed875e4fb819d0800000000000000
+      internalID: -2803280424840862761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_40
+      rect:
+        serializedVersion: 2
+        x: 893
+        y: 719
+        width: 31
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d91f0bf47d73ce4f0800000000000000
+      internalID: -798201636056927843
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_41
+      rect:
+        serializedVersion: 2
+        x: 915
+        y: 748
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1d2b97dbc72836fc0800000000000000
+      internalID: -3502812612897688879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_42
+      rect:
+        serializedVersion: 2
+        x: 920
+        y: 732
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 17ec6b666aa98fac0800000000000000
+      internalID: -3821134244345360783
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_43
+      rect:
+        serializedVersion: 2
+        x: 633
+        y: 620
+        width: 49
+        height: 110
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71d419fdf0f92f820800000000000000
+      internalID: 2950595596405263639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_44
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 648
+        width: 7
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 616b9e974b347f0b0800000000000000
+      internalID: -5695008761368168938
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_45
+      rect:
+        serializedVersion: 2
+        x: 781
+        y: 723
+        width: 15
+        height: 22
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 57be63fba34c84ef0800000000000000
+      internalID: -123633233157493899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_46
+      rect:
+        serializedVersion: 2
+        x: 933
+        y: 723
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7bdd98ac2319e1ce0800000000000000
+      internalID: -1432547984124813897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_47
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 698
+        width: 13
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7942225b645bf06a0800000000000000
+      internalID: -6480762023471602537
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_48
+      rect:
+        serializedVersion: 2
+        x: 706
+        y: 695
+        width: 25
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5edad3df0fe94eec0800000000000000
+      internalID: -3538528649328349723
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_49
+      rect:
+        serializedVersion: 2
+        x: 787
+        y: 703
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5e2630f1ded10eb60800000000000000
+      internalID: 7773245861106246373
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_50
+      rect:
+        serializedVersion: 2
+        x: 801
+        y: 619
+        width: 43
+        height: 102
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ed665832b9c3ba990800000000000000
+      internalID: -7373733327875512610
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_51
+      rect:
+        serializedVersion: 2
+        x: 890
+        y: 706
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8ab373be241670110800000000000000
+      internalID: 1227056363523750824
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_52
+      rect:
+        serializedVersion: 2
+        x: 901
+        y: 707
+        width: 13
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3097c4eb1ffb0afd0800000000000000
+      internalID: -2332653561977210621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_53
+      rect:
+        serializedVersion: 2
+        x: 781
+        y: 679
+        width: 10
+        height: 25
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ff57dd98565da3e0800000000000000
+      internalID: -2040880117523718160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_54
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 684
+        width: 9
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0a3ae67bfef473560800000000000000
+      internalID: 7293386012543067040
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_55
+      rect:
+        serializedVersion: 2
+        x: 915
+        y: 695
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5c6761d7151ec3bb0800000000000000
+      internalID: -4954837749907163451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_56
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 673
+        width: 20
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64c4ac3509beb8870800000000000000
+      internalID: 8686295311427718214
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_57
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 667
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 820c636eae4fc0fd0800000000000000
+      internalID: -2374253613809221592
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_58
+      rect:
+        serializedVersion: 2
+        x: 846
+        y: 683
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83b09d0bbba1a7860800000000000000
+      internalID: 7528359120531426104
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_59
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 674
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 736adce38d4fcf5f0800000000000000
+      internalID: -721432630682343881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_60
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 679
+        width: 10
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cf863837a88ea8e20800000000000000
+      internalID: 3353748553871878396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_61
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 488
+        width: 78
+        height: 183
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c850ee80a8899cf50800000000000000
+      internalID: 6902215622544721292
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_62
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 652
+        width: 20
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5aa5cea91fd2de360800000000000000
+      internalID: 7200461894944840357
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_63
+      rect:
+        serializedVersion: 2
+        x: 846
+        y: 661
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 847571141233b3710800000000000000
+      internalID: 1673987904417257288
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_64
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 661
+        width: 9
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 61de3fc9057c59120800000000000000
+      internalID: 2420059523826052374
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_65
+      rect:
+        serializedVersion: 2
+        x: 868
+        y: 665
+        width: 10
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cdeac44c11714960800000000000000
+      internalID: 7584467613695798722
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_66
+      rect:
+        serializedVersion: 2
+        x: 582
+        y: 534
+        width: 52
+        height: 123
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 985bc97e025eb9300800000000000000
+      internalID: 260053332991456649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_67
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 632
+        width: 20
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc70480b7aec14440800000000000000
+      internalID: 4918439487681595339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_68
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 627
+        width: 18
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aa02146ff766f7720800000000000000
+      internalID: 2846106189299785898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_69
+      rect:
+        serializedVersion: 2
+        x: 762
+        y: 639
+        width: 28
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ac813c15cc483da0800000000000000
+      internalID: -5964933296986944352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_70
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 649
+        width: 9
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b9a4b20433f1ca20800000000000000
+      internalID: 3081011024807373236
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_71
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 640
+        width: 9
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd01e5517721b79b0800000000000000
+      internalID: -5081447451888578339
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_72
+      rect:
+        serializedVersion: 2
+        x: 444
+        y: 587
+        width: 19
+        height: 35
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2b93174951968e270800000000000000
+      internalID: 8279983456326334898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_73
+      rect:
+        serializedVersion: 2
+        x: 553
+        y: 573
+        width: 36
+        height: 51
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0a282de51f1112a0800000000000000
+      internalID: -6768594585927538161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_74
+      rect:
+        serializedVersion: 2
+        x: 617
+        y: 592
+        width: 18
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 370adc148d8772260800000000000000
+      internalID: 7072754610020917363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_75
+      rect:
+        serializedVersion: 2
+        x: 658
+        y: 599
+        width: 9
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d56f9f300e7b6a8f0800000000000000
+      internalID: -529533733402184099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_76
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 619
+        width: 7
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 430a6e20c6d699c20800000000000000
+      internalID: 3213720119778123828
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_77
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 601
+        width: 25
+        height: 27
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8f5b57c22300d9ad0800000000000000
+      internalID: -2693996786603411976
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_78
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 604
+        width: 15
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a902770e2ecfa640800000000000000
+      internalID: 5093516400668051877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_79
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 573
+        width: 67
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2dabc2c33b0897b40800000000000000
+      internalID: 5438519532323650258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_80
+      rect:
+        serializedVersion: 2
+        x: 392
+        y: 504
+        width: 62
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b0181521f11c9d40800000000000000
+      internalID: 5592364564694438073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_81
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 584
+        width: 10
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4b6e88d598eabdd0800000000000000
+      internalID: -2469405715378312371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_82
+      rect:
+        serializedVersion: 2
+        x: 670
+        y: 600
+        width: 12
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 322701723adeefaf0800000000000000
+      internalID: -360589635152219613
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_83
+      rect:
+        serializedVersion: 2
+        x: 683
+        y: 581
+        width: 7
+        height: 37
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91098400f9fe23270800000000000000
+      internalID: 8228902935342911513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_84
+      rect:
+        serializedVersion: 2
+        x: 731
+        y: 590
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6a2e91df3a3bed8a0800000000000000
+      internalID: -6278383313600519514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_85
+      rect:
+        serializedVersion: 2
+        x: 437
+        y: 553
+        width: 36
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b0e85d42b16649040800000000000000
+      internalID: 4653456581748690443
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_86
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 579
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2016af444e4b8a0a0800000000000000
+      internalID: -6870042339050888958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_87
+      rect:
+        serializedVersion: 2
+        x: 691
+        y: 569
+        width: 26
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 344fa4de120f70f40800000000000000
+      internalID: 5694784282338980931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_88
+      rect:
+        serializedVersion: 2
+        x: 555
+        y: 563
+        width: 24
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fe34c693dd0b4de10800000000000000
+      internalID: 2221594980398154735
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_89
+      rect:
+        serializedVersion: 2
+        x: 623
+        y: 567
+        width: 12
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f8e1a3f7dd404f80800000000000000
+      internalID: -8124408137875592970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_90
+      rect:
+        serializedVersion: 2
+        x: 637
+        y: 512
+        width: 36
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ec5bd03ee08ed9bc0800000000000000
+      internalID: -3774605762030094898
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_91
+      rect:
+        serializedVersion: 2
+        x: 760
+        y: 564
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 845726e293d6a4440800000000000000
+      internalID: 4920865635214456136
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_92
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 539
+        width: 18
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2898d593d664405a0800000000000000
+      internalID: -6556037722616788606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_93
+      rect:
+        serializedVersion: 2
+        x: 554
+        y: 551
+        width: 17
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dd6520b9adfb797e0800000000000000
+      internalID: -1758726183840491811
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_94
+      rect:
+        serializedVersion: 2
+        x: 688
+        y: 542
+        width: 18
+        height: 19
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f382b7bfe43d50cc0800000000000000
+      internalID: -3745355178908637121
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_95
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 538
+        width: 19
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d699625b4def6edc0800000000000000
+      internalID: -3609917861765146259
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_96
+      rect:
+        serializedVersion: 2
+        x: 733
+        y: 549
+        width: 19
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d71aad8aff91f87c0800000000000000
+      internalID: -4067003352652013187
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_97
+      rect:
+        serializedVersion: 2
+        x: 294
+        y: 463
+        width: 76
+        height: 78
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 86650321a8bdf8400800000000000000
+      internalID: 328722683878463080
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_98
+      rect:
+        serializedVersion: 2
+        x: 445
+        y: 507
+        width: 32
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4134ab9e0cf4e8130800000000000000
+      internalID: 3570879244524995348
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_99
+      rect:
+        serializedVersion: 2
+        x: 560
+        y: 534
+        width: 17
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07256ba5f8547f810800000000000000
+      internalID: 1798983058162340464
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_100
+      rect:
+        serializedVersion: 2
+        x: 625
+        y: 534
+        width: 10
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ea74cabbdf58ac70800000000000000
+      internalID: 8982534854126369509
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_101
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 501
+        width: 37
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5d0b527cece307e20800000000000000
+      internalID: 3346243580961599701
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_102
+      rect:
+        serializedVersion: 2
+        x: 613
+        y: 521
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2244089b4c7b22c90800000000000000
+      internalID: -7195987199030967262
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_103
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 448
+        width: 66
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6b1290371b5bc70f0800000000000000
+      internalID: -1117818833750908490
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_104
+      rect:
+        serializedVersion: 2
+        x: 381
+        y: 462
+        width: 46
+        height: 44
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 89fbef2cdfd9ec1a0800000000000000
+      internalID: -6787313875176996968
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_105
+      rect:
+        serializedVersion: 2
+        x: 453
+        y: 494
+        width: 16
+        height: 13
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bc61e9fe87029b9c0800000000000000
+      internalID: -3911059097606285621
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_106
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 479
+        width: 10
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 59b7c69b2e0ee3080800000000000000
+      internalID: -9205673323920589931
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_107
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 470
+        width: 11
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7f5d7d98988e05e10800000000000000
+      internalID: 2184501496695477751
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_108
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 478
+        width: 12
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 745e88a1c9e26dbf0800000000000000
+      internalID: -300001077178604217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_109
+      rect:
+        serializedVersion: 2
+        x: 285
+        y: 465
+        width: 10
+        height: 10
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 98b1421e47238f990800000000000000
+      internalID: -7352070914107499639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_110
+      rect:
+        serializedVersion: 2
+        x: 306
+        y: 452
+        width: 26
+        height: 14
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 708333cebdc6d94f0800000000000000
+      internalID: -820379865295144953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_111
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 443
+        width: 29
+        height: 18
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9747c5a7602154a40800000000000000
+      internalID: 5351703551231685753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_112
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 453
+        width: 19
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d63c9bb0f69349dd0800000000000000
+      internalID: -2480294345673424019
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_113
+      rect:
+        serializedVersion: 2
+        x: 137
+        y: 440
+        width: 37
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: aae873b45b58ef030800000000000000
+      internalID: 3530406171602554538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_114
+      rect:
+        serializedVersion: 2
+        x: 173
+        y: 440
+        width: 22
+        height: 11
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cc7aac011aa31aa50800000000000000
+      internalID: 6530565398109792204
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_SkylineWindows_Right_Dense_115
+      rect:
+        serializedVersion: 2
+        x: 218
+        y: 443
+        width: 9
+        height: 8
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: da32b591844247f50800000000000000
+      internalID: 6878162422983238573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      SPR_LWC_BG_SkylineWindows_Right_Dense_0: -2049524030540409416
+      SPR_LWC_BG_SkylineWindows_Right_Dense_1: -1523095835612895740
+      SPR_LWC_BG_SkylineWindows_Right_Dense_10: -1395978509242068134
+      SPR_LWC_BG_SkylineWindows_Right_Dense_100: 8982534854126369509
+      SPR_LWC_BG_SkylineWindows_Right_Dense_101: 3346243580961599701
+      SPR_LWC_BG_SkylineWindows_Right_Dense_102: -7195987199030967262
+      SPR_LWC_BG_SkylineWindows_Right_Dense_103: -1117818833750908490
+      SPR_LWC_BG_SkylineWindows_Right_Dense_104: -6787313875176996968
+      SPR_LWC_BG_SkylineWindows_Right_Dense_105: -3911059097606285621
+      SPR_LWC_BG_SkylineWindows_Right_Dense_106: -9205673323920589931
+      SPR_LWC_BG_SkylineWindows_Right_Dense_107: 2184501496695477751
+      SPR_LWC_BG_SkylineWindows_Right_Dense_108: -300001077178604217
+      SPR_LWC_BG_SkylineWindows_Right_Dense_109: -7352070914107499639
+      SPR_LWC_BG_SkylineWindows_Right_Dense_11: 8494505267448692108
+      SPR_LWC_BG_SkylineWindows_Right_Dense_110: -820379865295144953
+      SPR_LWC_BG_SkylineWindows_Right_Dense_111: 5351703551231685753
+      SPR_LWC_BG_SkylineWindows_Right_Dense_112: -2480294345673424019
+      SPR_LWC_BG_SkylineWindows_Right_Dense_113: 3530406171602554538
+      SPR_LWC_BG_SkylineWindows_Right_Dense_114: 6530565398109792204
+      SPR_LWC_BG_SkylineWindows_Right_Dense_115: 6878162422983238573
+      SPR_LWC_BG_SkylineWindows_Right_Dense_12: -191161364898094328
+      SPR_LWC_BG_SkylineWindows_Right_Dense_13: -3289386193141084273
+      SPR_LWC_BG_SkylineWindows_Right_Dense_14: 3984665992360977659
+      SPR_LWC_BG_SkylineWindows_Right_Dense_15: -1812596728098135088
+      SPR_LWC_BG_SkylineWindows_Right_Dense_16: 986344580795471867
+      SPR_LWC_BG_SkylineWindows_Right_Dense_17: 6376387871097784759
+      SPR_LWC_BG_SkylineWindows_Right_Dense_18: -3743252790848312166
+      SPR_LWC_BG_SkylineWindows_Right_Dense_19: -683721902083703591
+      SPR_LWC_BG_SkylineWindows_Right_Dense_2: 6350448924708901593
+      SPR_LWC_BG_SkylineWindows_Right_Dense_20: -5172585204063383766
+      SPR_LWC_BG_SkylineWindows_Right_Dense_21: -1567398196752515444
+      SPR_LWC_BG_SkylineWindows_Right_Dense_22: 751341096651270422
+      SPR_LWC_BG_SkylineWindows_Right_Dense_23: 3442694850032003190
+      SPR_LWC_BG_SkylineWindows_Right_Dense_24: 8405026474133469722
+      SPR_LWC_BG_SkylineWindows_Right_Dense_25: -8686230237024986036
+      SPR_LWC_BG_SkylineWindows_Right_Dense_26: 741614747613375389
+      SPR_LWC_BG_SkylineWindows_Right_Dense_27: -4744325186859199972
+      SPR_LWC_BG_SkylineWindows_Right_Dense_28: 7578119754214941176
+      SPR_LWC_BG_SkylineWindows_Right_Dense_29: -8817586627172984465
+      SPR_LWC_BG_SkylineWindows_Right_Dense_3: -8070802892607688922
+      SPR_LWC_BG_SkylineWindows_Right_Dense_30: 8382210584939217929
+      SPR_LWC_BG_SkylineWindows_Right_Dense_31: -4803826477466786391
+      SPR_LWC_BG_SkylineWindows_Right_Dense_32: 6093961027588530189
+      SPR_LWC_BG_SkylineWindows_Right_Dense_33: 6074111016798601114
+      SPR_LWC_BG_SkylineWindows_Right_Dense_34: -6517892802803936491
+      SPR_LWC_BG_SkylineWindows_Right_Dense_35: -4075938744047790719
+      SPR_LWC_BG_SkylineWindows_Right_Dense_36: 272849982399452765
+      SPR_LWC_BG_SkylineWindows_Right_Dense_37: 2253090276617279814
+      SPR_LWC_BG_SkylineWindows_Right_Dense_38: -8034178624838299710
+      SPR_LWC_BG_SkylineWindows_Right_Dense_39: -2803280424840862761
+      SPR_LWC_BG_SkylineWindows_Right_Dense_4: 4185577981862808262
+      SPR_LWC_BG_SkylineWindows_Right_Dense_40: -798201636056927843
+      SPR_LWC_BG_SkylineWindows_Right_Dense_41: -3502812612897688879
+      SPR_LWC_BG_SkylineWindows_Right_Dense_42: -3821134244345360783
+      SPR_LWC_BG_SkylineWindows_Right_Dense_43: 2950595596405263639
+      SPR_LWC_BG_SkylineWindows_Right_Dense_44: -5695008761368168938
+      SPR_LWC_BG_SkylineWindows_Right_Dense_45: -123633233157493899
+      SPR_LWC_BG_SkylineWindows_Right_Dense_46: -1432547984124813897
+      SPR_LWC_BG_SkylineWindows_Right_Dense_47: -6480762023471602537
+      SPR_LWC_BG_SkylineWindows_Right_Dense_48: -3538528649328349723
+      SPR_LWC_BG_SkylineWindows_Right_Dense_49: 7773245861106246373
+      SPR_LWC_BG_SkylineWindows_Right_Dense_5: 4872952768517010811
+      SPR_LWC_BG_SkylineWindows_Right_Dense_50: -7373733327875512610
+      SPR_LWC_BG_SkylineWindows_Right_Dense_51: 1227056363523750824
+      SPR_LWC_BG_SkylineWindows_Right_Dense_52: -2332653561977210621
+      SPR_LWC_BG_SkylineWindows_Right_Dense_53: -2040880117523718160
+      SPR_LWC_BG_SkylineWindows_Right_Dense_54: 7293386012543067040
+      SPR_LWC_BG_SkylineWindows_Right_Dense_55: -4954837749907163451
+      SPR_LWC_BG_SkylineWindows_Right_Dense_56: 8686295311427718214
+      SPR_LWC_BG_SkylineWindows_Right_Dense_57: -2374253613809221592
+      SPR_LWC_BG_SkylineWindows_Right_Dense_58: 7528359120531426104
+      SPR_LWC_BG_SkylineWindows_Right_Dense_59: -721432630682343881
+      SPR_LWC_BG_SkylineWindows_Right_Dense_6: 1542755467037024247
+      SPR_LWC_BG_SkylineWindows_Right_Dense_60: 3353748553871878396
+      SPR_LWC_BG_SkylineWindows_Right_Dense_61: 6902215622544721292
+      SPR_LWC_BG_SkylineWindows_Right_Dense_62: 7200461894944840357
+      SPR_LWC_BG_SkylineWindows_Right_Dense_63: 1673987904417257288
+      SPR_LWC_BG_SkylineWindows_Right_Dense_64: 2420059523826052374
+      SPR_LWC_BG_SkylineWindows_Right_Dense_65: 7584467613695798722
+      SPR_LWC_BG_SkylineWindows_Right_Dense_66: 260053332991456649
+      SPR_LWC_BG_SkylineWindows_Right_Dense_67: 4918439487681595339
+      SPR_LWC_BG_SkylineWindows_Right_Dense_68: 2846106189299785898
+      SPR_LWC_BG_SkylineWindows_Right_Dense_69: -5964933296986944352
+      SPR_LWC_BG_SkylineWindows_Right_Dense_7: -5935685785659163484
+      SPR_LWC_BG_SkylineWindows_Right_Dense_70: 3081011024807373236
+      SPR_LWC_BG_SkylineWindows_Right_Dense_71: -5081447451888578339
+      SPR_LWC_BG_SkylineWindows_Right_Dense_72: 8279983456326334898
+      SPR_LWC_BG_SkylineWindows_Right_Dense_73: -6768594585927538161
+      SPR_LWC_BG_SkylineWindows_Right_Dense_74: 7072754610020917363
+      SPR_LWC_BG_SkylineWindows_Right_Dense_75: -529533733402184099
+      SPR_LWC_BG_SkylineWindows_Right_Dense_76: 3213720119778123828
+      SPR_LWC_BG_SkylineWindows_Right_Dense_77: -2693996786603411976
+      SPR_LWC_BG_SkylineWindows_Right_Dense_78: 5093516400668051877
+      SPR_LWC_BG_SkylineWindows_Right_Dense_79: 5438519532323650258
+      SPR_LWC_BG_SkylineWindows_Right_Dense_8: 80324008683210383
+      SPR_LWC_BG_SkylineWindows_Right_Dense_80: 5592364564694438073
+      SPR_LWC_BG_SkylineWindows_Right_Dense_81: -2469405715378312371
+      SPR_LWC_BG_SkylineWindows_Right_Dense_82: -360589635152219613
+      SPR_LWC_BG_SkylineWindows_Right_Dense_83: 8228902935342911513
+      SPR_LWC_BG_SkylineWindows_Right_Dense_84: -6278383313600519514
+      SPR_LWC_BG_SkylineWindows_Right_Dense_85: 4653456581748690443
+      SPR_LWC_BG_SkylineWindows_Right_Dense_86: -6870042339050888958
+      SPR_LWC_BG_SkylineWindows_Right_Dense_87: 5694784282338980931
+      SPR_LWC_BG_SkylineWindows_Right_Dense_88: 2221594980398154735
+      SPR_LWC_BG_SkylineWindows_Right_Dense_89: -8124408137875592970
+      SPR_LWC_BG_SkylineWindows_Right_Dense_9: 4221377773710428933
+      SPR_LWC_BG_SkylineWindows_Right_Dense_90: -3774605762030094898
+      SPR_LWC_BG_SkylineWindows_Right_Dense_91: 4920865635214456136
+      SPR_LWC_BG_SkylineWindows_Right_Dense_92: -6556037722616788606
+      SPR_LWC_BG_SkylineWindows_Right_Dense_93: -1758726183840491811
+      SPR_LWC_BG_SkylineWindows_Right_Dense_94: -3745355178908637121
+      SPR_LWC_BG_SkylineWindows_Right_Dense_95: -3609917861765146259
+      SPR_LWC_BG_SkylineWindows_Right_Dense_96: -4067003352652013187
+      SPR_LWC_BG_SkylineWindows_Right_Dense_97: 328722683878463080
+      SPR_LWC_BG_SkylineWindows_Right_Dense_98: 3570879244524995348
+      SPR_LWC_BG_SkylineWindows_Right_Dense_99: 1798983058162340464
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

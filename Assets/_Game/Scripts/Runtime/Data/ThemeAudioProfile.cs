@@ -26,6 +26,7 @@ namespace Voltline.Data
             }
         }
 
+        [SerializeField] private string profileId = "theme.live-wire-city.audio";
         [SerializeField] private int maxConcurrentGameplayVoices = 4;
         [SerializeField] private int maxConcurrentUiVoices = 1;
         [SerializeField] private float minimumUiClickIntervalSeconds = 0.05f;
@@ -34,6 +35,7 @@ namespace Voltline.Data
 
         private Dictionary<string, ThemeAudioCueOverride> lookup;
 
+        public string ProfileId => profileId;
         public int MaxConcurrentGameplayVoices => maxConcurrentGameplayVoices;
         public int MaxConcurrentUiVoices => maxConcurrentUiVoices;
         public float MinimumUiClickIntervalSeconds => minimumUiClickIntervalSeconds;

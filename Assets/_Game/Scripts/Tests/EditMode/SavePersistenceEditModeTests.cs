@@ -31,11 +31,12 @@ namespace Voltline.Tests.EditMode
             Assert.That(upgraded.unlockedThemeIds, Does.Contain(SaveSchema.DefaultThemeId));
             Assert.That(upgraded.musicVolume, Is.EqualTo(1f));
             Assert.That(upgraded.sfxVolume, Is.EqualTo(1f));
+            Assert.That(upgraded.hasSeenFirstLaunchHint, Is.False);
             Assert.That(upgraded.dailyChallenge, Is.Not.Null);
         }
 
         [Test]
-        public void SynchronizeThemeUnlocks_UnlocksCandyPopAtBestScoreTwenty()
+        public void SynchronizeThemeUnlocks_KeepsSingleLiveWireCityThemeUnlocked()
         {
             string tempPath = Path.Combine(Path.GetTempPath(), "voltline-theme-unlock-editmode-test.json");
             SaveStorage.SetOverridePathForTests(tempPath);
@@ -48,15 +49,15 @@ namespace Voltline.Tests.EditMode
                 SaveService saveService = SaveService.EnsureExists();
                 saveService.SynchronizeThemeUnlocks(themeCatalog);
 
-                Assert.That(saveService.IsThemeUnlocked("theme.neon-night"), Is.True);
-                Assert.That(saveService.IsThemeUnlocked("theme.candy-pop"), Is.False);
+                Assert.That(saveService.IsThemeUnlocked("theme.live-wire-city"), Is.True);
+                Assert.That(saveService.SelectedThemeId, Is.EqualTo("theme.live-wire-city"));
 
-                saveService.RecordRunScore(20);
+                saveService.RecordRunScore(50);
+                saveService.SetHasSeenFirstLaunchHint(true);
                 saveService.SynchronizeThemeUnlocks(themeCatalog);
-                Assert.That(saveService.IsThemeUnlocked("theme.candy-pop"), Is.True);
-
-                saveService.SetSelectedThemeId("theme.candy-pop");
-                Assert.That(saveService.SelectedThemeId, Is.EqualTo("theme.candy-pop"));
+                Assert.That(saveService.CurrentProfile.unlockedThemeIds.Count, Is.EqualTo(1));
+                Assert.That(saveService.CurrentProfile.unlockedThemeIds[0], Is.EqualTo("theme.live-wire-city"));
+                Assert.That(saveService.HasSeenFirstLaunchHint, Is.True);
             }
             finally
             {

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c927ca8d01564300ac164c1b80724b43, type: 3}
   m_Name: CFG_Obstacle_ElectricGateShort
   m_EditorClassIdentifier: 
-  obstacleId: obstacle.electric.gate.short
-  displayName: Electric Gate
+  obstacleId: obstacle.active-electric.short
+  displayName: Active Electric Hazard
   family: 2
   allowedFromScore: 8
   allowedToScore: -1

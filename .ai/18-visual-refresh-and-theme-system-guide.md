@@ -1,4 +1,4 @@
-# Visual Refresh and Theme System Guide
+﻿# Visual Refresh and Theme System Guide
 Status: Active
 Owner: Team / AI
 Last updated: 2026-03-16
@@ -25,7 +25,7 @@ This file is the execution guide for presentation refresh work. It owns how to e
 - Obstacle visuals are now decoupled from gameplay collision/spacing: `HazardManager.cs` owns spawn/collision/spacing state, while `HazardVisualView.cs` renders family visuals from `ObstacleVisualCatalog`.
 - Obstacle collision and readable spacing remain routed through `HazardPresentationCatalog`, which now sits cleanly beside the obstacle visual catalog instead of being implicitly tied to procedural rendering.
 - Gameplay background now has a dedicated owner: `BackgroundPresentationController.cs` builds a small budgeted layer stack from `BackgroundPresentationConfig`, while `TrackManager.cs` keeps line/path ownership only.
-- Themes are now presentation-ready rather than color-only: `ThemeConfig`, `ThemeCatalog`, `ThemeSequenceConfig`, `SaveService`, and `ThemePresentationController` support unlock/select persistence, background overrides, static player/obstacle override hooks, and milestone-gated runtime theme transitions.
+- Themes are now presentation-ready rather than color-only: `ThemeConfig`, `ThemeCatalog`, `WorldProgressionConfig`, `WorldProgressionController`, `SaveService`, and `ThemePresentationController` support one surfaced `theme.live-wire-city` package, district-based world progression, background/line/hazard reactions, and placeholder-safe front-door alignment.
 - VFX are now pipeline-ready: `VfxService.cs` remains lightweight and semantic, while `ThemeVfxProfile` gives each theme a controlled override path plus explicit effect budgets.
 - Audio is now pipeline-ready: `AudioService.cs` + `AudioCueCatalog.cs` + mixer routing stay semantic, while `ThemeAudioProfile` gives each theme a controlled cue-override and concurrency path.
 - Content folders are still sparse: `Assets/_Game/Art/...` and most audio content folders contain structure more than real authored assets.
@@ -51,7 +51,7 @@ Affected areas will include:
 5. Refresh obstacle visuals and revalidate spacing/fairness.
 6. Add a dedicated background presentation layer.
 7. Expand the theme system beyond color-only.
-8. Add dynamic theme switching only through the approved milestone-gated `ThemeSequenceConfig` path.
+8. Use one Live Wire City base theme with district progression through `WorldProgressionConfig` instead of shipping whole-theme milestone swaps.
 9. Update VFX and audio last so they match the final visual language.
 
 ## 6. Player asset refresh guide
@@ -99,7 +99,7 @@ Effect budget rules:
 
 ## 10. Obstacle refresh guide
 - Do not refresh hazard art ad hoc per script branch. Formalize visual profile data first.
-- Maintain family readability: spikes, cutters, gates, gaps, and blockers must remain recognizable in a fraction of a second.
+- Maintain family readability: grounded blockers, sharp utility hazards, active electric hazards, rotating industrial hazards, broken conduit sections, and side pressure hazards must remain recognizable in a fraction of a second.
 - Store visual extents and collision extents separately.
 - Decorative glow may extend beyond collision, but the visible dangerous core should still explain the hit area.
 - Re-check minimum hit-distance spacing, silhouette overlap, telegraph readability, and screenshot clarity after every obstacle art pass.
@@ -122,13 +122,12 @@ Recommended direction for this repo:
 - route theme-owned player, obstacle, background, VFX, and audio variation through focused child assets such as `PlayerVisualConfig`, `ObstacleVisualCatalog`, `BackgroundPresentationConfig`, `ThemeVfxProfile`, and `ThemeAudioProfile`
 - avoid `switch(themeId)` logic in gameplay code
 
-## 12. Dynamic theme switching
-- Best trigger model: milestone- or difficulty-band-based through `ThemeSequenceConfig`.
-- Switching should be infrequent, short, and readable.
-- Preferred transition behavior: brief background crossfade, line blend, subtle ambient VFX pulse, optional mild audio transition.
-- Do not switch themes during death resolution, pause, the first moments of a run, or during a teaching pattern.
-- Preserve fairness: danger color and silhouette meaning must remain stable during transitions.
-- Make thresholds, transition durations, and switching enablement configurable.
+## 12. World progression and district staging
+- The first-release shipping model is one surfaced `theme.live-wire-city` base theme.
+- Progression should be score-band and milestone driven through `WorldProgressionConfig`, not whole-theme swapping.
+- District progression should remain gradual, readable, and non-blocking.
+- Legacy `ThemeSequenceConfig` assets may remain in the repo for compatibility, but they are not the shipping runtime progression path.
+- Keep thresholds, stage modifiers, and milestone reactions configurable.
 
 ## 13. VFX refresh guide
 Map VFX to the existing semantic gameplay events:
@@ -161,13 +160,15 @@ Guidance:
 ## 15. Data/config model recommendations
 Likely needed additions for a proper refresh:
 - `PlayerVisualConfig` (including semantic state definitions and lightweight per-state effect tuning)
-- `CollisionTuningConfig`
 - `ObstacleVisualCatalog`
 - `BackgroundPresentationConfig`
-- `ThemeSequenceConfig`
+- `WorldProgressionConfig`
 - `ThemeVfxProfile`
 - `ThemeAudioProfile`
 - `PresentationRolloutPlanConfig`
+- `BrandingPresentationConfig`
+- `ProductionCopyConfig`
+- `UIThemeConfig`
 
 Recommended placement:
 - `Assets/_Game/Config/Themes/` for theme and theme-sequence assets
@@ -180,10 +181,10 @@ Most likely implementation touchpoints in the current repo:
 - `Assets/_Game/Scripts/Runtime/Gameplay/PlayerController.cs`
 - `Assets/_Game/Scripts/Runtime/Gameplay/HazardManager.cs`
 - `Assets/_Game/Scripts/Runtime/Gameplay/TrackManager.cs`
+- `Assets/_Game/Scripts/Runtime/Gameplay/WorldProgressionController.cs`
+- `Assets/_Game/Scripts/Runtime/Gameplay/ThemePresentationController.cs`
 - `Assets/_Game/Scripts/Runtime/Data/GameplayPresentationConfig.cs`
 - `Assets/_Game/Scripts/Runtime/Data/HazardPresentationCatalog.cs`
-- `Assets/_Game/Scripts/Runtime/Gameplay/GameplaySceneInstaller.cs`
-- `Assets/_Game/Scripts/Runtime/Gameplay/GameplayFeedbackCoordinator.cs`
 - `Assets/_Game/Scripts/Runtime/UI/MainMenuPreviewView.cs`
 - `Assets/_Game/Scripts/Runtime/UI/MainMenuView.cs`
 - `Assets/_Game/Scripts/Runtime/UI/SettingsOverlayView.cs`
@@ -192,7 +193,11 @@ Most likely implementation touchpoints in the current repo:
 - `Assets/_Game/Scripts/Runtime/Save/SaveService.cs`
 - `Assets/_Game/Scripts/Runtime/Data/ThemeConfig.cs`
 - `Assets/_Game/Scripts/Runtime/Data/ThemeCatalog.cs`
+- `Assets/_Game/Scripts/Runtime/Data/WorldProgressionConfig.cs`
 - `Assets/_Game/Scripts/Runtime/Data/ThemeSequenceConfig.cs`
+- `Assets/_Game/Scripts/Runtime/Data/BrandingPresentationConfig.cs`
+- `Assets/_Game/Scripts/Runtime/Data/ProductionCopyConfig.cs`
+- `Assets/_Game/Scripts/Runtime/Data/UIThemeConfig.cs`
 - `Assets/_Game/Scripts/Runtime/Data/ThemeVfxProfile.cs`
 - `Assets/_Game/Scripts/Runtime/Data/ThemeAudioProfile.cs`
 - `Assets/_Game/Scripts/Runtime/Data/AudioCueCatalog.cs`
@@ -210,12 +215,12 @@ Edit Mode:
 - approval gate and rollout plan integrity
 
 Play Mode:
-- active theme applies in menu and gameplay
+- the surfaced `theme.live-wire-city` package applies in menu and gameplay
 - selected theme persists after relaunch
 - retry resets transient presentation state
-- dynamic theme switching only occurs at allowed thresholds
-- UI/home/pause/results remain stable in themed runs
-- VFX/audio profiles swap cleanly with active theme changes
+- world progression moves through allowed district thresholds without changing base theme identity
+- UI/home/pause/results remain stable in Live Wire City runs
+- VFX/audio profiles stay stable while district progression changes apply
 
 Manual:
 - player readability at speed
@@ -269,17 +274,17 @@ Exit criteria for each phase:
 ## 20. Recommendations
 Highest-value path for this repo right now:
 - treat readiness as complete and use the approval gate before starting any broad presentation rollout
-- begin with the player refresh slice, then obstacle refresh, then background/static-theme slices through `PresentationRolloutPlanConfig`
-- keep the new presentation config assets as the frozen fairness baseline while authored content replaces procedural fallback
-- add dynamic theme switching polish only within the approved `ThemeSequenceConfig` path
-- refresh VFX/audio through `ThemeVfxProfile`, `ThemeAudioProfile`, and the semantic service/cue pipelines rather than ad hoc asset hooks
+- the Live Wire City Phase 3 to 5 migration is now in place: one surfaced theme, district progression, six hazard families, and the first-release front door shell
+- continue with authored audio/VFX through the existing theme-profile and semantic service pipelines rather than ad hoc asset hooks
+- finish with integration/hardening and remove remaining legacy theme assumptions once Live Wire City fully replaces them
 
 Safest sequence:
 - approval gate first
 - player slice second
 - obstacle slice third
 - background/static-theme slice fourth
-- dynamic transition slice fifth
-- VFX slice sixth
-- audio slice seventh
+- authored audio/VFX slice fifth
+- integration and hardening slice sixth
+
+
 

@@ -15,36 +15,36 @@ MonoBehaviour:
   bands:
   - bandId: band.0
     minScore: 0
-    maxScoreInclusive: 4
-    speedMultiplier: 1
-    minSpawnSpacing: 2.6
-    maxSpawnSpacing: 3.2
-    minimumTelegraphSeconds: 0.9
-  - bandId: band.1
-    minScore: 5
     maxScoreInclusive: 9
-    speedMultiplier: 1.1
-    minSpawnSpacing: 2.2
-    maxSpawnSpacing: 2.8
-    minimumTelegraphSeconds: 0.85
-  - bandId: band.2
+    speedMultiplier: 1
+    minSpawnSpacing: 3.05
+    maxSpawnSpacing: 3.3.95
+    minimumTelegraphSeconds: 1.0
+  - bandId: band.1
     minScore: 10
     maxScoreInclusive: 19
-    speedMultiplier: 1.2
-    minSpawnSpacing: 1.9
-    maxSpawnSpacing: 2.5
-    minimumTelegraphSeconds: 0.8
-  - bandId: band.3
+    speedMultiplier: 1.04
+    minSpawnSpacing: 2.15.6
+    maxSpawnSpacing: 3
+    minimumTelegraphSeconds: 0.94
+  - bandId: band.2
     minScore: 20
-    maxScoreInclusive: 34
-    speedMultiplier: 1.35
-    minSpawnSpacing: 1.7
-    maxSpawnSpacing: 2.2
-    minimumTelegraphSeconds: 0.75
+    maxScoreInclusive: 29
+    speedMultiplier: 1.13
+    minSpawnSpacing: 2
+    maxSpawnSpacing: 2.75
+    minimumTelegraphSeconds: 0.87
+  - bandId: band.3
+    minScore: 30
+    maxScoreInclusive: 39
+    speedMultiplier: 1.24
+    minSpawnSpacing: 1.92
+    maxSpawnSpacing: 2.4
+    minimumTelegraphSeconds: 0.8
   - bandId: band.4
-    minScore: 35
+    minScore: 40
     maxScoreInclusive: -1
-    speedMultiplier: 1.5
-    minSpawnSpacing: 1.5
-    maxSpawnSpacing: 2
-    minimumTelegraphSeconds: 0.75
+    speedMultiplier: 1.36
+    minSpawnSpacing: 1.68
+    maxSpawnSpacing: 2.15
+    minimumTelegraphSeconds: 0.78

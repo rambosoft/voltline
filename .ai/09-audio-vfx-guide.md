@@ -6,8 +6,9 @@ Source of truth for: sound philosophy, music philosophy, mixer routing, event-to
 Depends on: 01-product-vision.md, 07-gameplay-systems.md, 08-ui-ux-style-guide.md
 Do not duplicate with: prototype one-off effect experiments
 
-> Working title: **Voltline**  
-> Core concept / public-facing design name: **STAY ON THE LINE**
+> Working title: **Voltline**
+> Current public-facing release title: **Voltline**
+> Primary production theme direction: **Live Wire City**
 
 ## Purpose
 
@@ -33,11 +34,11 @@ If an audio/VFX idea does none of those, cut it.
 Audio style keywords:
 
 - clean
-- arcade
-- soft synth
-- cute digital
-- punchy
+- city-electric
+- charged
 - premium
+- punchy
+- restrained
 - not noisy
 - not harsh
 - not exhausting over many retries
@@ -82,6 +83,7 @@ Rules:
 - UI clicks should never be as loud as death or milestone events
 - gameplay clarity beats music fullness
 - theme-aware audio variation flows through `ThemeAudioProfile` on `ThemeConfig`, not through ad hoc scene logic
+- first-release Live Wire City feedback uses dedicated profile IDs `theme.live-wire-city.audio` and `theme.live-wire-city.vfx`
 
 ## Core sound event map
 
@@ -120,7 +122,7 @@ Rules:
 
 ### 5. Death
 **Purpose:** make failure feel final, fair, and motivating  
-**Sound character:** pop + glitch + soft bass hit  
+**Sound character:** overload snap + arc cut + short city power drop  
 **Rules:**
 - punchy, not depressing
 - fast read of failure
@@ -316,3 +318,6 @@ Build first:
 - Audio routing must stay organized through mixer groups.
 - VFX must support readability, never overpower it.
 - Feedback implementation should remain data-driven and reusable.
+
+
+

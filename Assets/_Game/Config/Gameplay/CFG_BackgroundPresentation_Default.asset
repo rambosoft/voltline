@@ -12,38 +12,264 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f41e17316a5440ca8d3d6a3fbbf3301, type: 3}
   m_Name: CFG_BackgroundPresentation_Default
   m_EditorClassIdentifier: 
-  maxRuntimeSpriteCount: 3
-  maxExpectedDrawCalls: 3
+  maxRuntimeSpriteCount: 12
+  maxExpectedDrawCalls: 12
   laneQuietZoneHalfWidth: 1.55
-  maximumAllowedLayerAlpha: 0.14
+  maximumAllowedLayerAlpha: 0.16
   layers:
-  - layerId: layer.far.left
-    colorRole: 0
-    size: {x: 6.8, y: 8.6}
-    anchorOffset: {x: -2.7, y: 0}
-    alpha: 0.07
-    verticalTravelMultiplier: 0.11
-    verticalLoopDistance: 7.4
-    horizontalOscillationAmplitude: 0.12
-    horizontalOscillationFrequency: 0.22
+  - layerId: layer.skyline.left
+    colorRole: 4
+    sprite: {fileID: 21300000, guid: 9cdc4ee993a11be4bba16583fefa17f1, type: 3}
+    size: {x: 6.8, y: 8.8}
+    contentFill: {x: 0.76, y: 0.482}
+    anchorOffset: {x: -2.9, y: 0.2}
+    enforceLaneQuietZone: 1
+    alpha: 0.16
+    verticalTravelMultiplier: 0.09
+    verticalLoopDistance: 8
+    velocityResponseMultiplier: 0.04
+    horizontalOscillationAmplitude: 0.06
+    horizontalOscillationFrequency: 0.16
+    sortingOrder: -15
+  - layerId: layer.tower.boost.left
+    colorRole: 4
+    sprite: {fileID: 0}
+    size: {x: 3.05, y: 9.6}
+    contentFill: {x: 0.539, y: 0.419}
+    districtVariants:
+    - minimumRestoredDistrictCount: 1
+      minimumScoreThreshold: 25
+      sprite: {fileID: 21300000, guid: a824002dd44425942a5368d31a9031e0, type: 3}
+      contentFill: {x: 0.539, y: 0.419}
+      alphaMultiplier: 1
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      tintStrength: 0.08
+    - minimumRestoredDistrictCount: 1
+      minimumScoreThreshold: 35
+      sprite: {fileID: 21300000, guid: a824002dd44425942a5368d31a9031e0, type: 3}
+      contentFill: {x: 0.539, y: 0.419}
+      alphaMultiplier: 1.18
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      tintStrength: 0.16
+    anchorOffset: {x: -3.02, y: 0.22}
+    enforceLaneQuietZone: 1
+    alpha: 0.105
+    verticalTravelMultiplier: 0.09
+    verticalLoopDistance: 8
+    velocityResponseMultiplier: 0.04
+    horizontalOscillationAmplitude: 0.05
+    horizontalOscillationFrequency: 0.16
+    sortingOrder: -14
+  - layerId: layer.skyline.left.windows
+    colorRole: 5
+    sprite: {fileID: 21300000, guid: ce52366a31fb64b41a07595b42af1881, type: 3}
+    size: {x: 6.8, y: 8.8}
+    contentFill: {x: 0.757, y: 0.475}
+    districtVariants:
+    - minimumRestoredDistrictCount: 2
+      sprite: {fileID: 21300000, guid: 2b3bd019b2bc903478cc17f700dc48bb, type: 3}
+      contentFill: {x: 0.757, y: 0.475}
+      alphaMultiplier: 1.4
+      tintColor: {r: 1, g: 0.86, b: 0.32, a: 1}
+      tintStrength: 0.82
+    anchorOffset: {x: -2.9, y: 0.2}
+    enforceLaneQuietZone: 1
+    alpha: 0.12
+    verticalTravelMultiplier: 0.09
+    verticalLoopDistance: 8
+    velocityResponseMultiplier: 0.04
+    horizontalOscillationAmplitude: 0.06
+    horizontalOscillationFrequency: 0.16
+    sortingOrder: -13
+  - layerId: layer.skyline.right
+    colorRole: 4
+    sprite: {fileID: 21300000, guid: daeb5001c4d7ebe49acec44da19f2d6d, type: 3}
+    size: {x: 6.5, y: 8.8}
+    contentFill: {x: 0.783, y: 0.432}
+    anchorOffset: {x: 2.95, y: 0.22}
+    enforceLaneQuietZone: 1
+    alpha: 0.16
+    verticalTravelMultiplier: 0.1
+    verticalLoopDistance: 8.2
+    velocityResponseMultiplier: 0.045
+    horizontalOscillationAmplitude: 0.07
+    horizontalOscillationFrequency: 0.17
     sortingOrder: -12
-  - layerId: layer.far.right
-    colorRole: 1
-    size: {x: 5.2, y: 9.4}
-    anchorOffset: {x: 2.55, y: -0.6}
-    alpha: 0.1
-    verticalTravelMultiplier: 0.17
-    verticalLoopDistance: 8.1
-    horizontalOscillationAmplitude: 0.16
-    horizontalOscillationFrequency: 0.3
+  - layerId: layer.tower.boost.right
+    colorRole: 4
+    sprite: {fileID: 0}
+    size: {x: 3.15, y: 9.45}
+    contentFill: {x: 0.598, y: 0.41}
+    districtVariants:
+    - minimumRestoredDistrictCount: 1
+      minimumScoreThreshold: 25
+      sprite: {fileID: 21300000, guid: 0b21da5c93381ee4293d435147cb3825, type: 3}
+      contentFill: {x: 0.598, y: 0.41}
+      alphaMultiplier: 1
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      tintStrength: 0.08
+    - minimumRestoredDistrictCount: 1
+      minimumScoreThreshold: 35
+      sprite: {fileID: 21300000, guid: 0b21da5c93381ee4293d435147cb3825, type: 3}
+      contentFill: {x: 0.598, y: 0.41}
+      alphaMultiplier: 1.18
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      tintStrength: 0.16
+    anchorOffset: {x: 3.04, y: 0.24}
+    enforceLaneQuietZone: 1
+    alpha: 0.105
+    verticalTravelMultiplier: 0.1
+    verticalLoopDistance: 8.2
+    velocityResponseMultiplier: 0.045
+    horizontalOscillationAmplitude: 0.055
+    horizontalOscillationFrequency: 0.17
     sortingOrder: -11
-  - layerId: layer.accent.upper
-    colorRole: 2
-    size: {x: 4.1, y: 6.4}
-    anchorOffset: {x: -2.2, y: 2.4}
-    alpha: 0.09
-    verticalTravelMultiplier: 0.21
-    verticalLoopDistance: 6.2
-    horizontalOscillationAmplitude: 0.14
-    horizontalOscillationFrequency: 0.34
+  - layerId: layer.skyline.right.windows
+    colorRole: 5
+    sprite: {fileID: 21300000, guid: ddebb8dccf9e6c449a0eb5915bd38664, type: 3}
+    size: {x: 6.5, y: 8.8}
+    contentFill: {x: 0.743, y: 0.426}
+    districtVariants:
+    - minimumRestoredDistrictCount: 2
+      sprite: {fileID: 21300000, guid: 8356ffa18492c9e4792cabe02c9db967, type: 3}
+      contentFill: {x: 0.743, y: 0.426}
+      alphaMultiplier: 1.4
+      tintColor: {r: 1, g: 0.86, b: 0.32, a: 1}
+      tintStrength: 0.82
+    anchorOffset: {x: 2.95, y: 0.22}
+    enforceLaneQuietZone: 1
+    alpha: 0.12
+    verticalTravelMultiplier: 0.1
+    verticalLoopDistance: 8.2
+    velocityResponseMultiplier: 0.045
+    horizontalOscillationAmplitude: 0.07
+    horizontalOscillationFrequency: 0.17
     sortingOrder: -10
+  - layerId: layer.beacon.left
+    colorRole: 3
+    sprite: {fileID: 0}
+    size: {x: 6.8, y: 8.8}
+    contentFill: {x: 0.627, y: 0.465}
+    districtVariants:
+    - minimumRestoredDistrictCount: 1
+      minimumScoreThreshold: 15
+      sprite: {fileID: 21300000, guid: 46b18709caee6ef4a9f070642c303596, type: 3}
+      contentFill: {x: 0.627, y: 0.465}
+      alphaMultiplier: 0.86
+      tintColor: {r: 0.96, g: 0.985, b: 1, a: 1}
+      tintStrength: 0.78
+    - minimumRestoredDistrictCount: 1
+      minimumScoreThreshold: 25
+      sprite: {fileID: 21300000, guid: 46b18709caee6ef4a9f070642c303596, type: 3}
+      contentFill: {x: 0.627, y: 0.465}
+      alphaMultiplier: 1.26
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      tintStrength: 1
+    - minimumRestoredDistrictCount: 1
+      minimumScoreThreshold: 35
+      sprite: {fileID: 21300000, guid: 46b18709caee6ef4a9f070642c303596, type: 3}
+      contentFill: {x: 0.627, y: 0.465}
+      alphaMultiplier: 1.45
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      tintStrength: 1
+    anchorOffset: {x: -2.9, y: 0.2}
+    enforceLaneQuietZone: 1
+    alpha: 0.11
+    verticalTravelMultiplier: 0.09
+    verticalLoopDistance: 8
+    velocityResponseMultiplier: 0.04
+    horizontalOscillationAmplitude: 0.06
+    horizontalOscillationFrequency: 0.16
+    sortingOrder: -9
+  - layerId: layer.beacon.right
+    colorRole: 3
+    sprite: {fileID: 0}
+    size: {x: 6.5, y: 8.8}
+    contentFill: {x: 0.721, y: 0.403}
+    districtVariants:
+    - minimumRestoredDistrictCount: 1
+      minimumScoreThreshold: 15
+      sprite: {fileID: 21300000, guid: 7be90d95bf3cefb4980b7f91f80d7216, type: 3}
+      contentFill: {x: 0.721, y: 0.403}
+      alphaMultiplier: 0.86
+      tintColor: {r: 0.96, g: 0.985, b: 1, a: 1}
+      tintStrength: 0.78
+    - minimumRestoredDistrictCount: 1
+      minimumScoreThreshold: 25
+      sprite: {fileID: 21300000, guid: 7be90d95bf3cefb4980b7f91f80d7216, type: 3}
+      contentFill: {x: 0.721, y: 0.403}
+      alphaMultiplier: 1.26
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      tintStrength: 1
+    - minimumRestoredDistrictCount: 1
+      minimumScoreThreshold: 35
+      sprite: {fileID: 21300000, guid: 7be90d95bf3cefb4980b7f91f80d7216, type: 3}
+      contentFill: {x: 0.721, y: 0.403}
+      alphaMultiplier: 1.45
+      tintColor: {r: 1, g: 1, b: 1, a: 1}
+      tintStrength: 1
+    anchorOffset: {x: 2.95, y: 0.22}
+    enforceLaneQuietZone: 1
+    alpha: 0.11
+    verticalTravelMultiplier: 0.1
+    verticalLoopDistance: 8.2
+    velocityResponseMultiplier: 0.045
+    horizontalOscillationAmplitude: 0.07
+    horizontalOscillationFrequency: 0.17
+    sortingOrder: -8
+  - layerId: layer.utility.band.left
+    colorRole: 6
+    sprite: {fileID: 21300000, guid: b7f04a22332a72544a186e6b7629bcd7, type: 3}
+    size: {x: 7.4, y: 5.0}
+    contentFill: {x: 0.779, y: 0.359}
+    anchorOffset: {x: -2.65, y: 0.5}
+    enforceLaneQuietZone: 1
+    alpha: 0.128
+    verticalTravelMultiplier: 0.122
+    verticalLoopDistance: 7.2
+    velocityResponseMultiplier: 0.07
+    horizontalOscillationAmplitude: 0.06
+    horizontalOscillationFrequency: 0.19
+    sortingOrder: -7
+  - layerId: layer.utility.band.right
+    colorRole: 6
+    sprite: {fileID: 21300000, guid: 3625117442d87ad41aa05b46bf142a1b, type: 3}
+    size: {x: 7.4, y: 5.0}
+    contentFill: {x: 0.889, y: 0.39}
+    anchorOffset: {x: 2.65, y: 0.5}
+    enforceLaneQuietZone: 1
+    alpha: 0.128
+    verticalTravelMultiplier: 0.122
+    verticalLoopDistance: 7.2
+    velocityResponseMultiplier: 0.07
+    horizontalOscillationAmplitude: 0.06
+    horizontalOscillationFrequency: 0.19
+    sortingOrder: -6
+  - layerId: layer.atmosphere.haze
+    colorRole: 7
+    sprite: {fileID: 21300000, guid: dc35a3dfe1c01a6418c9f3283a13f0e2, type: 3}
+    size: {x: 7.8, y: 3.9}
+    contentFill: {x: 0.907, y: 0.24}
+    anchorOffset: {x: 0.0, y: 1.2}
+    enforceLaneQuietZone: 0
+    alpha: 0.046
+    verticalTravelMultiplier: 0.112
+    verticalLoopDistance: 7.8
+    velocityResponseMultiplier: 0.03
+    horizontalOscillationAmplitude: 0.03
+    horizontalOscillationFrequency: 0.14
+    sortingOrder: -5
+  - layerId: layer.atmosphere.streaks
+    colorRole: 8
+    sprite: {fileID: 21300000, guid: 7342d979c4722854b9aa1f892b29b909, type: 3}
+    size: {x: 7.9, y: 3.6}
+    contentFill: {x: 0.939, y: 0.225}
+    anchorOffset: {x: 0.0, y: 1.35}
+    enforceLaneQuietZone: 0
+    alpha: 0.038
+    verticalTravelMultiplier: 0.148
+    verticalLoopDistance: 7.4
+    velocityResponseMultiplier: 0.085
+    horizontalOscillationAmplitude: 0.06
+    horizontalOscillationFrequency: 0.24
+    sortingOrder: -4

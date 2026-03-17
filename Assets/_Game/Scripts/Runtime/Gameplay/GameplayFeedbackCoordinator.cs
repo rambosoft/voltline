@@ -119,8 +119,9 @@ namespace Voltline.Gameplay
         {
             if (state == RunState.Dying)
             {
-                audioService.PlayCue(AudioCueIds.Death);
-                vfxService.PlayEffect(VfxCueIds.Death, playerController.WorldPosition);
+                ObstacleFamily? failureFamily = gameManager != null ? gameManager.LastFailureFamily : null;
+                audioService.PlayCue(AudioCueIds.ResolveDeathCueId(failureFamily));
+                vfxService.PlayEffect(VfxCueIds.ResolveDeathCueId(failureFamily), playerController.WorldPosition);
                 return;
             }
 

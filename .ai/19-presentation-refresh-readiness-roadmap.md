@@ -1,4 +1,4 @@
-# Presentation Refresh Readiness Roadmap
+﻿# Presentation Refresh Readiness Roadmap
 Status: Active
 Owner: Team / AI
 Last updated: 2026-03-16
@@ -41,7 +41,7 @@ Current repo state relevant to readiness:
 - `GameplayPresentationConfig` owns the frozen player/track presentation baseline for the live repo.
 - `HazardPresentationCatalog` owns the frozen hazard-family readability, collision, and spacing baseline for the live repo.
 - `BackgroundPresentationController.cs` owns a small budgeted gameplay background layer stack through `BackgroundPresentationConfig`, while `TrackManager.cs` stays focused on line/path ownership.
-- `ThemeConfig.cs` is now presentation-ready, and `ThemePresentationController.cs` plus `ThemeSequenceConfig.cs` own milestone-gated runtime theme application rules.
+- `ThemeConfig.cs` is now presentation-ready, and the first-release shipping posture now uses `WorldProgressionConfig.cs`, `WorldProgressionController.cs`, and `ThemePresentationController.cs` for Live Wire City district progression while `ThemeSequenceConfig.cs` remains dormant for compatibility only.
 - `VfxService.cs` and `AudioService.cs` are centralized, theme-aware, and now route variation through `ThemeVfxProfile` and `ThemeAudioProfile`.
 - `PresentationRefreshApprovalAudit.cs` and `PresentationRolloutPlanConfig` now provide the hard stop/go approval gate for staged refresh work.
 - `Assets/_Game/Art` and most authored audio content folders are structurally present but still sparse.
@@ -271,7 +271,7 @@ Readiness gates:
 ## 9. Asset-swap gating rules
 - Player art swaps are allowed only through `PlayerVisualConfig` and `PlayerVisualView`; they remain blocked from touching collision or line anchoring code directly.
 - Obstacle art swaps are allowed only through `ObstacleVisualCatalog` and `HazardVisualView`; they remain blocked from touching collision or spacing code directly.
-- Background and theme refresh work are now structurally allowed only through `BackgroundPresentationConfig`, `ThemeConfig`, `ThemeCatalog`, and `ThemeSequenceConfig`.
+- Background and theme refresh work are now structurally allowed only through `BackgroundPresentationConfig`, `ThemeConfig`, `ThemeCatalog`, and `WorldProgressionConfig`, with legacy `ThemeSequenceConfig` left dormant rather than used as the shipping runtime path.
 - VFX and audio replacement is allowed only through the approved `ThemeVfxProfile` / `ThemeAudioProfile` plus semantic catalog/service pipeline, and only after the presentation refresh approval audit is clean for the current slice.
 - Temporary scene-local overrides are not allowed as a shortcut around these gates.
 
@@ -317,6 +317,7 @@ Recommended asset families for refresh implementation:
 - `ObstacleVisualCatalog`
 - `CollisionTuningConfig`
 - `BackgroundPresentationConfig`
+- `WorldProgressionConfig`
 - `ThemeSequenceConfig`
 - `ThemeVfxProfile`
 - `ThemeAudioProfile`
@@ -366,3 +367,4 @@ When implementation later happens, update only the owning docs affected by the a
 - Keep collision, spacing, line anchoring, and transition rules off-limits to ad hoc asset swaps; they must continue to flow through config and controllers.
 - Keep this roadmap narrower than `16` and more restrictive than `18`.
 - Use it as the stop/go gate for any future visual refresh proposal.
+

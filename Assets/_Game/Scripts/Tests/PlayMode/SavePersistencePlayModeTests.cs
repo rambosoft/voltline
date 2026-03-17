@@ -10,7 +10,7 @@ namespace Voltline.Tests.PlayMode
     public sealed class SavePersistencePlayModeTests
     {
         [UnityTest]
-        public IEnumerator SaveService_BestScoreAndSettingsPersistAcrossRecreation()
+        public IEnumerator SaveService_BestScoreSettingsAndFirstLaunchHintPersistAcrossRecreation()
         {
             string tempPath = Path.Combine(Application.temporaryCachePath, "voltline-save-persistence-test.json");
             SaveStorage.SetOverridePathForTests(tempPath);
@@ -23,8 +23,7 @@ namespace Voltline.Tests.PlayMode
             firstService.SetMusicVolume(0.35f);
             firstService.SetSfxVolume(0.65f);
             firstService.SetVibrationEnabled(false);
-            firstService.CurrentProfile.unlockedThemeIds.Add("theme.candy-pop");
-            firstService.SetSelectedThemeId("theme.candy-pop");
+            firstService.SetHasSeenFirstLaunchHint(true);
             yield return null;
 
             SaveService.ResetInstanceForTests();
@@ -35,8 +34,10 @@ namespace Voltline.Tests.PlayMode
             Assert.That(secondService.MusicVolume, Is.EqualTo(0.35f).Within(0.001f));
             Assert.That(secondService.SfxVolume, Is.EqualTo(0.65f).Within(0.001f));
             Assert.That(secondService.VibrationEnabled, Is.False);
-            Assert.That(secondService.SelectedThemeId, Is.EqualTo("theme.candy-pop"));
-            Assert.That(secondService.CurrentProfile.unlockedThemeIds, Does.Contain("theme.candy-pop"));
+            Assert.That(secondService.HasSeenFirstLaunchHint, Is.True);
+            Assert.That(secondService.SelectedThemeId, Is.EqualTo("theme.live-wire-city"));
+            Assert.That(secondService.CurrentProfile.unlockedThemeIds, Does.Contain("theme.live-wire-city"));
+            Assert.That(secondService.CurrentProfile.unlockedThemeIds.Count, Is.EqualTo(1));
 
             SaveService.ResetInstanceForTests();
             SaveStorage.DeleteProfile();

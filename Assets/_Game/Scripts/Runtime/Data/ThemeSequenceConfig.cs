@@ -8,7 +8,7 @@ namespace Voltline.Data
     public sealed class ThemeSequenceEntry
     {
         [SerializeField] private int scoreThreshold = 20;
-        [SerializeField] private string themeId = "theme.candy-pop";
+        [SerializeField] private string themeId = "theme.live-wire-city";
         [SerializeField] private float transitionDurationSeconds = 0.35f;
 
         public int ScoreThreshold => scoreThreshold;
@@ -19,9 +19,9 @@ namespace Voltline.Data
     [CreateAssetMenu(fileName = "CFG_ThemeSequence_Main", menuName = "Voltline/Config/Theme Sequence")]
     public sealed class ThemeSequenceConfig : ScriptableObject
     {
-        [SerializeField] private bool enableRuntimeTransitions = true;
-        [SerializeField] private bool requireUnlockedTheme = true;
-        [SerializeField] private int minimumScoreForTransitions = 20;
+        [SerializeField] private bool enableRuntimeTransitions = false;
+        [SerializeField] private bool requireUnlockedTheme = false;
+        [SerializeField] private int minimumScoreForTransitions = 0;
         [SerializeField] private float minimumTransitionDurationSeconds = 0.24f;
         [SerializeField] private float maximumTransitionDurationSeconds = 0.5f;
         [SerializeField] private List<ThemeSequenceEntry> entries = new();
@@ -34,3 +34,4 @@ namespace Voltline.Data
         public IReadOnlyList<ThemeSequenceEntry> Entries => entries;
     }
 }
+

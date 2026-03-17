@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3c8a73a2a1545d3b5db3364d120b222, type: 3}
+  m_Name: CFG_ProductionCopy_LiveWireCity
+  m_EditorClassIdentifier: 
+  menuHintPrimary: Tap to flip sides
+  menuHintSecondary: Keep the charge alive
+  playButtonLabel: Play
+  dailyButtonLabel: Daily
+  themesButtonLabel: Themes
+  gridStatusButtonLabel: Grid
+  bestButtonLabel: Best
+  settingsButtonLabel: Settings
+  retryButtonLabel: Retry
+  shareButtonLabel: Share
+  settingsTitle: Settings
+  pauseTitle: PAUSED
+  resumeButtonLabel: Resume
+  restartButtonLabel: Restart
+  homeButtonLabel: Home
+  closeButtonLabel: Close
+  musicLabel: Music
+  sfxLabel: SFX
+  vibrationLabel: Haptics
+  themeLabel: Themes
+  themeSelectionHint: More themes come online in a later rollout.
+  selectedThemeStatusLabel: Selected
+  unlockedThemeStatusLabel: Unlocked
+  lockedThemeRequirementFormat: Best {0}
+  onLabel: On
+  offLabel: Off
+  bestScoreFormat: Best {0}
+  newBestScoreFormat: New Best {0}
+  almostMilestoneFormat: Almost {0}
+  comingSoonStatusLabel: SOON
+  bestPanelTitle: GRID RECORD
+  gridStatusTitle: GRID STATUS
+  gridStatusSummaryFormat: '{0} | {1}'
+  gridStatusCurrentLabel: CURRENT
+  gridStatusOnlineLabel: ONLINE
+  gridStatusLockedRequirementFormat: Reach {0}
+  gridStatusScoreBandFormat: '{0}-{1}'
+  gridStatusScoreBandOpenEndedFormat: '{0}+'
+  gridStatusOnlineDistrictsSingularFormat: '{0} district online'
+  gridStatusOnlineDistrictsPluralFormat: '{0} districts online'
+  shareTitle: SHARE STATUS
+  shareCopyButtonLabel: Copy
+  shareCopiedStatusLabel: Copied
+  shareSummaryFormat: 'Score {0} | {1}'
+  shareFlavorSingularFormat: '{0} district online in {1}.'
+  shareFlavorPluralFormat: '{0} districts online in {1}.'
+  tutorialTitle: KEEP THE GRID ALIVE
+  tutorialPrimaryLine: Tap to flip to the safer side of the conduit.
+  tutorialSecondaryLine: Stay ahead of the hazards and keep the transfer alive.
+  tutorialActionLabel: Start Run
+  districtsRestoredSingularFormat: You restored {0} district.
+  districtsRestoredPluralFormat: You restored {0} districts.
+  resultTitles:
+  - GRID FAILURE
+  - SIGNAL LOST
+  - DISTRICT DOWN
+  - POWER CUT
+  - TRANSFER FAILED
+  newBestResultTitles:
+  - GRID RECORD
+  - BEST TRANSFER
+  zeroScoreMessages:
+  - The line died before the city woke.
+  lowScoreMessages:
+  - The district dimmed out.
+  - Retry the transfer.
+  genericMessages:
+  - Keep the grid alive.
+  - The city needs another run.
+  - The transfer almost held.
+  newBestMessages:
+  - Record charge across the grid.
+  - Best transfer in the city yet.
+  milestoneMessages:
+  - scoreThreshold: 10
+    message: DISTRICT ONLINE
+  - scoreThreshold: 20
+    message: GRID STABLE
+  - scoreThreshold: 30
+    message: CITY AWAKENS
+  - scoreThreshold: 40
+    message: FULL CHARGE
+  - scoreThreshold: 50
+    message: NO BLACKOUT
+  failureResultCopies:
+  - family: 0
+    titles:
+    - GRID DRAINED
+    - GROUND FAULT
+    messages:
+    - The grounded block killed the transfer.
+    - The city lost charge to a grounded blocker.
+  - family: 1
+    titles:
+    - SIGNAL RUPTURE
+    - LINE CUT
+    messages:
+    - A sharp utility hazard split the transfer.
+    - The conduit ruptured before the district held.
+  - family: 2
+    titles:
+    - OVERLOAD
+    - ARC FAILURE
+    messages:
+    - A live hazard overloaded the grid.
+    - The transfer spiked out in an electric surge.
+  - family: 3
+    titles:
+    - ROTOR HIT
+    - MAINTENANCE FAILURE
+    messages:
+    - An industrial rotor cut the charge path.
+    - The city line failed inside a rotating hazard.
+  - family: 4
+    titles:
+    - LINE INTERRUPTED
+    - CONDUIT BROKEN
+    messages:
+    - The transfer dropped into a broken conduit.
+    - The line gave out before the next district lit.
+  - family: 5
+    titles:
+    - PRESSURE COLLAPSE
+    - SIDE IMPACT
+    messages:
+    - A side-pressure hazard crushed the transfer.
+    - Grid pressure closed in before the reroute held.

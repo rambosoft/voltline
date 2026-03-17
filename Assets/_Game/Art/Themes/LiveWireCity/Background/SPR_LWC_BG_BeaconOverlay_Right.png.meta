@@ -1,0 +1,403 @@
+fileFormatVersion: 2
+guid: 7be90d95bf3cefb4980b7f91f80d7216
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 3506126143559229550
+    second: SPR_LWC_BG_BeaconOverlay_Right_0
+  - first:
+      213: -4408265678317134754
+    second: SPR_LWC_BG_BeaconOverlay_Right_1
+  - first:
+      213: 1901397134845408777
+    second: SPR_LWC_BG_BeaconOverlay_Right_2
+  - first:
+      213: 1360280020054999425
+    second: SPR_LWC_BG_BeaconOverlay_Right_3
+  - first:
+      213: -3318682609596285396
+    second: SPR_LWC_BG_BeaconOverlay_Right_4
+  - first:
+      213: -8657715920840328781
+    second: SPR_LWC_BG_BeaconOverlay_Right_5
+  - first:
+      213: 8977622703602595761
+    second: SPR_LWC_BG_BeaconOverlay_Right_6
+  - first:
+      213: -5567948424468633788
+    second: SPR_LWC_BG_BeaconOverlay_Right_7
+  - first:
+      213: -7817293048547502877
+    second: SPR_LWC_BG_BeaconOverlay_Right_8
+  - first:
+      213: -4207960549335265170
+    second: SPR_LWC_BG_BeaconOverlay_Right_9
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 0
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: SPR_LWC_BG_BeaconOverlay_Right_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1049
+        width: 1024
+        height: 487
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e60ee8cb62348a030800000000000000
+      internalID: 3506126143559229550
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_BeaconOverlay_Right_1
+      rect:
+        serializedVersion: 2
+        x: 786
+        y: 959
+        width: 50
+        height: 39
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e5c5c58b8b1b2d2c0800000000000000
+      internalID: -4408265678317134754
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_BeaconOverlay_Right_2
+      rect:
+        serializedVersion: 2
+        x: 746
+        y: 883
+        width: 46
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 906f76fbe9e136a10800000000000000
+      internalID: 1901397134845408777
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_BeaconOverlay_Right_3
+      rect:
+        serializedVersion: 2
+        x: 882
+        y: 890
+        width: 69
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 181807e987fa0e210800000000000000
+      internalID: 1360280020054999425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_BeaconOverlay_Right_4
+      rect:
+        serializedVersion: 2
+        x: 648
+        y: 744
+        width: 62
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2e3fbcefbba1f1d0800000000000000
+      internalID: -3318682609596285396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_BeaconOverlay_Right_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1024
+        height: 696
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3b971149d3d99d780800000000000000
+      internalID: -8657715920840328781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_BeaconOverlay_Right_6
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 476
+        width: 71
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1b7f6bf884ce69c70800000000000000
+      internalID: 8977622703602595761
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_BeaconOverlay_Right_7
+      rect:
+        serializedVersion: 2
+        x: 333
+        y: 527
+        width: 53
+        height: 49
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 447e9df786caab2b0800000000000000
+      internalID: -5567948424468633788
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_BeaconOverlay_Right_8
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 532
+        width: 22
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e41230e365638390800000000000000
+      internalID: -7817293048547502877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SPR_LWC_BG_BeaconOverlay_Right_9
+      rect:
+        serializedVersion: 2
+        x: 489
+        y: 636
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e609304dc225a95c0800000000000000
+      internalID: -4207960549335265170
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      SPR_LWC_BG_BeaconOverlay_Right_0: 3506126143559229550
+      SPR_LWC_BG_BeaconOverlay_Right_1: -4408265678317134754
+      SPR_LWC_BG_BeaconOverlay_Right_2: 1901397134845408777
+      SPR_LWC_BG_BeaconOverlay_Right_3: 1360280020054999425
+      SPR_LWC_BG_BeaconOverlay_Right_4: -3318682609596285396
+      SPR_LWC_BG_BeaconOverlay_Right_5: -8657715920840328781
+      SPR_LWC_BG_BeaconOverlay_Right_6: 8977622703602595761
+      SPR_LWC_BG_BeaconOverlay_Right_7: -5567948424468633788
+      SPR_LWC_BG_BeaconOverlay_Right_8: -7817293048547502877
+      SPR_LWC_BG_BeaconOverlay_Right_9: -4207960549335265170
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

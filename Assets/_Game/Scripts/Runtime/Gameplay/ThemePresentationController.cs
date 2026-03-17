@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using Voltline.Audio;
 using Voltline.Data;
@@ -10,10 +9,7 @@ namespace Voltline.Gameplay
 {
     public sealed class ThemePresentationController : MonoBehaviour
     {
-        private readonly HashSet<string> consumedThemeIds = new();
-
         private ThemeCatalog themeCatalog;
-        private ThemeSequenceConfig themeSequenceConfig;
         private SaveService saveService;
         private GameManager gameManager;
         private ScoreSystem scoreSystem;
@@ -25,11 +21,14 @@ namespace Voltline.Gameplay
         private UIStateCoordinator uiStateCoordinator;
         private AudioService audioService;
         private VfxService vfxService;
+        private WorldProgressionController worldProgressionController;
         private ThemeConfig currentTheme;
         private bool isInitialized;
 
         public string CurrentThemeId => currentTheme != null ? currentTheme.ThemeId : string.Empty;
-        public int ActivatedTransitionCount { get; private set; }
+        public string CurrentDistrictId => worldProgressionController != null ? worldProgressionController.CurrentDistrictId : string.Empty;
+        public int ActivatedTransitionCount => worldProgressionController != null ? worldProgressionController.ActivatedTransitionCount : 0;
+        public int ActivatedMilestoneReactionCount => worldProgressionController != null ? worldProgressionController.ActivatedMilestoneReactionCount : 0;
 
         public void Initialize(
             ThemeCatalog catalog,
@@ -42,6 +41,7 @@ namespace Voltline.Gameplay
             TrackManager track,
             PlayerController player,
             HazardManager hazards,
+            WorldProgressionController progression,
             UIStateCoordinator ui,
             AudioService audio,
             VfxService vfx,
@@ -53,7 +53,6 @@ namespace Voltline.Gameplay
             }
 
             themeCatalog = catalog;
-            themeSequenceConfig = sequenceConfig;
             saveService = service;
             gameManager = manager;
             scoreSystem = scores;
@@ -62,21 +61,47 @@ namespace Voltline.Gameplay
             trackManager = track;
             playerController = player;
             hazardManager = hazards;
+            worldProgressionController = progression;
             uiStateCoordinator = ui;
             audioService = audio;
             vfxService = vfx;
             currentTheme = startingTheme;
 
+            if (worldProgressionController == null)
+            {
+                worldProgressionController = GetComponent<WorldProgressionController>();
+                if (worldProgressionController == null)
+                {
+                    worldProgressionController = gameObject.AddComponent<WorldProgressionController>();
+                }
+            }
+
+            worldProgressionController.DistrictChanged += HandleDistrictChanged;
+            worldProgressionController.MilestoneReactionTriggered += HandleMilestoneReactionTriggered;
+
             scoreSystem.ScoreChanged += HandleScoreChanged;
+            scoreSystem.MilestoneReached += HandleMilestoneReached;
             gameManager.RunStateChanged += HandleRunStateChanged;
+
+            // Bootstrap the active theme and district immediately so the first run does not wait for a later restart.
+            ApplyTheme(currentTheme, 0f);
+            backgroundController?.ApplyScore(scoreSystem != null ? scoreSystem.CurrentScore : 0);
+            worldProgressionController?.ResetForRun(scoreSystem != null ? scoreSystem.CurrentScore : 0);
             isInitialized = true;
         }
 
         private void OnDestroy()
         {
+            if (worldProgressionController != null)
+            {
+                worldProgressionController.DistrictChanged -= HandleDistrictChanged;
+                worldProgressionController.MilestoneReactionTriggered -= HandleMilestoneReactionTriggered;
+            }
+
             if (scoreSystem != null)
             {
                 scoreSystem.ScoreChanged -= HandleScoreChanged;
+                scoreSystem.MilestoneReached -= HandleMilestoneReached;
             }
 
             if (gameManager != null)
@@ -92,74 +117,47 @@ namespace Voltline.Gameplay
                 return;
             }
 
-            consumedThemeIds.Clear();
-            ActivatedTransitionCount = 0;
             ThemeConfig selectedTheme = saveService.ResolveSelectedTheme(themeCatalog) ?? themeCatalog.DefaultTheme;
-            ApplyTheme(selectedTheme, 0f, false);
+            ApplyTheme(selectedTheme, 0f);
+            backgroundController?.ApplyScore(scoreSystem != null ? scoreSystem.CurrentScore : 0);
+            worldProgressionController?.ResetForRun(scoreSystem != null ? scoreSystem.CurrentScore : 0);
         }
 
         private void HandleScoreChanged(int score)
         {
-            if (gameManager == null
-                || gameManager.CurrentState != RunState.Active
-                || gameManager.IsPaused
-                || themeSequenceConfig == null
-                || !themeSequenceConfig.EnableRuntimeTransitions)
+            if (gameManager == null || gameManager.CurrentState != RunState.Active || gameManager.IsPaused)
             {
                 return;
             }
 
-            IReadOnlyList<int> milestones = scoreSystem.MilestoneThresholds;
-            bool isMilestone = false;
-            for (int i = 0; i < milestones.Count; i++)
-            {
-                if (milestones[i] == score)
-                {
-                    isMilestone = true;
-                    break;
-                }
-            }
-
-            if (!isMilestone || score < themeSequenceConfig.MinimumScoreForTransitions)
-            {
-                return;
-            }
-
-            IReadOnlyList<ThemeSequenceEntry> entries = themeSequenceConfig.Entries;
-            for (int i = 0; i < entries.Count; i++)
-            {
-                ThemeSequenceEntry entry = entries[i];
-                if (entry == null || score < entry.ScoreThreshold || consumedThemeIds.Contains(entry.ThemeId))
-                {
-                    continue;
-                }
-
-                if (!themeCatalog.TryGetTheme(entry.ThemeId, out ThemeConfig targetTheme) || targetTheme == null)
-                {
-                    consumedThemeIds.Add(entry.ThemeId);
-                    continue;
-                }
-
-                if (themeSequenceConfig.RequireUnlockedTheme && !saveService.IsThemeUnlocked(targetTheme.ThemeId))
-                {
-                    continue;
-                }
-
-                if (!targetTheme.AllowRuntimeSequenceSelection || targetTheme.ThemeId == CurrentThemeId)
-                {
-                    consumedThemeIds.Add(entry.ThemeId);
-                    continue;
-                }
-
-                float configuredDuration = Mathf.Max(targetTheme.PreferredTransitionDuration, entry.TransitionDurationSeconds);
-                float duration = Mathf.Clamp(configuredDuration, themeSequenceConfig.MinimumTransitionDurationSeconds, themeSequenceConfig.MaximumTransitionDurationSeconds);
-                ApplyTheme(targetTheme, duration, true);
-                consumedThemeIds.Add(entry.ThemeId);
-                break;
-            }
+            backgroundController?.ApplyScore(score);
+            worldProgressionController?.UpdateDistrictForScore(score, ResolveDistrictTransitionDuration(score), false);
         }
 
-        private void ApplyTheme(ThemeConfig theme, float durationSeconds, bool countAsTransition)
+        private void HandleMilestoneReached(int milestone)
+        {
+            worldProgressionController?.TriggerMilestoneReaction(milestone);
+        }
+
+        private void HandleDistrictChanged(WorldDistrictStateDefinition district, float durationSeconds, bool force)
+        {
+            trackManager?.ApplyWorldDistrict(district, durationSeconds);
+            backgroundController?.ApplyWorldDistrict(district, durationSeconds);
+            hazardManager?.ApplyWorldDistrict(district);
+            vfxService?.ApplyWorldDistrict(district);
+            uiStateCoordinator?.ApplyWorldDistrict(district);
+        }
+
+        private void HandleMilestoneReactionTriggered(WorldMilestoneReactionDefinition reaction, int milestone)
+        {
+            Color milestoneColor = worldProgressionController != null && worldProgressionController.CurrentDistrict != null
+                ? worldProgressionController.CurrentDistrict.MilestoneColor
+                : (currentTheme != null ? currentTheme.MilestoneColor : Color.white);
+            backgroundController?.PlayMilestonePulse(milestoneColor, reaction.BackgroundFlashStrength);
+            uiStateCoordinator?.ShowMilestoneMessage(milestone);
+        }
+
+        private void ApplyTheme(ThemeConfig theme, float durationSeconds)
         {
             if (theme == null)
             {
@@ -167,6 +165,7 @@ namespace Voltline.Gameplay
             }
 
             currentTheme = theme;
+            worldProgressionController?.Initialize(theme);
             BackgroundPresentationConfig backgroundConfig = theme.ResolveBackgroundPresentation(defaultBackgroundConfig);
             backgroundController?.ApplyTheme(theme, backgroundConfig, durationSeconds);
             trackManager?.ApplyTheme(theme, durationSeconds);
@@ -175,11 +174,17 @@ namespace Voltline.Gameplay
             uiStateCoordinator?.ApplyTheme(theme);
             audioService?.ApplyTheme(theme);
             vfxService?.ApplyTheme(theme);
+        }
 
-            if (countAsTransition)
+        private float ResolveDistrictTransitionDuration(int score)
+        {
+            WorldProgressionConfig worldProgressionConfig = currentTheme != null ? currentTheme.ResolveWorldProgressionConfig() : null;
+            if (worldProgressionConfig == null || !worldProgressionConfig.TryGetMilestoneReaction(score, out WorldMilestoneReactionDefinition reaction))
             {
-                ActivatedTransitionCount++;
+                return currentTheme != null ? Mathf.Max(0.16f, currentTheme.PreferredTransitionDuration) : 0.24f;
             }
+
+            return reaction.TransitionDurationSeconds;
         }
     }
 }

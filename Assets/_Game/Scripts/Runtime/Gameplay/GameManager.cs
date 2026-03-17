@@ -28,6 +28,7 @@ namespace Voltline.Gameplay
         public float CurrentSpeed { get; private set; }
         public bool IsPaused { get; private set; }
         public int StartingScore => runStartingScore;
+        public ObstacleFamily? LastFailureFamily { get; private set; }
 
         public void Initialize(
             GameBalanceConfig balanceConfig,
@@ -163,6 +164,7 @@ namespace Voltline.Gameplay
             int seed = baseSeed + (runCounter * 17);
             runCounter++;
             SetPaused(false);
+            LastFailureFamily = null;
 
             scoreSystem.ResetRun(runStartingScore);
             trackManager.ResetRun();
@@ -187,6 +189,7 @@ namespace Voltline.Gameplay
 
             if (collisionConfig != null)
             {
+                LastFailureFamily = collisionConfig.Family;
                 playerController.MarkDead();
                 SetState(RunState.Dying);
             }

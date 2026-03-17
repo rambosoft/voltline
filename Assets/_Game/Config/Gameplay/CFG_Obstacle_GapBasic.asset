@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c927ca8d01564300ac164c1b80724b43, type: 3}
   m_Name: CFG_Obstacle_GapBasic
   m_EditorClassIdentifier: 
-  obstacleId: obstacle.gap.basic
-  displayName: Line Gap
-  family: 3
+  obstacleId: obstacle.broken-conduit.basic
+  displayName: Broken Conduit Section
+  family: 4
   allowedFromScore: 18
   allowedToScore: -1
   minSpawnSpacing: 1.7

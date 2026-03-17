@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -120,7 +121,7 @@ namespace Voltline.Tests.PlayMode
         }
 
         [UnityTest]
-        public IEnumerator GameplayScene_ThemeSequenceTransitionsAtConfiguredMilestoneWithinBackgroundAndFeedbackBudgets()
+        public IEnumerator GameplayScene_WorldProgressionMovesDistrictsWithoutChangingBaseThemeIdentity()
         {
 #if UNITY_EDITOR
             GameplaySceneInstaller.ClearEditorSessionDebugStartingScoreOverride();
@@ -133,6 +134,7 @@ namespace Voltline.Tests.PlayMode
             GameplaySceneInstaller installer = Object.FindFirstObjectByType<GameplaySceneInstaller>();
             ScoreSystem scoreSystem = Object.FindFirstObjectByType<ScoreSystem>();
             ThemePresentationController themePresentationController = Object.FindFirstObjectByType<ThemePresentationController>();
+            WorldProgressionController worldProgressionController = Object.FindFirstObjectByType<WorldProgressionController>();
             BackgroundPresentationController backgroundPresentationController = Object.FindFirstObjectByType<BackgroundPresentationController>();
             PlayerVisualView playerVisualView = Object.FindFirstObjectByType<PlayerVisualView>();
             VfxService vfxService = Object.FindFirstObjectByType<VfxService>();
@@ -142,13 +144,13 @@ namespace Voltline.Tests.PlayMode
             Assert.That(installer, Is.Not.Null);
             Assert.That(scoreSystem, Is.Not.Null);
             Assert.That(themePresentationController, Is.Not.Null);
+            Assert.That(worldProgressionController, Is.Not.Null);
             Assert.That(backgroundPresentationController, Is.Not.Null);
             Assert.That(playerVisualView, Is.Not.Null);
             Assert.That(vfxService, Is.Not.Null);
             Assert.That(audioService, Is.Not.Null);
 
             SaveService saveService = SaveService.EnsureExists();
-            saveService.RecordRunScore(20);
             saveService.SynchronizeThemeUnlocks(installer.ThemeCatalog);
             saveService.SetSelectedThemeId(installer.ThemeCatalog.DefaultThemeId);
 
@@ -156,27 +158,106 @@ namespace Voltline.Tests.PlayMode
             yield return null;
             yield return WaitForState(gameManager, RunState.Active, 1.5f);
 
-            Assert.That(themePresentationController.CurrentThemeId, Is.EqualTo(installer.ThemeCatalog.DefaultThemeId));
+            Assert.That(themePresentationController.CurrentThemeId, Is.EqualTo("theme.live-wire-city"));
+            Assert.That(themePresentationController.CurrentDistrictId, Is.EqualTo("district.failing-grid"));
             Assert.That(backgroundPresentationController.RuntimeLayerCount, Is.LessThanOrEqualTo(backgroundPresentationController.ConfiguredSpriteBudget));
-            Assert.That(vfxService.CurrentThemeVfxProfileName, Does.Contain("NeonNight"));
-            Assert.That(audioService.CurrentThemeAudioProfileName, Does.Contain("NeonNight"));
+            Assert.That(vfxService.CurrentThemeVfxProfileId, Is.EqualTo("theme.live-wire-city.vfx"));
+            Assert.That(audioService.CurrentThemeAudioProfileId, Is.EqualTo("theme.live-wire-city.audio"));
 
-            for (int i = scoreSystem.CurrentScore; i < 20; i++)
+            for (int i = scoreSystem.CurrentScore; i < 40; i++)
             {
                 scoreSystem.RegisterClearedBeat();
             }
 
             yield return null;
 
-            Assert.That(themePresentationController.ActivatedTransitionCount, Is.EqualTo(1));
-            Assert.That(themePresentationController.CurrentThemeId, Is.EqualTo("theme.candy-pop"));
-            Assert.That(backgroundPresentationController.ActiveConfig, Is.Not.Null);
-            Assert.That(backgroundPresentationController.ActiveConfig.name, Does.Contain("CandyPop"));
+            Assert.That(themePresentationController.CurrentThemeId, Is.EqualTo("theme.live-wire-city"));
+            Assert.That(themePresentationController.CurrentDistrictId, Is.EqualTo("district.overclock-city"));
+            Assert.That(worldProgressionController.ActivatedTransitionCount, Is.GreaterThanOrEqualTo(5));
+            Assert.That(worldProgressionController.ActivatedMilestoneReactionCount, Is.GreaterThanOrEqualTo(4));
             Assert.That(backgroundPresentationController.RuntimeLayerCount, Is.LessThanOrEqualTo(backgroundPresentationController.ConfiguredSpriteBudget));
             Assert.That(playerVisualView.CurrentPresentationState, Is.EqualTo(PlayerVisualPresentationStateId.Milestone));
-            Assert.That(vfxService.CurrentThemeVfxProfileName, Does.Contain("CandyPop"));
-            Assert.That(audioService.CurrentThemeAudioProfileName, Does.Contain("CandyPop"));
             LogAssert.NoUnexpectedReceived();
+        }
+
+        [UnityTest]
+        public IEnumerator GameplayScene_DebugProgressionReachesFortyPlusWhileEncounteringMultipleHazardFamilies()
+        {
+#if UNITY_EDITOR
+            GameplaySceneInstaller.ClearEditorSessionDebugStartingScoreOverride();
+#endif
+            SceneManager.LoadScene(SceneCatalog.Gameplay, LoadSceneMode.Single);
+            yield return null;
+            yield return null;
+
+            GameManager gameManager = Object.FindFirstObjectByType<GameManager>();
+            ScoreSystem scoreSystem = Object.FindFirstObjectByType<ScoreSystem>();
+            HazardManager hazardManager = Object.FindFirstObjectByType<HazardManager>();
+            DifficultyDirector difficultyDirector = Object.FindFirstObjectByType<DifficultyDirector>();
+            ThemePresentationController themePresentationController = Object.FindFirstObjectByType<ThemePresentationController>();
+            PlayerController playerController = Object.FindFirstObjectByType<PlayerController>();
+            TrackManager trackManager = Object.FindFirstObjectByType<TrackManager>();
+            Assert.That(gameManager, Is.Not.Null);
+            Assert.That(scoreSystem, Is.Not.Null);
+            Assert.That(hazardManager, Is.Not.Null);
+            Assert.That(difficultyDirector, Is.Not.Null);
+            Assert.That(themePresentationController, Is.Not.Null);
+            Assert.That(playerController, Is.Not.Null);
+            Assert.That(trackManager, Is.Not.Null);
+
+            GameplayAutoplayScenario scenario = GameplayAutoplayTestDriver.MarathonForty;
+            float originalTimeScale = Time.timeScale;
+            Time.timeScale = scenario.TimeScale;
+
+            try
+            {
+                yield return WaitForState(gameManager, RunState.Active, 2f);
+
+                HashSet<ObstacleFamily> encounteredFamilies = new();
+                List<HazardDebugSnapshot> snapshots = new();
+                float elapsed = 0f;
+                while (elapsed < scenario.MaxUnscaledSeconds && scoreSystem.CurrentScore < scenario.TargetScore)
+                {
+                    Assert.That(gameManager.CurrentState, Is.EqualTo(RunState.Active));
+                    GameplayAutoplayTestDriver.Tick(gameManager, playerController, hazardManager, trackManager.PlayerAnchorY, scenario, encounteredFamilies, snapshots);
+                    elapsed += Time.unscaledDeltaTime;
+                    yield return null;
+                }
+
+                Assert.That(scoreSystem.CurrentScore, Is.GreaterThanOrEqualTo(scenario.TargetScore));
+                Assert.That(themePresentationController.CurrentDistrictId, Is.EqualTo("district.overclock-city"));
+                Assert.That(encounteredFamilies.Count, Is.GreaterThanOrEqualTo(scenario.MinimumEncounteredFamilies));
+                Assert.That(encounteredFamilies.Contains(ObstacleFamily.SharpUtilityHazards), Is.True);
+                Assert.That(encounteredFamilies.Overlaps(new[]
+                {
+                    ObstacleFamily.ActiveElectricHazards,
+                    ObstacleFamily.RotatingIndustrialHazards,
+                    ObstacleFamily.SidePressureHazards,
+                    ObstacleFamily.BrokenConduitSections,
+                    ObstacleFamily.GroundedBlockers,
+                }), Is.True);
+
+                List<ObstacleConfig> eligibleLateGame = new();
+                difficultyDirector.PopulateEligibleObstacleConfigs(scenario.TargetScore, eligibleLateGame);
+                HashSet<ObstacleFamily> eligibleFamilies = new();
+                for (int i = 0; i < eligibleLateGame.Count; i++)
+                {
+                    if (eligibleLateGame[i] != null)
+                    {
+                        eligibleFamilies.Add(eligibleLateGame[i].Family);
+                    }
+                }
+
+                Assert.That(eligibleFamilies.Contains(ObstacleFamily.ActiveElectricHazards), Is.True);
+                Assert.That(eligibleFamilies.Contains(ObstacleFamily.RotatingIndustrialHazards), Is.True);
+                Assert.That(eligibleFamilies.Contains(ObstacleFamily.SidePressureHazards), Is.True);
+                Assert.That(eligibleFamilies.Contains(ObstacleFamily.BrokenConduitSections), Is.True);
+                LogAssert.NoUnexpectedReceived();
+            }
+            finally
+            {
+                Time.timeScale = originalTimeScale;
+            }
         }
 
         private static IEnumerator WaitForState(GameManager gameManager, RunState state, float timeoutSeconds)
@@ -204,3 +285,5 @@ namespace Voltline.Tests.PlayMode
         }
     }
 }
+
+

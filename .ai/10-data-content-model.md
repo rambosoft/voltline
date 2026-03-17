@@ -1,13 +1,14 @@
 # Data and Content Model
 Status: Active
 Owner: Team
-Last updated: 2026-03-16
+Last updated: 2026-03-17
 Source of truth for: what is code vs config vs content, ScriptableObject catalogs, IDs, persistence model, balancing workflow
 Depends on: 03-tech-stack.md, 04-architecture.md, 07-gameplay-systems.md
 Do not duplicate with: hardcoded scene values, throwaway prototype constants
 
 > Working title: **Voltline**  
-> Core concept / public-facing design name: **STAY ON THE LINE**
+> Current public-facing release title: **Voltline**  
+> Primary production theme direction: **Live Wire City**
 
 ## Purpose
 
@@ -109,6 +110,8 @@ Suggested fields:
 - lane quiet-zone width
 - maximum allowed layer alpha
 - layer definitions
+- per-layer quiet-zone enforcement flag for side-anchored structure layers vs centered atmosphere layers
+- per-layer velocity-response multiplier so skyline, utility, haze, and streak passes keep distinct parallax feel without hardcoded runtime constants
 
 #### `PlayerVisualConfig`
 Owns the player's readable visual footprint and semantic state-driven art/effect behavior.
@@ -174,13 +177,48 @@ Suggested fields:
 - optional player visual override
 - optional obstacle visual override
 - optional background presentation override
+- required `WorldProgressionConfig`
 - required `ThemeVfxProfile`
 - required `ThemeAudioProfile`
 - runtime transition allowance flag
 - preferred transition duration
 
 #### `ThemeCatalog`
-Owns all theme entries.
+Owns all theme entries plus the shared branding, copy, and UI token configs used by current first-release surfaces.
+
+#### `WorldProgressionConfig`
+Owns one theme''s score-band district states and milestone reaction library.
+
+Suggested fields:
+- district state definitions with score ranges and stage IDs
+- milestone reaction definitions with score thresholds and copy IDs
+- district-restoration counting rules for result copy
+- stage colors or presentation modifiers that feed line, hazard, HUD, and background responses
+
+#### `BrandingPresentationConfig`
+Owns placeholder-safe public branding presentation for the current release posture.
+
+Suggested fields:
+- public title
+- optional subtitle
+- optional logo sprite
+- optional-entry visibility flags for splash, share, daily, and Grid Status surfaces
+- optional splash duration for the menu logo moment
+- first-release theme-selection visibility gate
+
+#### `ProductionCopyConfig`
+Owns public-facing production copy for menu, pause, result, settings, and milestone text.
+
+Suggested fields:
+- menu hint text
+- play/settings/retry/home/close labels
+- pause/settings labels
+- result title and message libraries
+- milestone message library
+- Grid Status labels, score-band formatting, and online/locked copy
+- share-surface labels and clipboard-friendly summary/flavor formats
+- first-run tutorial title/body/action labels
+- theme-status labels and locked-theme requirement format
 
 #### `ThemeVfxProfile`
 Owns theme-aware VFX cue overrides and VFX safety budgets.
@@ -233,7 +271,7 @@ Suggested fields:
 - optional pooling hint
 
 #### `UIThemeConfig`
-Optional if UI-specific role mapping grows beyond `ThemeConfig`.
+Owns UI-specific role tokens for panels, buttons, text, shadows, outlines, and optional TMP font assignments used by menu, HUD, pause, result, and settings surfaces.
 
 ## ID rules
 
@@ -241,10 +279,10 @@ Use stable IDs for config/cue/theme references.
 
 Examples:
 
-- `theme.neon-night`
-- `theme.candy-pop`
-- `obstacle.spike.basic`
-- `obstacle.electric.gate.short`
+- `theme.live-wire-city`
+- `district.failing-grid`
+- `obstacle.grounded.blocker.basic`
+- `obstacle.active-electric.short-gate`
 - `audio.flip.default`
 - `vfx.death.default`
 
@@ -264,8 +302,8 @@ Suggested schema:
 {
   "version": 1,
   "bestScore": 0,
-  "selectedThemeId": "theme.neon-night",
-  "unlockedThemeIds": ["theme.neon-night"],
+  "selectedThemeId": "theme.live-wire-city",
+  "unlockedThemeIds": ["theme.live-wire-city"],
   "musicVolume": 1.0,
   "sfxVolume": 1.0,
   "vibrationEnabled": true,
@@ -355,33 +393,26 @@ Disallowed:
 
 ## Theme data model
 
-Initial theme set can be defined entirely in data.
+Current first-release shipping posture:
 
-Suggested first themes:
-- `theme.neon-night`
-- `theme.candy-pop`
-- `theme.volcano-wire`
-- `theme.sky-circuit`
-- `theme.glitch-mode`
-
-First release can ship with only one or two unlocked.
-
-Current launch baseline:
-- `theme.neon-night` is the default unlocked theme and resolves to the default gameplay background presentation plus a dedicated `ThemeVfxProfile` and `ThemeAudioProfile`
-- `theme.candy-pop` is the first best-score unlock theme and owns a dedicated background presentation override plus its own `ThemeVfxProfile` and `ThemeAudioProfile`
-- runtime theme transitions are currently milestone-gated through `ThemeSequenceConfig` and are limited to background/color-safe theme changes
-- staged presentation rollout is governed by `PresentationRolloutPlanConfig`
+- `theme.live-wire-city` is the surfaced base theme
+- `ThemeCatalog` surfaces one active production theme while preserving later extensibility for more themes
+- the former `Themes` menu slot can be promoted to a `Grid` entry while only one production theme remains surfaced
+- `WorldProgressionConfig` owns the five district stages `Failing Grid`, `Local Power Restored`, `Grid Stabilization`, `Surge City`, and `Overclock City`
+- milestone reactions for `10`, `20`, `30`, `40`, and `50` are config-owned through `WorldProgressionConfig` and `ProductionCopyConfig`
+- `ThemeSequenceConfig` remains in the repo only as a dormant compatibility asset and is not the shipping runtime progression model
+- staged presentation rollout is still governed by `PresentationRolloutPlanConfig`
 
 ## Difficulty data model
 
 Difficulty should be data-driven through score bands or progression curves.
 
 Suggested score bands:
-- band 0: scores 0-4
-- band 1: scores 5-9
-- band 2: scores 10-19
-- band 3: scores 20-34
-- band 4: 35+
+- band 0: scores 0-9
+- band 1: scores 10-19
+- band 2: scores 20-29
+- band 3: scores 30-39
+- band 4: 40+
 
 Actual values are tunable, but the model should exist in config.
 
@@ -418,5 +449,9 @@ Examples:
 - Balance values should not be scattered across scene objects.
 - Runtime systems should read catalogs, not invent parallel registries.
 - Do not mutate content assets as a save mechanism.
+
+
+
+
 
 

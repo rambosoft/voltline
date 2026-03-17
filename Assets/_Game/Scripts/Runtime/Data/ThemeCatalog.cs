@@ -8,10 +8,17 @@ namespace Voltline.Data
     {
         [SerializeField] private ThemeConfig defaultTheme;
         [SerializeField] private List<ThemeConfig> themes = new();
+        [SerializeField] private BrandingPresentationConfig brandingPresentationConfig;
+        [SerializeField] private ProductionCopyConfig productionCopyConfig;
+        [SerializeField] private UIThemeConfig uiThemeConfig;
 
         public ThemeConfig DefaultTheme => defaultTheme;
         public IReadOnlyList<ThemeConfig> Themes => themes;
         public string DefaultThemeId => defaultTheme != null ? defaultTheme.ThemeId : string.Empty;
+        public BrandingPresentationConfig BrandingPresentationConfig => brandingPresentationConfig;
+        public ProductionCopyConfig ProductionCopyConfig => productionCopyConfig;
+        public UIThemeConfig UiThemeConfig => uiThemeConfig;
+        public bool ShouldShowThemeSelectionInSettings => brandingPresentationConfig != null && brandingPresentationConfig.ShowThemeSelectionInSettings && themes.Count > 1;
 
         public ThemeConfig ResolveThemeOrDefault(string themeId)
         {

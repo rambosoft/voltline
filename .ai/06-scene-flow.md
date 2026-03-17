@@ -1,7 +1,7 @@
 # Scene Flow
 Status: Active
 Owner: Team
-Last updated: 2026-03-15
+Last updated: 2026-03-17
 Source of truth for: approved scenes, build order, transitions, persistent objects, menu/gameplay/results ownership
 Depends on: 04-architecture.md, 05-project-structure.md
 Do not duplicate with: UI flow notes inside scene-specific implementation comments
@@ -52,11 +52,12 @@ Rules:
 Purpose:
 
 - title screen
+- optional splash/logo moment
 - attract/demo animation
 - play button
+- Grid Status entry
 - settings entry
 - future daily challenge entry
-- future cosmetics entry
 
 Rules:
 
@@ -71,6 +72,7 @@ Purpose:
 - HUD
 - pause overlay
 - result/death panel
+- optional share overlay
 - retry loop
 - optional settings overlay access
 
@@ -116,6 +118,12 @@ Decision rule:
 ### Open settings
 Preferred as overlay/panel within current scene context.
 
+### Optional extras
+- splash/logo moment remains an in-scene MainMenu overlay
+- Grid Status remains an in-scene MainMenu overlay
+- expanded tutorial remains an in-scene MainMenu overlay that can gate the first run
+- share remains an in-scene Gameplay result-flow overlay
+
 ## Persistent objects
 
 Approved persistent app-level objects may be created during `Bootstrap` and preserved across scenes only if they are truly app-level.
@@ -139,6 +147,9 @@ Do not make gameplay-specific systems persistent across scenes unless there is a
 - title/logo presentation
 - menu navigation
 - home-screen demo
+- splash/logo moment
+- Grid Status overlay
+- expanded tutorial overlay
 - future non-run front-door entry points
 
 ### `Gameplay` owns
@@ -146,6 +157,7 @@ Do not make gameplay-specific systems persistent across scenes unless there is a
 - score HUD
 - pause state
 - death/results state
+- share surface inside results
 - retry loop
 
 ## UI hierarchy model per scene
@@ -154,12 +166,15 @@ Do not make gameplay-specific systems persistent across scenes unless there is a
 Contains:
 
 - Title / branding
+- optional splash/logo moment
 - animated demo region
 - Play button
 - Best score summary
 - Daily entry (when enabled)
-- Skins/Themes entry (when enabled)
+- Grid Status entry in the former Themes slot when promoted
 - Settings entry
+- optional Grid Status overlay
+- optional expanded tutorial overlay
 
 ### `Gameplay`
 Contains:
@@ -168,6 +183,7 @@ Contains:
 - HUD canvas
 - pause overlay
 - result panel
+- optional share overlay
 - optional settings overlay
 - debug overlay in non-release builds only
 

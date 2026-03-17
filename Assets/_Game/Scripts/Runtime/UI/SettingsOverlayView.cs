@@ -31,41 +31,49 @@ namespace Voltline.UI
 
         private SaveService saveService;
         private ThemeCatalog themeCatalog;
+        private BrandingPresentationConfig brandingPresentationConfig;
+        private ProductionCopyConfig productionCopyConfig;
+        private UIThemeConfig uiThemeConfig;
         private RectTransform root;
         private Image panelImage;
         private TMP_Text themeHintText;
+        private Image vibrationButtonImage;
+        private TMP_Text vibrationButtonLabel;
         private Image closeButtonImage;
         private VolumeRow musicRow;
         private VolumeRow sfxRow;
         private Button vibrationButton;
-        private Image vibrationButtonImage;
-        private TMP_Text vibrationButtonLabel;
         private OverlayTransitionController transitionController;
         private readonly List<ThemeRow> themeRows = new();
 
         public bool IsVisible => transitionController != null && transitionController.IsVisible;
+        public bool HasThemeSelectionSection => themeRows.Count > 0;
 
         public void Initialize(Transform parent, ThemeConfig theme, ThemeCatalog catalog, SaveService service, System.Action closeAction)
         {
             saveService = service;
             themeCatalog = catalog;
-            root = UIFactory.CreatePanel("SettingsOverlay", parent, new Color(0f, 0f, 0f, 0.56f));
+            brandingPresentationConfig = catalog != null ? catalog.BrandingPresentationConfig : null;
+            productionCopyConfig = catalog != null ? catalog.ProductionCopyConfig : null;
+            uiThemeConfig = catalog != null ? catalog.UiThemeConfig : null;
+
+            root = UIFactory.CreateSurface("SettingsOverlay", parent, uiThemeConfig, UiSurfaceRole.Overlay, theme);
             UIFactory.Stretch(root, 0f);
 
-            RectTransform panel = UIFactory.CreatePanel("SettingsPanel", root, UIFactory.PanelColor(0.96f));
+            RectTransform panel = UIFactory.CreateSurface("SettingsPanel", root, uiThemeConfig, UiSurfaceRole.Panel, theme);
             UIFactory.SetAnchors(panel, new Vector2(0.5f, 0.5f), new Vector2(0.5f, 0.5f), Vector2.zero, new Vector2(760f, 1080f));
             panelImage = panel.GetComponent<Image>();
 
-            TMP_Text title = UIFactory.CreateText("Title", panel, "Settings", 52, FontStyles.Bold, TextAlignmentOptions.Center, Color.white);
+            TMP_Text title = UIFactory.CreateStyledText("Title", panel, productionCopyConfig != null ? productionCopyConfig.SettingsTitle : "Settings", 52, FontStyles.Bold, TextAlignmentOptions.Center, uiThemeConfig, UiTextRole.Heading, theme);
             UIFactory.SetAnchors((RectTransform)title.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -82f), new Vector2(560f, 80f));
 
-            musicRow = CreateVolumeRow(panel, "Music", new Vector2(0f, -190f), saveService.MusicVolume, saveService.SetMusicVolume, theme);
-            sfxRow = CreateVolumeRow(panel, "SFX", new Vector2(0f, -320f), saveService.SfxVolume, saveService.SetSfxVolume, theme);
+            musicRow = CreateVolumeRow(panel, productionCopyConfig != null ? productionCopyConfig.MusicLabel : "Music", new Vector2(0f, -190f), saveService.MusicVolume, saveService.SetMusicVolume, theme);
+            sfxRow = CreateVolumeRow(panel, productionCopyConfig != null ? productionCopyConfig.SfxLabel : "SFX", new Vector2(0f, -320f), saveService.SfxVolume, saveService.SetSfxVolume, theme);
 
-            TMP_Text vibrationLabel = UIFactory.CreateText("VibrationLabel", panel, "Vibration", 34, FontStyles.Bold, TextAlignmentOptions.Left, Color.white);
+            TMP_Text vibrationLabel = UIFactory.CreateStyledText("VibrationLabel", panel, productionCopyConfig != null ? productionCopyConfig.VibrationLabel : "Haptics", 34, FontStyles.Bold, TextAlignmentOptions.Left, uiThemeConfig, UiTextRole.Body, theme);
             UIFactory.SetAnchors((RectTransform)vibrationLabel.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(-168f, -448f), new Vector2(220f, 50f));
 
-            vibrationButton = UIFactory.CreateButton("VibrationButton", panel, "On", theme.PlayerAccentColor, new Color(0.08f, 0.08f, 0.12f, 1f), ToggleVibration);
+            vibrationButton = UIFactory.CreateStyledButton("VibrationButton", panel, productionCopyConfig != null ? productionCopyConfig.OnLabel : "On", uiThemeConfig, UiSurfaceRole.AccentButton, theme, ToggleVibration);
             UIFactory.SetAnchors((RectTransform)vibrationButton.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(164f, -448f), new Vector2(188f, 62f));
             vibrationButtonImage = vibrationButton.GetComponent<Image>();
             vibrationButtonLabel = vibrationButton.GetComponentInChildren<TMP_Text>();
@@ -74,15 +82,15 @@ namespace Voltline.UI
                 vibrationButtonLabel.fontSize = 28;
             }
 
-            if (themeCatalog != null && themeCatalog.Themes != null && themeCatalog.Themes.Count > 1)
+            if (themeCatalog != null && themeCatalog.ShouldShowThemeSelectionInSettings)
             {
-                TMP_Text themeLabel = UIFactory.CreateText("ThemeLabel", panel, "Theme", 34, FontStyles.Bold, TextAlignmentOptions.Left, Color.white);
+                TMP_Text themeLabel = UIFactory.CreateStyledText("ThemeLabel", panel, productionCopyConfig != null ? productionCopyConfig.ThemeLabel : "Themes", 34, FontStyles.Bold, TextAlignmentOptions.Left, uiThemeConfig, UiTextRole.Body, theme);
                 UIFactory.SetAnchors((RectTransform)themeLabel.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(-168f, -600f), new Vector2(220f, 50f));
 
-                themeHintText = UIFactory.CreateText("ThemeHint", panel, "Unlocked themes only. Applies on next run.", 22, FontStyles.Normal, TextAlignmentOptions.Left, theme.PlayerAccentColor);
-                UIFactory.SetAnchors((RectTransform)themeHintText.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(60f, -602f), new Vector2(420f, 42f));
+                themeHintText = UIFactory.CreateStyledText("ThemeHint", panel, productionCopyConfig != null ? productionCopyConfig.ThemeSelectionHint : "Unlocked themes only. Applies on next run.", 22, FontStyles.Normal, TextAlignmentOptions.Left, uiThemeConfig, UiTextRole.Micro, theme);
+                UIFactory.SetAnchors((RectTransform)themeHintText.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(76f, -602f), new Vector2(420f, 42f));
 
-                RectTransform themeSection = UIFactory.CreatePanel("ThemeSection", panel, new Color(1f, 1f, 1f, 0.045f));
+                RectTransform themeSection = UIFactory.CreateSurface("ThemeSection", panel, uiThemeConfig, UiSurfaceRole.HighlightPanel, theme);
                 UIFactory.SetAnchors(themeSection, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(0f, -790f), new Vector2(560f, 250f));
 
                 GameObject viewportObject = new("ThemeViewport", typeof(RectTransform), typeof(Image), typeof(Mask), typeof(ScrollRect));
@@ -126,13 +134,7 @@ namespace Voltline.UI
                     }
 
                     string themeId = themeEntry.ThemeId;
-                    Button themeButton = UIFactory.CreateButton(
-                        $"ThemeButton_{i}",
-                        content,
-                        themeEntry.DisplayName,
-                        UIFactory.PanelColor(1f),
-                        Color.white,
-                        () => SelectTheme(themeId));
+                    Button themeButton = UIFactory.CreateStyledButton($"ThemeButton_{i}", content, themeEntry.DisplayName, uiThemeConfig, UiSurfaceRole.SecondaryButton, theme, () => SelectTheme(themeId));
                     RectTransform themeButtonRect = (RectTransform)themeButton.transform;
                     themeButtonRect.anchorMin = new Vector2(0f, 1f);
                     themeButtonRect.anchorMax = new Vector2(1f, 1f);
@@ -148,8 +150,9 @@ namespace Voltline.UI
                     labelRect.offsetMax = new Vector2(-164f, 0f);
                     labelText.alignment = TextAlignmentOptions.MidlineLeft;
                     labelText.fontSize = 32;
+                    UIFactory.ApplyTextStyle(labelText, uiThemeConfig, UiTextRole.Body, theme);
 
-                    TMP_Text statusText = UIFactory.CreateText($"ThemeStatus_{i}", themeButton.transform, string.Empty, 22, FontStyles.Normal, TextAlignmentOptions.MidlineRight, theme.PlayerAccentColor);
+                    TMP_Text statusText = UIFactory.CreateStyledText($"ThemeStatus_{i}", themeButton.transform, string.Empty, 22, FontStyles.Normal, TextAlignmentOptions.MidlineRight, uiThemeConfig, UiTextRole.Status, theme);
                     RectTransform statusRect = (RectTransform)statusText.transform;
                     statusRect.anchorMin = new Vector2(1f, 0.5f);
                     statusRect.anchorMax = new Vector2(1f, 0.5f);
@@ -174,7 +177,7 @@ namespace Voltline.UI
                 content.sizeDelta = new Vector2(0f, contentHeight);
             }
 
-            Button closeButton = UIFactory.CreateButton("CloseButton", panel, "Close", theme.DangerColor, Color.white, closeAction);
+            Button closeButton = UIFactory.CreateStyledButton("CloseButton", panel, productionCopyConfig != null ? productionCopyConfig.CloseButtonLabel : "Close", uiThemeConfig, UiSurfaceRole.DestructiveButton, theme, closeAction);
             UIFactory.SetAnchors((RectTransform)closeButton.transform, new Vector2(0.5f, 0f), new Vector2(0.5f, 0f), new Vector2(0f, 72f), new Vector2(420f, 92f));
             closeButtonImage = closeButton.GetComponent<Image>();
 
@@ -203,32 +206,32 @@ namespace Voltline.UI
 
             if (panelImage != null)
             {
-                panelImage.color = UIFactory.PanelColor(0.96f);
+                UIFactory.ApplySurfaceStyle(panelImage, uiThemeConfig, UiSurfaceRole.Panel, theme);
             }
 
             if (themeHintText != null)
             {
-                themeHintText.color = theme.PlayerAccentColor;
+                UIFactory.ApplyTextStyle(themeHintText, uiThemeConfig, UiTextRole.Micro, theme);
             }
 
             if (musicRow.ValueText != null)
             {
-                musicRow.ValueText.color = theme.PlayerAccentColor;
+                UIFactory.ApplyTextStyle(musicRow.ValueText, uiThemeConfig, UiTextRole.Secondary, theme);
             }
 
             if (sfxRow.ValueText != null)
             {
-                sfxRow.ValueText.color = theme.PlayerAccentColor;
+                UIFactory.ApplyTextStyle(sfxRow.ValueText, uiThemeConfig, UiTextRole.Secondary, theme);
             }
 
             if (vibrationButtonImage != null)
             {
-                vibrationButtonImage.color = theme.PlayerAccentColor;
+                UIFactory.ApplySurfaceStyle(vibrationButtonImage, uiThemeConfig, UiSurfaceRole.AccentButton, theme);
             }
 
             if (closeButtonImage != null)
             {
-                closeButtonImage.color = theme.DangerColor;
+                UIFactory.ApplySurfaceStyle(closeButtonImage, uiThemeConfig, UiSurfaceRole.DestructiveButton, theme);
             }
         }
 
@@ -245,19 +248,19 @@ namespace Voltline.UI
 
         private VolumeRow CreateVolumeRow(Transform parent, string label, Vector2 anchoredPosition, float initialValue, System.Action<float> setter, ThemeConfig theme)
         {
-            TMP_Text labelText = UIFactory.CreateText(label + "Label", parent, label, 34, FontStyles.Bold, TextAlignmentOptions.Left, Color.white);
+            TMP_Text labelText = UIFactory.CreateStyledText(label + "Label", parent, label, 34, FontStyles.Bold, TextAlignmentOptions.Left, uiThemeConfig, UiTextRole.Body, theme);
             UIFactory.SetAnchors((RectTransform)labelText.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(-168f, anchoredPosition.y), new Vector2(220f, 50f));
 
-            Button minusButton = UIFactory.CreateButton(label + "Minus", parent, "-", UIFactory.PanelColor(1f), Color.white, null);
+            Button minusButton = UIFactory.CreateStyledButton(label + "Minus", parent, "-", uiThemeConfig, UiSurfaceRole.SecondaryButton, theme, null);
             UIFactory.SetAnchors((RectTransform)minusButton.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(30f, anchoredPosition.y), new Vector2(82f, 62f));
 
-            Button plusButton = UIFactory.CreateButton(label + "Plus", parent, "+", UIFactory.PanelColor(1f), Color.white, null);
+            Button plusButton = UIFactory.CreateStyledButton(label + "Plus", parent, "+", uiThemeConfig, UiSurfaceRole.SecondaryButton, theme, null);
             UIFactory.SetAnchors((RectTransform)plusButton.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(314f, anchoredPosition.y), new Vector2(82f, 62f));
 
-            TMP_Text valueText = UIFactory.CreateText(label + "Value", parent, Mathf.RoundToInt(initialValue * 100f) + "%", 30, FontStyles.Normal, TextAlignmentOptions.Center, theme.PlayerAccentColor);
+            TMP_Text valueText = UIFactory.CreateStyledText(label + "Value", parent, Mathf.RoundToInt(initialValue * 100f) + "%", 30, FontStyles.Normal, TextAlignmentOptions.Center, uiThemeConfig, UiTextRole.Secondary, theme);
             UIFactory.SetAnchors((RectTransform)valueText.transform, new Vector2(0.5f, 1f), new Vector2(0.5f, 1f), new Vector2(172f, anchoredPosition.y), new Vector2(180f, 50f));
 
-            System.Func<float> getter = label == "Music"
+            System.Func<float> getter = label == (productionCopyConfig != null ? productionCopyConfig.MusicLabel : "Music")
                 ? () => saveService.MusicVolume
                 : () => saveService.SfxVolume;
 
@@ -287,7 +290,9 @@ namespace Voltline.UI
             sfxRow.ValueText.text = Mathf.RoundToInt(saveService.SfxVolume * 100f) + "%";
             if (vibrationButtonLabel != null)
             {
-                vibrationButtonLabel.text = saveService.VibrationEnabled ? "On" : "Off";
+                vibrationButtonLabel.text = saveService.VibrationEnabled
+                    ? (productionCopyConfig != null ? productionCopyConfig.OnLabel : "On")
+                    : (productionCopyConfig != null ? productionCopyConfig.OffLabel : "Off");
             }
 
             for (int i = 0; i < themeRows.Count; i++)
@@ -303,30 +308,37 @@ namespace Voltline.UI
 
                 if (row.ButtonImage != null)
                 {
-                    row.ButtonImage.color = isSelected
-                        ? row.Theme.LineGlowColor
-                        : (isUnlocked ? UIFactory.PanelColor(1f) : new Color(0.12f, 0.12f, 0.16f, 1f));
+                    if (isSelected)
+                    {
+                        UIFactory.ApplySurfaceStyle(row.ButtonImage, uiThemeConfig, UiSurfaceRole.PrimaryButton, row.Theme);
+                    }
+                    else
+                    {
+                        row.ButtonImage.color = isUnlocked
+                            ? uiThemeConfig.SecondaryButtonColor
+                            : new Color(0.12f, 0.12f, 0.16f, 1f);
+                    }
                 }
 
                 if (row.LabelText != null)
                 {
                     row.LabelText.text = row.Theme.DisplayName;
-                    row.LabelText.color = isSelected ? new Color(0.04f, 0.07f, 0.12f, 1f) : Color.white;
+                    row.LabelText.color = isSelected ? new Color(0.04f, 0.07f, 0.12f, 1f) : (uiThemeConfig != null ? uiThemeConfig.TextPrimaryColor : Color.white);
                 }
 
                 if (row.StatusText != null)
                 {
                     if (isSelected)
                     {
-                        row.StatusText.text = "Selected";
+                        row.StatusText.text = productionCopyConfig != null ? productionCopyConfig.SelectedThemeStatusLabel : "Selected";
                     }
                     else if (isUnlocked)
                     {
-                        row.StatusText.text = "Unlocked";
+                        row.StatusText.text = productionCopyConfig != null ? productionCopyConfig.UnlockedThemeStatusLabel : "Unlocked";
                     }
                     else
                     {
-                        row.StatusText.text = $"Best {row.Theme.UnlockBestScoreThreshold}";
+                        row.StatusText.text = productionCopyConfig != null ? productionCopyConfig.FormatLockedThemeRequirement(row.Theme.UnlockBestScoreThreshold) : $"Best {row.Theme.UnlockBestScoreThreshold}";
                     }
 
                     row.StatusText.color = isSelected
@@ -337,3 +349,4 @@ namespace Voltline.UI
         }
     }
 }
+
